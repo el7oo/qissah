@@ -1,0 +1,7 @@
+[
+  {
+    "id": "TC001",
+    "title": "postapi_checkout_submitorderform",
+    "description": "Test the POST /api/checkout endpoint to verify that submitting the order form with valid shipping and contact information successfully processes the order and redirects to the success confirmation page."
+  }
+]

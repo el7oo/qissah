@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Luxara - Luxury Home</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&amp;family=Tajawal:wght@200;300;400;500;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error-container": "#93000a",
+                        "primary-container": "#c7485e",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed": "#ffdbc9",
+                        "surface-container-low": "#fff0f0",
+                        "inverse-primary": "#ffb2b9",
+                        "surface-variant": "#f3ddde",
+                        "inverse-surface": "#3a2d2e",
+                        "on-error": "#ffffff",
+                        "surface-dim": "#ebd5d6",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#ffb1c1",
+                        "outline": "#8a7173",
+                        "tertiary": "#825030",
+                        "on-background": "#24191a",
+                        "background": "#fff8f7",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#ffeced",
+                        "tertiary-container": "#9f6846",
+                        "surface-container-high": "#f9e3e4",
+                        "surface-container": "#ffe9e9",
+                        "surface": "#fff8f7",
+                        "surface-tint": "#aa3249",
+                        "on-primary-container": "#fffbff",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#f3ddde",
+                        "on-surface": "#24191a",
+                        "secondary-container": "#fd7d9d",
+                        "on-surface-variant": "#574143",
+                        "tertiary-fixed-dim": "#fbb891",
+                        "error-container": "#ffdad6",
+                        "primary-fixed-dim": "#ffb2b9",
+                        "on-secondary-container": "#751135",
+                        "on-primary-fixed": "#400010",
+                        "secondary-fixed": "#ffd9df",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed-variant": "#891833",
+                        "secondary": "#a33757",
+                        "on-tertiary-container": "#fffbff",
+                        "on-tertiary-fixed": "#321200",
+                        "primary": "#a62f47",
+                        "on-secondary-fixed": "#3f0017",
+                        "outline-variant": "#debfc1",
+                        "primary-fixed": "#ffdadc",
+                        "on-secondary-fixed-variant": "#841f40",
+                        "on-tertiary-fixed-variant": "#693b1d",
+                        "surface-bright": "#fff8f7"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-lg": "32px",
+                        "section-gap": "64px",
+                        "stack-md": "16px",
+                        "container-padding": "24px",
+                        "gutter": "16px",
+                        "unit": "4px",
+                        "stack-sm": "8px"
+                    },
+                    "fontFamily": {
+                        "title-lg": ["Tajawal"],
+                        "display-lg": ["Cormorant Garamond"],
+                        "body-md": ["Tajawal"],
+                        "display-md": ["Cormorant Garamond"],
+                        "body-lg": ["Tajawal"],
+                        "label-sm": ["Tajawal"]
+                    },
+                    "fontSize": {
+                        "title-lg": ["22px", { "lineHeight": "1.4", "fontWeight": "700" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "display-md": ["36px", { "lineHeight": "1.2", "fontWeight": "500" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background antialiased font-body-md text-body-md pb-[80px] md:pb-0">
+<!-- TopNavBar -->
+<nav class="hidden md:flex fixed top-0 w-full z-50 bg-white/70 backdrop-blur-3xl border-b border-white/20 shadow-sm shadow-rose-500/5 justify-between items-center px-6 py-4 max-w-7xl mx-auto left-0 right-0">
+<div class="text-2xl font-serif italic text-rose-600 font-display-md text-display-md">
+            Luxara
+        </div>
+<div class="flex items-center gap-6">
+<span class="material-symbols-outlined text-slate-600 hover:opacity-80 transition-all duration-300 ease-in-out cursor-pointer">search</span>
+<span class="material-symbols-outlined text-slate-600 hover:opacity-80 transition-all duration-300 ease-in-out cursor-pointer">shopping_cart</span>
+<span class="material-symbols-outlined text-slate-600 hover:opacity-80 transition-all duration-300 ease-in-out cursor-pointer">person</span>
+</div>
+</nav>
+<!-- BottomNavBar (Mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 bg-white/80 backdrop-blur-3xl rounded-t-3xl border-t border-white/10 shadow-2xl shadow-rose-900/10 flex justify-around items-center px-4 py-3 pb-safe">
+<div class="flex flex-col items-center justify-center bg-rose-50 text-rose-600 rounded-2xl px-5 py-2 scale-95 transition-transform text-[10px] font-medium tracking-tighter">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">home</span>
+<span>Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-400 hover:text-rose-400 px-5 py-2 scale-95 transition-transform text-[10px] font-medium tracking-tighter">
+<span class="material-symbols-outlined mb-1">grid_view</span>
+<span>Shop</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-400 hover:text-rose-400 px-5 py-2 scale-95 transition-transform text-[10px] font-medium tracking-tighter">
+<span class="material-symbols-outlined mb-1">shopping_bag</span>
+<span>Cart</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-400 hover:text-rose-400 px-5 py-2 scale-95 transition-transform text-[10px] font-medium tracking-tighter">
+<span class="material-symbols-outlined mb-1">receipt_long</span>
+<span>Orders</span>
+</div>
+</nav>
+<main class="pt-0 md:pt-24 max-w-7xl mx-auto px-container-padding">
+<!-- Hero Section -->
+<section class="relative rounded-[32px] overflow-hidden bg-gradient-to-br from-primary-container to-secondary mt-stack-md md:mt-0 mb-section-gap p-8 md:p-16 flex flex-col justify-center items-start min-h-[500px]">
+<img alt="" class="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-overlay" data-alt="abstract soft flowing silk fabric in warm rose gold and peach tones with subtle lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCT63LCXmbEIwpqy3-iH-cx1ZthK9zhRWw4PrAjX7ivd5RQPu8cVXcHviNQC2yFYoVMIdhiPv04fA41VyfwuGKd1HgB9yTpsZouKkQt2b5H8m07huoExdMA0MJJAT7PseX9TQhBvTe-AtEq60oDJHJ-JJk6_hCR_AktGyhrDCszogOybw66EW9rWUzRkv2Y20_GP3Nho_Zk6kEqCZ_tD0VT9m-LjEO6nDc4jtGvMRQBbcOL5x3fO0I1eXC3uGg_I1PuJlwQDs21"/>
+<div class="relative z-10 max-w-2xl text-on-primary">
+<h1 class="font-display-lg text-display-lg mb-stack-md leading-tight">Elevate Your Living Space with Curated Luxury</h1>
+<p class="font-body-lg text-body-lg mb-stack-lg opacity-90">Discover our exclusive collection of artisanal home decor, fine jewelry, and premium lifestyle accessories.</p>
+<button class="bg-white text-primary px-8 py-4 rounded-full font-title-lg text-title-lg hover:bg-surface-variant transition-colors shadow-lg shadow-rose-900/20">
+                    Explore Collection
+                </button>
+</div>
+</section>
+<!-- Category Chips -->
+<section class="mb-section-gap overflow-x-auto pb-4 hide-scrollbar">
+<div class="flex gap-gutter w-max px-2">
+<button class="flex items-center gap-2 bg-surface-container-high px-6 py-3 rounded-full hover:bg-surface-variant transition-colors border border-outline-variant/30">
+<span class="material-symbols-outlined text-primary">diamond</span>
+<span class="font-body-md text-body-md text-on-surface">Fine Jewelry</span>
+</button>
+<button class="flex items-center gap-2 bg-surface-container-high px-6 py-3 rounded-full hover:bg-surface-variant transition-colors border border-outline-variant/30">
+<span class="material-symbols-outlined text-primary">local_florist</span>
+<span class="font-body-md text-body-md text-on-surface">Floral Arrangements</span>
+</button>
+<button class="flex items-center gap-2 bg-surface-container-high px-6 py-3 rounded-full hover:bg-surface-variant transition-colors border border-outline-variant/30">
+<span class="material-symbols-outlined text-primary">chair</span>
+<span class="font-body-md text-body-md text-on-surface">Furniture</span>
+</button>
+<button class="flex items-center gap-2 bg-surface-container-high px-6 py-3 rounded-full hover:bg-surface-variant transition-colors border border-outline-variant/30">
+<span class="material-symbols-outlined text-primary">local_fire_department</span>
+<span class="font-body-md text-body-md text-on-surface">Candles &amp; Scents</span>
+</button>
+<button class="flex items-center gap-2 bg-surface-container-high px-6 py-3 rounded-full hover:bg-surface-variant transition-colors border border-outline-variant/30">
+<span class="material-symbols-outlined text-primary">auto_awesome</span>
+<span class="font-body-md text-body-md text-on-surface">Decor</span>
+</button>
+</div>
+</section>
+<!-- Featured Products Grid -->
+<section class="mb-section-gap">
+<h2 class="font-display-md text-display-md text-on-surface mb-stack-lg text-center">Featured Elegance</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-stack-md">
+<!-- Product Card 1 -->
+<div class="bg-surface rounded-3xl overflow-hidden shadow-[0_8px_30px_rgb(220,88,109,0.05)] border border-outline-variant/20 group">
+<div class="relative h-64 overflow-hidden">
+<img alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="rose gold designer watch on white marble background with soft lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8_8C9_ImZZrTwCJcNaa-BQL9QSey_kCqqdvzW6W4-6eqIkSbxp-f8A1Nw0FP5Byn2jlyGz4zBdGcGNaiRuHeBcs1zWrA743dyTb_dIV2I4fo9CkjoFb8WsUjmisDJvhClKhLuoF4A0f3bQF0xi7GVZMhRFlsHnTkpSLWoEphnrJAKWN2iKpOAqmHvLXF0JxzsbrI6_NtNgAtRdW_kJ7wlSZBHwIFZPmi8lW0KlMEQRQ_tRYiQabVhdlgS970umQc_-oMIDeNC"/>
+<div class="absolute top-4 right-4 bg-white/80 backdrop-blur-md rounded-full p-2 text-primary cursor-pointer hover:bg-white transition-colors">
+<span class="material-symbols-outlined">favorite</span>
+</div>
+</div>
+<div class="p-container-padding">
+<h3 class="font-title-lg text-title-lg text-on-surface mb-1">Rose Gold Chronograph</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">Timeless precision</p>
+<div class="flex justify-between items-center">
+<span class="font-title-lg text-title-lg text-primary">$1,250</span>
+<button class="bg-primary-container text-on-primary-container px-4 py-2 rounded-full font-label-sm text-label-sm hover:bg-primary transition-colors">
+                                Add to Cart
+                            </button>
+</div>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="bg-surface rounded-3xl overflow-hidden shadow-[0_8px_30px_rgb(220,88,109,0.05)] border border-outline-variant/20 group">
+<div class="relative h-64 overflow-hidden">
+<img alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="elegant crystal vase with white peonies on a minimalist wooden table" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8ANO7RCn1banGliV-SSSusItDmIGmESzvALR1d9OiWZjAEIKXghVocQB9Bqe3wXSW-eKB7kGpW-3ehwrUkVCAOe1xQ1yvkDbDTiGkO2DrH4cHYmY51_03HznEkU_Y8x_Zub9kZYP5A6PdYUzhx2ImH6UcL_Imi6UKJK4kLQ6NkjUAvnw6QPSSjnOYa1Xb5Ho9yQiPOwuhIy3ahSJxeHJsEcYOb8fGAxyWuVbKSPV7Jxaawris8H01c2Hq1hIKGAsG5ky0oXFa"/>
+<div class="absolute top-4 right-4 bg-white/80 backdrop-blur-md rounded-full p-2 text-primary cursor-pointer hover:bg-white transition-colors">
+<span class="material-symbols-outlined">favorite</span>
+</div>
+</div>
+<div class="p-container-padding">
+<h3 class="font-title-lg text-title-lg text-on-surface mb-1">Crystal Peony Vase</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">Hand-blown artisanal glass</p>
+<div class="flex justify-between items-center">
+<span class="font-title-lg text-title-lg text-primary">$340</span>
+<button class="bg-primary-container text-on-primary-container px-4 py-2 rounded-full font-label-sm text-label-sm hover:bg-primary transition-colors">
+                                Add to Cart
+                            </button>
+</div>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="bg-surface rounded-3xl overflow-hidden shadow-[0_8px_30px_rgb(220,88,109,0.05)] border border-outline-variant/20 group">
+<div class="relative h-64 overflow-hidden">
+<img alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="luxurious velvet accent chair in soft blush pink in a bright modern room" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAt_OGDGSTmgMYKLXtN0vix0F-vcP26VbuKbq69Bzpco0T0xcxbDj1_0hXxV9ZzKVB6RGWfO6KdfqJOgAPQPDmZN5Ke6arnEMr9hLZc3n5HAZ_jc9GD2Xld8iFob2lMSXSkzpNcXuVTQz-4Yfh9rz35A2N2VcMwJDRvZFV-2z9oqslJi1rGWYgPTZXlqm7L-qhanhetdHQ1_ZFd6TKGcdiBZh5isS3zJ2-Y0xcgDthIQsoHOu7nlynctzz8I6zCBqbbpecAYj57"/>
+<div class="absolute top-4 right-4 bg-white/80 backdrop-blur-md rounded-full p-2 text-primary cursor-pointer hover:bg-white transition-colors">
+<span class="material-symbols-outlined">favorite</span>
+</div>
+</div>
+<div class="p-container-padding">
+<h3 class="font-title-lg text-title-lg text-on-surface mb-1">Blush Velvet Chair</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">Mid-century modern revival</p>
+<div class="flex justify-between items-center">
+<span class="font-title-lg text-title-lg text-primary">$895</span>
+<button class="bg-primary-container text-on-primary-container px-4 py-2 rounded-full font-label-sm text-label-sm hover:bg-primary transition-colors">
+                                Add to Cart
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Trust Badges -->
+<section class="mb-section-gap bg-surface-container-low rounded-[32px] p-8 md:p-12 border border-surface-variant/50">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+<div class="flex flex-col items-center">
+<div class="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center mb-4 text-primary">
+<span class="material-symbols-outlined text-3xl">local_shipping</span>
+</div>
+<h4 class="font-title-lg text-title-lg text-on-surface mb-2">Complimentary Shipping</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">On all orders over $500</p>
+</div>
+<div class="flex flex-col items-center">
+<div class="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center mb-4 text-primary">
+<span class="material-symbols-outlined text-3xl">verified_user</span>
+</div>
+<h4 class="font-title-lg text-title-lg text-on-surface mb-2">Secure Transactions</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Encrypted payment processing</p>
+</div>
+<div class="flex flex-col items-center">
+<div class="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center mb-4 text-primary">
+<span class="material-symbols-outlined text-3xl">workspace_premium</span>
+</div>
+<h4 class="font-title-lg text-title-lg text-on-surface mb-2">Authenticity Guarantee</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">100% genuine luxury items</p>
+</div>
+</div>
+</section>
+</main>
+<style>
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</body></html>

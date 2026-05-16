@@ -1,0 +1,20 @@
+{
+  "status": "commited",
+  "type": "frontend",
+  "scope": "codebase",
+  "localEndpoint": "http://localhost:3000",
+  "loginUser": "housamkwili@gmail.com",
+  "loginPassword": "123456abc",
+  "executionArgs": {
+    "projectName": "new project",
+    "projectPath": "d:\\housam\\new project",
+    "testIds": [],
+    "additionalInstruction": "Ensure to check the bracketed phone number format and empty cart checkout behavior. For empty cart checkout, verify if the checkout button is disabled or shows an error when navigating to /checkout with no items.",
+    "serverMode": "development",
+    "envs": {
+      "API_KEY": "sk-user-FGpoBmRGxJFzYdkiorLEIXprgo8mJSvuB-dIluspQDqJYmOtGeUObtV9FvtLPuAIKpN9FacXq7eVlvqHhrZn3Vt3Cw__KqlkdZ96eHa2xSnv3op4fE5XQubG6nnp9HzTL_o"
+    }
+  },
+  "serverPort": 55094,
+  "proxy": "http://2751ec37-800f-4396-a747-0695c6dfcdb9:F4u3bPGbny2xcMFH4qMBD5o8cIz3enOb@tun.testsprite.com:8080"
+}

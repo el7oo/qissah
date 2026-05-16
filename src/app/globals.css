@@ -1,0 +1,163 @@
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Amiri:wght@400;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+@import "tailwindcss";
+@import "./luxara.css";
+
+@theme {
+  --color-background: var(--bg);
+  --color-on-background: var(--txt);
+  --color-surface: var(--card);
+  --color-on-surface: var(--txt);
+  --color-surface-variant: var(--surf);
+  --color-on-surface-variant: var(--txt2);
+  --color-primary: var(--p1);
+  --color-primary-container: var(--p2);
+  --color-on-primary: #ffffff;
+  --color-outline-variant: var(--bdr);
+
+  --font-display: var(--font-cormorant);
+  --font-serif: var(--font-cormorant);
+  --font-sans: var(--font-alexandria), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 24px;
+  --radius-3xl: 26px;
+  --radius-full: 9999px;
+
+  --shadow-ambient: 0 8px 32px 0 rgba(220, 88, 109, 0.08);
+  --shadow-ambient-sm: 0 4px 16px 0 rgba(220, 88, 109, 0.05);
+
+  --blur-glass: 24px;
+}
+
+@layer base {
+  :root {
+    --bg: #FFF8F3;
+    --bg2: #FFE8D6;
+    --card: #FFFDFB;
+    --surf: #FFF5EE;
+    --txt: #2D2A26;
+    --card: #FFFFFF;
+    --bdr: rgba(0,0,0,0.06);
+    --p1: #dc586d;
+    --p2: #e07a5f;
+    --shd: rgba(0,0,0,0.05);
+  }
+  
+  .dark {
+    --bg: #0a0a0a;
+    --txt: #f5f5f5;
+    --card: #141414;
+    --bdr: rgba(255,255,255,0.08);
+    --p1: #f48fb1;
+    --p2: #ffab91;
+    --shd: rgba(0,0,0,0.4);
+  }
+}
+
+@layer base {
+  html {
+    background-color: var(--bg);
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+    color: var(--txt);
+    font-family: var(--font-sans), sans-serif;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  .lx::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    z-index: -1;
+    pointer-events: none;
+    background-image: url("/topography.svg");
+    background-size: 500px;
+    background-repeat: repeat;
+    opacity: 0.25;
+    animation: driftAnim 60s linear infinite;
+  }
+
+  .lx.dark::before {
+    filter: invert(1);
+    opacity: 0.20;
+  }
+}
+
+@keyframes driftAnim {
+  0% { transform: translateY(0) translateX(0); }
+  100% { transform: translateY(-500px) translateX(-500px); }
+}
+
+@utility glass-panel {
+  backdrop-filter: blur(var(--blur-glass));
+  -webkit-backdrop-filter: blur(var(--blur-glass));
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: var(--shadow-ambient);
+}
+
+@utility glass-panel-dark {
+  backdrop-filter: blur(var(--blur-glass));
+  -webkit-backdrop-filter: blur(var(--blur-glass));
+  background: rgba(36, 25, 26, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: var(--shadow-ambient);
+}/* Visual Effects Keyframes */
+@keyframes rippleAnim {
+  0% { transform: scale(0); opacity: 1; }
+  100% { transform: scale(4); opacity: 0; }
+}
+.ripple-span {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(0);
+  animation: rippleAnim 550ms linear;
+  pointer-events: none;
+}
+.btn, button {
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes heroMeshAnim {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.hero-sec {
+  background-size: 300% 300% !important;
+  animation: heroMeshAnim 8s ease infinite !important;
+}
+
+@keyframes skeletonShimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, var(--bg2) 25%, var(--card) 50%, var(--bg2) 75%);
+  background-size: 400px 100%;
+  animation: skeletonShimmer 1.5s infinite linear;
+}
+
+@keyframes confettiFall {
+  0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+.confetti {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  animation: confettiFall 3s linear forwards;
+}

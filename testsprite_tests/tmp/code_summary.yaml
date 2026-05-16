@@ -1,0 +1,77 @@
+version: "2"
+type: frontend
+tech_stack:
+  - TypeScript
+  - Next.js
+  - React
+  - Sanity
+  - Firebase
+  - Zustand
+  - GSAP
+routes:
+  - path: /
+    file: src/app/(front)/page.tsx
+    auth_required: false
+    description: Homepage with hero and featured categories
+  - path: /shop
+    file: src/app/(front)/shop/page.tsx
+    auth_required: false
+    description: Full product catalog with filters
+  - path: /cart
+    file: src/app/(front)/cart/page.tsx
+    auth_required: false
+    description: Shopping cart overview and management
+  - path: /checkout
+    file: src/app/(front)/checkout/page.tsx
+    auth_required: false
+    description: Checkout form for delivery details
+  - path: /success
+    file: src/app/(front)/success/page.tsx
+    auth_required: false
+    description: Order success confirmation page
+  - path: /admin
+    file: src/app/(front)/admin/page.tsx
+    auth_required: true
+    description: Admin dashboard for order management
+features:
+  - name: Product Browsing
+    description: Browsing products on homepage and shop page
+    files:
+      - src/app/(front)/page.tsx
+      - src/app/(front)/shop/page.tsx
+    entry_route: /
+    user_interactions:
+      - Scroll through homepage
+      - Click on product categories
+      - View product details
+    api_calls:
+      - method: GET
+        endpoint: /api/products
+    auth_required: false
+  - name: Shopping Cart
+    description: Manage products in the shopping cart
+    files:
+      - src/app/(front)/cart/page.tsx
+      - src/store/useCartStore.ts
+    entry_route: /cart
+    user_interactions:
+      - Add product to cart
+      - Increase/decrease item quantity
+      - Remove item from cart
+      - View total price
+    auth_required: false
+  - name: Checkout Workflow
+    description: Complete order by providing delivery info
+    files:
+      - src/app/(front)/checkout/page.tsx
+    entry_route: /checkout
+    user_interactions:
+      - Fill name, phone, and address
+      - Select Wilaya (delivery area)
+      - Submit order form
+      - See validation errors for invalid input
+    api_calls:
+      - method: POST
+        endpoint: /api/orders
+    auth_required: false
+known_limitations: []

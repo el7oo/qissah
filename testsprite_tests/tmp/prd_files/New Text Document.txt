@@ -1,0 +1,29 @@
+Test my frontend interface using TestSprite MCP. Focus on all interactive elements and forms in my app. No authentication required (login/signup removed).
+
+Test these features thoroughly:
+
+1. Product browsing:
+   - Load all product categories
+   - Click on any category and verify products appear
+   - Search/filter products if available
+
+2. Shopping cart:
+   - Add product to cart
+   - Increase/decrease quantity
+   - Remove product from cart
+   - View cart total price updates correctly
+
+3. Checkout & delivery form:
+   - Enter name
+   - Enter phone number (validate format)
+   - Enter delivery address
+   - Select delivery method if available
+   - Verify "store phone number" displays correctly (between brackets)
+   - Submit order
+
+4. Edge cases:
+   - Empty cart checkout (should show error or disable button)
+   - Enter invalid phone number
+   - Submit form with missing fields
+
+For each test, report: PASS/FAIL, screenshot of failure, and description of what went wrong.

@@ -1,0 +1,395 @@
+[
+  {
+    "id": "TC001",
+    "title": "Complete checkout and reach success",
+    "description": "A shopper can fill all required checkout fields, submit the order, and reach the success confirmation page.",
+    "category": "Checkout and delivery form",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Add a product to the cart"
+      },
+      {
+        "type": "action",
+        "description": "Open the checkout page"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the name field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the phone field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the delivery address field"
+      },
+      {
+        "type": "action",
+        "description": "Select a Wilaya"
+      },
+      {
+        "type": "action",
+        "description": "Submit the order form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the success confirmation page is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC002",
+    "title": "Add a product from the homepage and view it in cart",
+    "description": "A shopper can add a product from the homepage and confirm it appears in the cart.",
+    "category": "Shopping cart management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Add a product to the cart"
+      },
+      {
+        "type": "action",
+        "description": "Open the cart page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the added item is displayed in the cart"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the cart contains items"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC003",
+    "title": "Browse homepage products by category",
+    "description": "A shopper can filter the homepage product list by category and see the displayed products update accordingly.",
+    "category": "Product browsing",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Select a product category"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the product list updates to show the selected category"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC004",
+    "title": "Increase cart quantity and update totals",
+    "description": "A shopper can increase an item quantity in the cart and see the cart totals update.",
+    "category": "Shopping cart management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Add a product to the cart"
+      },
+      {
+        "type": "action",
+        "description": "Open the cart page"
+      },
+      {
+        "type": "action",
+        "description": "Increase the item quantity"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the cart total updates"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the item quantity increases"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC005",
+    "title": "Search the homepage catalog",
+    "description": "A shopper can use the homepage search or filter controls to narrow the product list and see matching results.",
+    "category": "Product browsing",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Use the search or filter control to narrow the product list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the product list is refined to matching products"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC006",
+    "title": "Keep cart items while moving between browsing and cart",
+    "description": "A shopper can move between the homepage and cart without losing the added item or its total.",
+    "category": "Shopping cart management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Add a product to the cart"
+      },
+      {
+        "type": "action",
+        "description": "Open the cart page"
+      },
+      {
+        "type": "action",
+        "description": "Return to the homepage"
+      },
+      {
+        "type": "action",
+        "description": "Open the cart page again"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the added item is still displayed in the cart"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the cart total is preserved"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC007",
+    "title": "Decrease cart quantity and update totals",
+    "description": "A shopper can decrease an item quantity in the cart and see the cart totals update.",
+    "category": "Shopping cart management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Add a product to the cart"
+      },
+      {
+        "type": "action",
+        "description": "Open the cart page"
+      },
+      {
+        "type": "action",
+        "description": "Decrease the item quantity"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the cart total updates"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the item quantity decreases"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC008",
+    "title": "Remove an item from the cart",
+    "description": "A shopper can remove an item from the cart and see the cart reflect the removal.",
+    "category": "Shopping cart management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Add a product to the cart"
+      },
+      {
+        "type": "action",
+        "description": "Open the cart page"
+      },
+      {
+        "type": "action",
+        "description": "Remove the item from the cart"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the item is no longer displayed in the cart"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the cart is updated"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC009",
+    "title": "Explore the shop catalog",
+    "description": "A visitor can open the shop page and browse available products and details.",
+    "category": "Product browsing",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /shop"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the product catalog is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify product details are visible"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC010",
+    "title": "Show validation when required checkout fields are missing",
+    "description": "A shopper can try to submit checkout with missing required fields and see inline validation without completing the order.",
+    "category": "Checkout and delivery form",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /checkout"
+      },
+      {
+        "type": "action",
+        "description": "Submit the order form without filling required fields"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify validation feedback is visible for the missing fields"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the success confirmation page is not displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC011",
+    "title": "Reject invalid checkout phone number",
+    "description": "A shopper can enter an invalid phone number at checkout and see phone validation before the order is submitted.",
+    "category": "Checkout and delivery form",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /checkout"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the name field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in an invalid phone number in the phone field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the delivery address field"
+      },
+      {
+        "type": "action",
+        "description": "Select a Wilaya"
+      },
+      {
+        "type": "action",
+        "description": "Submit the order form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify phone validation feedback is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the success confirmation page is not displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC012",
+    "title": "Allow authenticated admin access to the dashboard",
+    "description": "An authenticated admin can open the admin route and see the dashboard content.",
+    "category": "admin",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the admin page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the admin dashboard is displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC013",
+    "title": "Display stored phone number formatting",
+    "description": "A shopper can view the stored phone number on checkout and confirm it is shown in the expected bracketed format.",
+    "category": "Checkout and delivery form",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /checkout"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the stored phone number display is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the phone number is shown between brackets"
+      }
+    ],
+    "priority": "Low"
+  }
+]

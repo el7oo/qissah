@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Luxara - Cart &amp; Checkout</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&amp;family=Tajawal:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-error-container": "#93000a",
+                      "primary-container": "#c7485e",
+                      "on-secondary": "#ffffff",
+                      "tertiary-fixed": "#ffdbc9",
+                      "surface-container-low": "#fff0f0",
+                      "inverse-primary": "#ffb2b9",
+                      "surface-variant": "#f3ddde",
+                      "inverse-surface": "#3a2d2e",
+                      "on-error": "#ffffff",
+                      "surface-dim": "#ebd5d6",
+                      "error": "#ba1a1a",
+                      "secondary-fixed-dim": "#ffb1c1",
+                      "outline": "#8a7173",
+                      "tertiary": "#825030",
+                      "on-background": "#24191a",
+                      "background": "#fff8f7",
+                      "on-tertiary": "#ffffff",
+                      "inverse-on-surface": "#ffeced",
+                      "tertiary-container": "#9f6846",
+                      "surface-container-high": "#f9e3e4",
+                      "surface-container": "#ffe9e9",
+                      "surface": "#fff8f7",
+                      "surface-tint": "#aa3249",
+                      "on-primary-container": "#fffbff",
+                      "on-primary": "#ffffff",
+                      "surface-container-highest": "#f3ddde",
+                      "on-surface": "#24191a",
+                      "secondary-container": "#fd7d9d",
+                      "on-surface-variant": "#574143",
+                      "tertiary-fixed-dim": "#fbb891",
+                      "error-container": "#ffdad6",
+                      "primary-fixed-dim": "#ffb2b9",
+                      "on-secondary-container": "#751135",
+                      "on-primary-fixed": "#400010",
+                      "secondary-fixed": "#ffd9df",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary-fixed-variant": "#891833",
+                      "secondary": "#a33757",
+                      "on-tertiary-container": "#fffbff",
+                      "on-tertiary-fixed": "#321200",
+                      "primary": "#a62f47",
+                      "on-secondary-fixed": "#3f0017",
+                      "outline-variant": "#debfc1",
+                      "primary-fixed": "#ffdadc",
+                      "on-secondary-fixed-variant": "#841f40",
+                      "on-tertiary-fixed-variant": "#693b1d",
+                      "surface-bright": "#fff8f7"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "stack-lg": "32px",
+                      "section-gap": "64px",
+                      "stack-md": "16px",
+                      "container-padding": "24px",
+                      "gutter": "16px",
+                      "unit": "4px",
+                      "stack-sm": "8px"
+              },
+              "fontFamily": {
+                      "title-lg": [
+                              "Tajawal"
+                      ],
+                      "display-lg": [
+                              "Cormorant Garamond"
+                      ],
+                      "body-md": [
+                              "Tajawal"
+                      ],
+                      "display-md": [
+                              "Cormorant Garamond"
+                      ],
+                      "body-lg": [
+                              "Tajawal"
+                      ],
+                      "label-sm": [
+                              "Tajawal"
+                      ]
+              },
+              "fontSize": {
+                      "title-lg": [
+                              "22px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-md": [
+                              "36px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .glass-layer {
+            backdrop-filter: blur(24px);
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .soft-shadow {
+            box-shadow: 0 4px 20px rgba(220, 88, 109, 0.05);
+        }
+        .deep-shadow {
+            box-shadow: 0 10px 40px rgba(220, 88, 109, 0.08);
+        }
+      </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md min-h-screen antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 border-b border-white/20 bg-white/70 dark:bg-slate-900/70 backdrop-blur-3xl shadow-sm shadow-rose-500/5 transition-all duration-300">
+<div class="flex justify-between items-center px-6 py-4 w-full max-w-7xl mx-auto">
+<div class="flex items-center">
+<!-- Search could go here if left aligned -->
+</div>
+<a class="text-2xl font-serif italic text-rose-600 dark:text-rose-300 font-display-md text-display-md tracking-wide" href="#">
+                Luxara
+            </a>
+<div class="flex items-center space-x-4 text-rose-500 dark:text-rose-400">
+<button class="hover:bg-rose-50/50 dark:hover:bg-rose-900/20 transition-all duration-300 ease-in-out hover:opacity-80 p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+</button>
+<button class="hover:bg-rose-50/50 dark:hover:bg-rose-900/20 transition-all duration-300 ease-in-out hover:opacity-80 p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+</button>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="pt-[100px] pb-[100px] md:pb-stack-lg max-w-7xl mx-auto px-4 md:px-8">
+<div class="mb-stack-lg">
+<h1 class="font-display-md text-display-md text-on-background mb-unit">Your Cart</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Review your items and proceed to checkout.</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-section-gap">
+<!-- Left Side: Cart Items -->
+<div class="lg:col-span-7 flex flex-col gap-stack-md">
+<!-- Cart Item 1 -->
+<div class="bg-surface rounded-[24px] p-container-padding soft-shadow flex flex-col sm:flex-row gap-gutter items-center border border-surface-variant/50 relative overflow-hidden group">
+<div class="w-full sm:w-32 h-32 rounded-[16px] overflow-hidden flex-shrink-0 bg-surface-container-low">
+<img alt="Product" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Elegant crystal perfume bottle with gold accents catching warm natural light on a smooth marble surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2WCJ5JbAe91BE70S5F8ATHfLQy0B2suBpIc0tEY97hvhCUpF6cR4FEDzmL1h9mNObFxz6vfMTkWPeVYfYT--we-Oxnd9NEYR7EhKWM24F3rV6pBNzvuTiR4tL67WQtLzvS-MNxvZ-45oSVOxGikMpy2X6ezDm3qPXcX2R9bAVT1OI8D1gdA5o4fekZY2QTCiw_u--ISaZgUd6wykbSyNX_aXH7dLZTzQR0K2CucAx9TL_H7a8qAZR7Tzn17YyuIBurpIKkXhF"/>
+</div>
+<div class="flex-grow flex flex-col justify-between h-full py-2 w-full">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h3 class="font-title-lg text-title-lg text-on-surface">Radiance Elixir</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">50ml · Eau de Parfum</p>
+</div>
+<p class="font-title-lg text-title-lg text-primary">$125.00</p>
+</div>
+<div class="flex justify-between items-end mt-auto">
+<div class="flex items-center bg-surface-container-high rounded-full p-1 border border-outline-variant/30">
+<button aria-label="Decrease quantity" class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[18px]">remove</span>
+</button>
+<span class="font-body-md text-body-md font-medium px-4">1</span>
+<button aria-label="Increase quantity" class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+<button class="text-on-surface-variant hover:text-error transition-colors flex items-center gap-1 font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+                                 Remove
+                             </button>
+</div>
+</div>
+</div>
+<!-- Cart Item 2 -->
+<div class="bg-surface rounded-[24px] p-container-padding soft-shadow flex flex-col sm:flex-row gap-gutter items-center border border-surface-variant/50 relative overflow-hidden group">
+<div class="w-full sm:w-32 h-32 rounded-[16px] overflow-hidden flex-shrink-0 bg-surface-container-low">
+<img alt="Product" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Minimalist skincare jars on a soft peach background with subtle soft shadows indicating organic luxury" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJ3IdB5byp7SF23mHJnknZBeRZOZgOHZbAoRDlz3XeY39VVqW7rsiO6qfdOgxQi5Sc918ikCGgI0aS0RZF9_REBV8DBOPoy5vUEKm6ZHjhCtj_npA07Irjw5o0ji0FjJ6DZb382-tMgpS6FahxGzPR2ojij3S51UmJfBJAu4a2IsI_RYod6ztR4jE_LCelL2Zt91cmy5abz89YFjl-uXQ9D4WUM2i4MfggY0g7oSp3KHYSdz2LyiZtq3bq8UpQS-MaR-5TIrea"/>
+</div>
+<div class="flex-grow flex flex-col justify-between h-full py-2 w-full">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h3 class="font-title-lg text-title-lg text-on-surface">Velvet Night Cream</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">100ml · Hydration</p>
+</div>
+<p class="font-title-lg text-title-lg text-primary">$85.00</p>
+</div>
+<div class="flex justify-between items-end mt-auto">
+<div class="flex items-center bg-surface-container-high rounded-full p-1 border border-outline-variant/30">
+<button aria-label="Decrease quantity" class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[18px]">remove</span>
+</button>
+<span class="font-body-md text-body-md font-medium px-4">2</span>
+<button aria-label="Increase quantity" class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+<button class="text-on-surface-variant hover:text-error transition-colors flex items-center gap-1 font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+                                 Remove
+                             </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Side: Order Summary & Checkout -->
+<div class="lg:col-span-5 relative">
+<!-- Sticky Container for Desktop -->
+<div class="sticky top-[120px] flex flex-col gap-stack-lg">
+<!-- Order Summary Card -->
+<div class="bg-surface-container-lowest rounded-[24px] p-container-padding deep-shadow border border-surface-variant/30 relative overflow-hidden">
+<!-- Decorative gradient blob -->
+<div class="absolute -top-20 -right-20 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+<h2 class="font-title-lg text-title-lg text-on-surface mb-stack-md relative z-10">Order Summary</h2>
+<div class="space-y-stack-sm mb-stack-md relative z-10">
+<div class="flex justify-between font-body-md text-body-md text-on-surface-variant">
+<span>Subtotal</span>
+<span>$295.00</span>
+</div>
+<div class="flex justify-between font-body-md text-body-md text-on-surface-variant">
+<span>Shipping</span>
+<span class="text-secondary flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">local_shipping</span>
+                                    Free Delivery
+                                </span>
+</div>
+<div class="flex justify-between font-body-md text-body-md text-on-surface-variant">
+<span>Tax (Estimated)</span>
+<span>$0.00</span>
+</div>
+</div>
+<div class="border-t border-surface-variant/50 pt-stack-md mb-stack-md relative z-10">
+<div class="flex justify-between items-center">
+<span class="font-title-lg text-title-lg text-on-surface">Total</span>
+<span class="font-display-md text-display-md text-primary">$295.00</span>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant text-right mt-1">Including VAT</p>
+</div>
+</div>
+<!-- Checkout Form Card -->
+<div class="bg-surface-container-lowest rounded-[24px] p-container-padding deep-shadow border border-surface-variant/30">
+<h2 class="font-title-lg text-title-lg text-on-surface mb-stack-md">Delivery Details</h2>
+<form class="space-y-stack-md">
+<!-- Full Name -->
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-unit" for="fullName">Full Name</label>
+<input class="w-full bg-[#FFE8D6] border-none rounded-[24px] py-3 px-5 font-body-md text-body-md text-on-surface placeholder:text-outline-variant focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-all" id="fullName" name="fullName" placeholder="Jane Doe" type="text"/>
+</div>
+<!-- Phone -->
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-unit" for="phone">Phone Number</label>
+<input class="w-full bg-[#FFE8D6] border-none rounded-[24px] py-3 px-5 font-body-md text-body-md text-on-surface placeholder:text-outline-variant focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-all" id="phone" name="phone" placeholder="+213 XX XX XX XX" type="tel"/>
+</div>
+<!-- Wilaya Dropdown -->
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-unit" for="wilaya">Wilaya</label>
+<div class="relative">
+<select class="w-full bg-[#FFE8D6] border-none rounded-[24px] py-3 px-5 pr-10 font-body-md text-body-md text-on-surface appearance-none focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-all cursor-pointer" id="wilaya" name="wilaya">
+<option class="text-outline-variant" disabled="" selected="" value="">Select Wilaya</option>
+<option value="16">16 - Algiers</option>
+<option value="31">31 - Oran</option>
+<option value="25">25 - Constantine</option>
+<option value="23">23 - Annaba</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Address -->
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-unit" for="address">Address</label>
+<textarea class="w-full bg-[#FFE8D6] border-none rounded-[24px] py-3 px-5 font-body-md text-body-md text-on-surface placeholder:text-outline-variant focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-all resize-none" id="address" name="address" placeholder="Street name, building, apartment..." rows="2"></textarea>
+</div>
+<!-- Payment Focus Badge -->
+<div class="bg-surface-container-high rounded-[16px] p-4 mt-stack-md flex items-center gap-3 border border-outline-variant/30">
+<div class="bg-primary-container text-on-primary-container w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<div>
+<h4 class="font-body-md text-body-md font-medium text-on-surface">Cash on Delivery</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Pay safely when you receive your order.</p>
+</div>
+</div>
+<!-- Submit Button -->
+<button class="w-full bg-gradient-to-r from-primary to-secondary text-on-primary rounded-[24px] py-4 font-title-lg text-title-lg hover:opacity-90 transition-opacity mt-stack-lg shadow-lg shadow-primary/20 flex items-center justify-center gap-2" type="submit">
+                                Confirm Order
+                                <span class="material-symbols-outlined text-[20px]">check_circle</span>
+</button>
+</form>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 rounded-t-3xl border-t border-white/30 bg-white/80 dark:bg-slate-950/80 backdrop-blur-3xl shadow-2xl shadow-rose-900/10">
+<div class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-3 pb-safe">
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-5 py-2 hover:text-rose-400 dark:hover:text-rose-200 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="home">home</span>
+<span class="text-[10px] font-medium tracking-tighter">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-5 py-2 hover:text-rose-400 dark:hover:text-rose-200 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="grid_view">grid_view</span>
+<span class="text-[10px] font-medium tracking-tighter">Shop</span>
+</a>
+<!-- Active State: Cart -->
+<a class="flex flex-col items-center justify-center bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-300 rounded-2xl px-5 py-2 hover:text-rose-400 dark:hover:text-rose-200 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="shopping_bag" style="font-variation-settings: 'FILL' 1;">shopping_bag</span>
+<span class="text-[10px] font-medium tracking-tighter">Cart</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-5 py-2 hover:text-rose-400 dark:hover:text-rose-200 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="receipt_long">receipt_long</span>
+<span class="text-[10px] font-medium tracking-tighter">Orders</span>
+</a>
+</div>
+</nav>
+</body></html>

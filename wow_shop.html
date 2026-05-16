@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Luxara - Shop</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Tajawal:wght@300;400;500;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error-container": "#93000a",
+                        "primary-container": "#c7485e",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed": "#ffdbc9",
+                        "surface-container-low": "#fff0f0",
+                        "inverse-primary": "#ffb2b9",
+                        "surface-variant": "#f3ddde",
+                        "inverse-surface": "#3a2d2e",
+                        "on-error": "#ffffff",
+                        "surface-dim": "#ebd5d6",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#ffb1c1",
+                        "outline": "#8a7173",
+                        "tertiary": "#825030",
+                        "on-background": "#24191a",
+                        "background": "#fff8f7",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#ffeced",
+                        "tertiary-container": "#9f6846",
+                        "surface-container-high": "#f9e3e4",
+                        "surface-container": "#ffe9e9",
+                        "surface": "#fff8f7",
+                        "surface-tint": "#aa3249",
+                        "on-primary-container": "#fffbff",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#f3ddde",
+                        "on-surface": "#24191a",
+                        "secondary-container": "#fd7d9d",
+                        "on-surface-variant": "#574143",
+                        "tertiary-fixed-dim": "#fbb891",
+                        "error-container": "#ffdad6",
+                        "primary-fixed-dim": "#ffb2b9",
+                        "on-secondary-container": "#751135",
+                        "on-primary-fixed": "#400010",
+                        "secondary-fixed": "#ffd9df",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed-variant": "#891833",
+                        "secondary": "#a33757",
+                        "on-tertiary-container": "#fffbff",
+                        "on-tertiary-fixed": "#321200",
+                        "primary": "#a62f47",
+                        "on-secondary-fixed": "#3f0017",
+                        "outline-variant": "#debfc1",
+                        "primary-fixed": "#ffdadc",
+                        "on-secondary-fixed-variant": "#841f40",
+                        "on-tertiary-fixed-variant": "#693b1d",
+                        "surface-bright": "#fff8f7"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-lg": "32px",
+                        "section-gap": "64px",
+                        "stack-md": "16px",
+                        "container-padding": "24px",
+                        "gutter": "16px",
+                        "unit": "4px",
+                        "stack-sm": "8px"
+                    },
+                    "fontFamily": {
+                        "title-lg": ["Tajawal"],
+                        "display-lg": ["Cormorant Garamond"],
+                        "body-md": ["Tajawal"],
+                        "display-md": ["Cormorant Garamond"],
+                        "body-lg": ["Tajawal"],
+                        "label-sm": ["Tajawal"]
+                    },
+                    "fontSize": {
+                        "title-lg": ["22px", { "lineHeight": "1.4", "fontWeight": "700" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "display-md": ["36px", { "lineHeight": "1.2", "fontWeight": "500" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #FFF8F3;
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-background pb-24 md:pb-0">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 border-b border-white/20 shadow-sm shadow-rose-500/5 bg-white/70 dark:bg-slate-900/70 backdrop-blur-3xl transition-all duration-300 ease-in-out">
+<div class="flex justify-between items-center px-6 py-4 w-full max-w-7xl mx-auto">
+<div class="text-2xl font-serif italic text-rose-600 dark:text-rose-300 font-display-md text-primary">
+                Luxara
+            </div>
+<div class="hidden md:flex flex-1 max-w-md mx-6">
+<div class="relative w-full">
+<input class="w-full bg-[#FFE8D6]/50 border-none rounded-2xl py-2 pl-4 pr-10 text-on-surface focus:ring-2 focus:ring-primary/20 transition-all font-body-md placeholder:text-outline/50" placeholder="Search curated collections..." type="text"/>
+<span class="material-symbols-outlined absolute right-3 top-2.5 text-outline">search</span>
+</div>
+</div>
+<div class="flex items-center gap-4 text-rose-500 dark:text-rose-400 font-serif font-light tracking-wide">
+<button class="hover:bg-rose-50/50 dark:hover:bg-rose-900/20 transition-all duration-300 ease-in-out hover:opacity-80 p-2 rounded-full hidden md:block">
+<span class="material-symbols-outlined">shopping_cart</span>
+</button>
+<button class="hover:bg-rose-50/50 dark:hover:bg-rose-900/20 transition-all duration-300 ease-in-out hover:opacity-80 p-2 rounded-full hidden md:block">
+<span class="material-symbols-outlined">person</span>
+</button>
+<!-- Mobile Search Toggle -->
+<button class="md:hidden p-2 text-primary">
+<span class="material-symbols-outlined">search</span>
+</button>
+</div>
+</div>
+</nav>
+<!-- SideNavBar (Desktop) -->
+<aside class="hidden md:flex flex-col h-screen w-64 border-r border-rose-100/50 bg-[#FFF8F3] dark:bg-slate-950 fixed left-0 top-0 pt-24 pb-8 px-4 z-40">
+<div class="mb-8 px-4">
+<h2 class="font-title-lg text-primary mb-1">Luxara Admin</h2>
+<p class="font-label-sm text-outline">Management Console</p>
+</div>
+<nav class="flex flex-col gap-2 flex-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-slate-900 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-slate-900 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-body-md">Inventory</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-slate-900 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">local_shipping</span>
+<span class="font-body-md">Orders</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-slate-900 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-body-md">Customers</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-slate-900 transition-colors duration-200 mt-auto" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md">Settings</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="pt-24 md:pl-64 min-h-screen">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<!-- Page Header & Filters -->
+<div class="mb-section-gap">
+<h1 class="font-display-lg text-on-surface mb-stack-md text-center md:text-left">Curated Collection</h1>
+<!-- Mobile Search -->
+<div class="md:hidden w-full mb-stack-lg relative">
+<input class="w-full bg-[#FFE8D6]/50 border-none rounded-2xl py-3 pl-4 pr-12 text-on-surface focus:ring-2 focus:ring-primary/20 transition-all font-body-md placeholder:text-outline/50 shadow-sm" placeholder="Search curated collections..." type="text"/>
+<span class="material-symbols-outlined absolute right-4 top-3 text-outline">search</span>
+</div>
+<!-- Filter Chips -->
+<div class="flex overflow-x-auto pb-4 gap-3 hide-scrollbar">
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-primary text-on-primary font-label-sm tracking-wider shadow-md shadow-primary/10 border border-primary/20 transition-all">All</button>
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-high text-on-surface font-label-sm tracking-wider hover:bg-surface-variant transition-all border border-transparent">New Arrivals</button>
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-high text-on-surface font-label-sm tracking-wider hover:bg-surface-variant transition-all border border-transparent">Living</button>
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-high text-on-surface font-label-sm tracking-wider hover:bg-surface-variant transition-all border border-transparent">Lighting</button>
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-high text-on-surface font-label-sm tracking-wider hover:bg-surface-variant transition-all border border-transparent">Decor</button>
+</div>
+</div>
+<!-- Product Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+<!-- Product Card 1 -->
+<div class="group relative bg-white/40 backdrop-blur-md rounded-[24px] p-4 shadow-[0_8px_30px_rgb(220,88,109,0.05)] border border-white/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgb(220,88,109,0.08)] flex flex-col">
+<div class="relative w-full aspect-[4/5] rounded-xl overflow-hidden mb-4 bg-surface-variant/30">
+<img alt="Aesthetic Sofa" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="minimalist modern sofa in a bright sunlit room with subtle shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAs3TkpnAP6NEe0EwV8TlXJ4vlCISGKmcJb5YsCxZyNguaqezEpvkUzrfylXxxb3gBI4oy3yFlB8nKsvndmH4WUKNOBVhNttPsgZtnptnwnsPeBPB-aZVWv3wXKdhbzzLdBDVLBPWyfbFCPDrTLFq0ENYm_npSSqdNm7YdUhj0y9dI5OZQn1ZfOLtK7CC162zwfMKiGOfRjukvz-Y-4za5Ooe0Ke-FwmxSvNDmOKA4VezJRLzr8FNj0TNhxl4-xwQHRfbF2qS0H"/>
+<div class="absolute top-3 left-3 bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full font-label-sm text-primary shadow-sm">New</div>
+</div>
+<div class="flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-1">
+<h3 class="font-title-lg text-on-surface leading-tight">Aura Lounge</h3>
+<button class="text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">favorite</span>
+</button>
+</div>
+<p class="font-label-sm text-on-surface-variant mb-3 line-clamp-1">Bouclé Fabric Sofa</p>
+<div class="mt-auto flex justify-between items-end">
+<div class="flex flex-col">
+<span class="font-body-md text-on-surface font-medium">$2,400</span>
+</div>
+<button class="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-colors duration-300">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="group relative bg-white/40 backdrop-blur-md rounded-[24px] p-4 shadow-[0_8px_30px_rgb(220,88,109,0.05)] border border-white/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgb(220,88,109,0.08)] flex flex-col">
+<div class="relative w-full aspect-[4/5] rounded-xl overflow-hidden mb-4 bg-surface-variant/30">
+<img alt="Pendant Light" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="sleek modern pendant light hanging over a concrete table minimal styling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDA6RiNOzH8AGChOSHqmetTPIYXp5htaghbEpMudIbvF2MNweeeXLin0pO6yRGMuNOrWeTpTjFW2VTc0sE3tRyd8Y079_fTPCwa2xXaBq-o9pYfE-lNvnQjNmA3g4l5SUH9m7opMXEBK8hJUamatXmc6c8z2-uuU36i7YvSKt3I20uHfQtaEha3Z2BDzXx8gAhlhzf1VZv0ZQCiVgpzMpljgt8UPLTV5lgcMbIFMwI0JO2CsRwnjg2HQpYnKZPMitrK2kU00BxC"/>
+</div>
+<div class="flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-1">
+<h3 class="font-title-lg text-on-surface leading-tight">Lumina Pendant</h3>
+<button class="text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">favorite</span>
+</button>
+</div>
+<p class="font-label-sm text-on-surface-variant mb-3 line-clamp-1">Matte Black &amp; Brass</p>
+<div class="mt-auto flex justify-between items-end">
+<div class="flex flex-col">
+<span class="font-label-sm text-outline line-through mb-0.5">$450</span>
+<span class="font-body-md text-secondary font-medium">$380</span>
+</div>
+<button class="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-colors duration-300">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="group relative bg-white/40 backdrop-blur-md rounded-[24px] p-4 shadow-[0_8px_30px_rgb(220,88,109,0.05)] border border-white/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgb(220,88,109,0.08)] flex flex-col">
+<div class="relative w-full aspect-[4/5] rounded-xl overflow-hidden mb-4 bg-surface-variant/30">
+<img alt="Ceramic Vase" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="sculptural organic shaped ceramic vase on a wooden pedestal warm light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrApFI8bXQdVDpTQHOLLlMqVn_8dVAZzOCBbljJh17zMQ1yYgX77KlfP8WNikgu6bpddwQRCmwcOwh9im5eiVTt7NYGTntaaRXjwafHVXA1H5KIhL87E9Lrb7U2CYZVE2V28UN-8RegvtoQisFlIwqTBsRbBDJYj3XlFooscg3GKFqc5y17Sf368xHMnkZNjueyVkcyIbrwoKesySseEgOuamoM4KKmHpeHvl5JzxqWDC6uDZ60syuVNmwTXycPrwbmN65YtGu"/>
+</div>
+<div class="flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-1">
+<h3 class="font-title-lg text-on-surface leading-tight">Forma Vessel</h3>
+<button class="text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">favorite</span>
+</button>
+</div>
+<p class="font-label-sm text-on-surface-variant mb-3 line-clamp-1">Hand-thrown Ceramic</p>
+<div class="mt-auto flex justify-between items-end">
+<div class="flex flex-col">
+<span class="font-body-md text-on-surface font-medium">$120</span>
+</div>
+<button class="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-colors duration-300">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product Card 4 -->
+<div class="group relative bg-white/40 backdrop-blur-md rounded-[24px] p-4 shadow-[0_8px_30px_rgb(220,88,109,0.05)] border border-white/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgb(220,88,109,0.08)] flex flex-col">
+<div class="relative w-full aspect-[4/5] rounded-xl overflow-hidden mb-4 bg-surface-variant/30">
+<img alt="Dining Chair" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="minimalist dining chair in soft wood and beige fabric natural light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6Z_tPhQP4TJ_g_hf4LzFTCdzB-vdezJU8-qWaZcrqE0hdbF5KwhDxKFFEVNp9fVTzJPbCZUHMZlrB-m-_q-Z60CRfkriNMYmJmhgvgZfXvzzBSef6BXf_4V2XiMsUDK4qr51P3ySKeJoJlD0wspowlOvsnGJeIDr6hyOFGWnLzN6HRCDJ6mQ9H2tJODywLP3ntJaBMwsJZb1s0bFL2wjqeUS0geOAWi-pXOK8aZwrgDfJ0Lt4WpaXHEmhXjPzaKk3MvSJNA1J"/>
+<div class="absolute top-3 left-3 bg-secondary/90 backdrop-blur-sm px-3 py-1 rounded-full font-label-sm text-white shadow-sm">-15%</div>
+</div>
+<div class="flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-1">
+<h3 class="font-title-lg text-on-surface leading-tight">Oasis Chair</h3>
+<button class="text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">favorite</span>
+</button>
+</div>
+<p class="font-label-sm text-on-surface-variant mb-3 line-clamp-1">Oak &amp; Linen</p>
+<div class="mt-auto flex justify-between items-end">
+<div class="flex flex-col">
+<span class="font-label-sm text-outline line-through mb-0.5">$320</span>
+<span class="font-body-md text-secondary font-medium">$272</span>
+</div>
+<button class="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-colors duration-300">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Empty State (Hidden by default, shown for demonstration) -->
+<div class="hidden mt-section-gap flex-col items-center justify-center text-center py-16 px-4 bg-white/20 backdrop-blur-sm rounded-[32px] border border-white/40">
+<div class="w-24 h-24 bg-surface-container rounded-full flex items-center justify-center mb-6 shadow-inner">
+<span class="material-symbols-outlined text-4xl text-outline/50">search_off</span>
+</div>
+<h3 class="font-display-md text-on-surface mb-2">No items found</h3>
+<p class="font-body-md text-on-surface-variant max-w-md">We couldn't find any pieces matching your current filters. Try adjusting your search to explore more of our collection.</p>
+<button class="mt-8 px-8 py-3 rounded-full bg-primary text-on-primary font-body-md tracking-wide shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-shadow">Clear Filters</button>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-3 pb-safe z-50 rounded-t-3xl border-t border-white/10 dark:border-slate-800/50 shadow-2xl shadow-rose-900/10 bg-white/80 dark:bg-slate-950/80 backdrop-blur-3xl">
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-5 py-2 scale-95 active:scale-90 transition-transform hover:text-rose-400 dark:hover:text-rose-200" href="#">
+<span class="material-symbols-outlined mb-1">home</span>
+<span class="text-[10px] font-medium tracking-tighter">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-300 rounded-2xl px-5 py-2 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">grid_view</span>
+<span class="text-[10px] font-medium tracking-tighter">Shop</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-5 py-2 scale-95 active:scale-90 transition-transform hover:text-rose-400 dark:hover:text-rose-200" href="#">
+<span class="material-symbols-outlined mb-1">shopping_bag</span>
+<span class="text-[10px] font-medium tracking-tighter">Cart</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-5 py-2 scale-95 active:scale-90 transition-transform hover:text-rose-400 dark:hover:text-rose-200" href="#">
+<span class="material-symbols-outlined mb-1">receipt_long</span>
+<span class="text-[10px] font-medium tracking-tighter">Orders</span>
+</a>
+</nav>
+<style>
+        /* Hide scrollbar for filter chips */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* Safe area padding for mobile bottom nav */
+        .pb-safe {
+            padding-bottom: env(safe-area-inset-bottom, 16px);
+        }
+    </style>
+</body></html>
