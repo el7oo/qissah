@@ -13,6 +13,7 @@ export interface Product {
   rating: string;
   image: string;
   images?: string[];
+  description?: string;
 }
 
 interface ProductStore {
