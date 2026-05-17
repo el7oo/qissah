@@ -52,7 +52,7 @@ function buildConnectSrc(isProduction: boolean): string {
 }
 
 function contentSecurityPolicy(isProduction: boolean): string {
-  const scriptSrc = isProduction ? "'self'" : "'self' 'unsafe-eval' 'unsafe-inline'";
+  const scriptSrc = "'self' 'unsafe-eval' 'unsafe-inline'";
   const styleSrc = "'self' 'unsafe-inline'";
   const imgSrc = "'self' blob: data: https:";
   const connectSrc = buildConnectSrc(isProduction);
