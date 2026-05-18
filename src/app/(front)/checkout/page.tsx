@@ -42,13 +42,10 @@ export default function CheckoutPage() {
   const { homeFee, deskFee } = useMemo(() => {
     if (!selectedWilaya) return { homeFee: 0, deskFee: 0 };
     
-    let calcHome = 0;
-    let calcDesk = 0;
+    let calcHome: number | null = selectedWilaya.homePrice;
+    let calcDesk: number | null = selectedWilaya.deskPrice;
     
     if (selectedWilaya) {
-      let sumHome = 0;
-      let sumDesk = 0;
-      
       items.forEach(item => {
         let iHome = selectedWilaya.homePrice;
         let iDesk = selectedWilaya.deskPrice;
@@ -61,15 +58,25 @@ export default function CheckoutPage() {
           }
         }
         
-        if (iHome > calcHome) calcHome = iHome;
-        if (iDesk > calcDesk) calcDesk = iDesk;
+        if (calcHome !== null && iHome !== null && iHome > calcHome) calcHome = iHome;
+        if (calcDesk !== null && iDesk !== null && iDesk > calcDesk) calcDesk = iDesk;
       });
     }
     
     return { homeFee: calcHome, deskFee: calcDesk };
   }, [selectedWilaya, items]);
 
-  const shippingFee = formData.deliveryType === 'home' ? homeFee : deskFee;
+  useEffect(() => {
+    if (selectedWilaya) {
+      if (formData.deliveryType === 'home' && homeFee === null && deskFee !== null) {
+        setFormData(prev => ({ ...prev, deliveryType: 'desk' }));
+      } else if (formData.deliveryType === 'desk' && deskFee === null && homeFee !== null) {
+        setFormData(prev => ({ ...prev, deliveryType: 'home' }));
+      }
+    }
+  }, [selectedWilaya, homeFee, deskFee]);
+
+  const shippingFee = formData.deliveryType === 'home' ? (homeFee || 0) : (deskFee || 0);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -168,14 +175,17 @@ export default function CheckoutPage() {
         {selectedWilaya && (
           <div className="fg" style={{ display: 'flex', gap: '10px', marginTop: '10px', marginBottom: '10px' }}>
             <div 
-              onClick={() => handleDeliveryTypeChange('home')}
+              onClick={() => {
+                if (homeFee !== null) handleDeliveryTypeChange('home');
+              }}
               style={{ 
                 flex: 1, 
                 padding: '12px', 
                 borderRadius: '12px', 
                 border: formData.deliveryType === 'home' ? '2px solid var(--p1)' : '2px solid var(--bdr)',
                 background: formData.deliveryType === 'home' ? 'var(--p1-10)' : 'var(--bg2)',
-                cursor: 'pointer',
+                cursor: homeFee === null ? 'not-allowed' : 'pointer',
+                opacity: homeFee === null ? 0.5 : 1,
                 textAlign: 'center',
                 transition: 'all 0.2s'
               }}
@@ -184,18 +194,21 @@ export default function CheckoutPage() {
                 {lang === 'ar' ? 'توصيل للمنزل' : 'Home Delivery'}
               </div>
               <div style={{ fontSize: '14px', color: 'var(--txt2)', marginTop: '4px' }}>
-                {homeFee} دج
+                {homeFee === null ? (lang === 'ar' ? 'غير متوفر' : 'N/A') : `${homeFee} دج`}
               </div>
             </div>
             <div 
-              onClick={() => handleDeliveryTypeChange('desk')}
+              onClick={() => {
+                if (deskFee !== null) handleDeliveryTypeChange('desk');
+              }}
               style={{ 
                 flex: 1, 
                 padding: '12px', 
                 borderRadius: '12px', 
                 border: formData.deliveryType === 'desk' ? '2px solid var(--p1)' : '2px solid var(--bdr)',
                 background: formData.deliveryType === 'desk' ? 'var(--p1-10)' : 'var(--bg2)',
-                cursor: 'pointer',
+                cursor: deskFee === null ? 'not-allowed' : 'pointer',
+                opacity: deskFee === null ? 0.5 : 1,
                 textAlign: 'center',
                 transition: 'all 0.2s'
               }}
@@ -204,7 +217,7 @@ export default function CheckoutPage() {
                 {lang === 'ar' ? 'توصيل للمكتب' : 'Desk Delivery'}
               </div>
               <div style={{ fontSize: '14px', color: 'var(--txt2)', marginTop: '4px' }}>
-                {deskFee} دج
+                {deskFee === null ? (lang === 'ar' ? 'غير متوفر' : 'N/A') : `${deskFee} دج`}
               </div>
             </div>
           </div>
