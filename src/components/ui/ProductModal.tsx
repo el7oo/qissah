@@ -20,21 +20,7 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
   const panelRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const overlay = overlayRef.current;
-    const panel = panelRef.current;
-    if (!overlay || !panel) return;
-
-    const tl = gsap.timeline();
-    tl.fromTo(overlay, { opacity: 0 }, { opacity: 1, duration: 0.18, ease: 'power2.out' });
-    tl.fromTo(
-      panel,
-      { y: 24, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.24, ease: 'power2.out' },
-      0
-    );
-    return () => {
-      tl.kill();
-    };
+    // Relying entirely on CSS animations for smoother performance (no GSAP lagging)
   }, []);
 
   const handleAdd = (e: React.MouseEvent) => {
@@ -61,22 +47,24 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
       <div
         ref={overlayRef}
         style={{
-          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', zIndex: 99998,
-          backdropFilter: 'blur(8px)', animation: 'fadeIn 0.3s ease'
+          position: 'fixed', inset: 0, background: 'rgba(0,10,30,0.65)', zIndex: 99998,
+          animation: 'fadeIn 0.25s ease forwards'
         }}
         onClick={() => { audio.playTap(); onClose(); }}
       />
-      <div
-        ref={panelRef}
-        className="product-modal-panel"
-        style={{
-          position: 'fixed', background: 'var(--bg)',
-          zIndex: 99999, display: 'flex', flexDirection: 'column',
-          animation: 'slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-          boxShadow: '0 -10px 40px rgba(0,0,0,0.2)'
-        }}
-        dir={lang === 'ar' ? 'rtl' : 'ltr'}
-      >
+      <div className="product-modal-wrapper" onClick={(e) => { if (e.target === e.currentTarget) { audio.playTap(); onClose(); } }}>
+        <div
+          ref={panelRef}
+          className="product-modal-panel"
+          style={{
+            background: 'var(--bg)',
+            display: 'flex', flexDirection: 'column',
+            animation: 'modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+            boxShadow: '0 20px 60px rgba(0,0,0,0.4)',
+            position: 'relative'
+          }}
+          dir={lang === 'ar' ? 'rtl' : 'ltr'}
+        >
         <div style={{ padding: '16px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--bdr)' }}>
           <div style={{ fontSize: '18px', fontWeight: 800, color: 'var(--txt)', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis', paddingRight: '10px' }}>{product.title}</div>
           <button onClick={() => { audio.playTap(); onClose(); }} style={{ background: 'var(--card)', border: '1px solid var(--bdr)', color: 'var(--txt)', cursor: 'pointer', padding: '8px', borderRadius: '50%', flexShrink: 0, transition: 'transform 0.2s' }}>
@@ -141,24 +129,35 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
           </div>
         </div>
       </div>
+      </div>
       <style>{`
+        .product-modal-wrapper {
+          position: fixed; inset: 0; z-index: 99999;
+          display: flex; align-items: flex-end; justify-content: center;
+          pointer-events: auto;
+        }
         .product-modal-panel {
-          bottom: 0; left: 0; right: 0; 
+          width: 100%;
           border-top-left-radius: 32px; border-top-right-radius: 32px;
           max-height: 90vh;
         }
         @media (min-width: 768px) {
+          .product-modal-wrapper {
+            align-items: center; padding: 20px;
+          }
           .product-modal-panel {
-            top: 5vh; bottom: 5vh; left: 50%; right: auto; 
-            width: 90vw; max-width: 500px;
-            transform: translateX(-50%) !important;
+            width: 90vw; max-width: 480px;
             border-radius: 32px;
-            max-height: none;
+            max-height: 90vh;
           }
         }
-        @keyframes slideUp {
-          from { transform: translateY(100%); }
-          to { transform: translateY(0); }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes modalPop {
+          from { opacity: 0; transform: translateY(40px) scale(0.98); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
         }
       `}</style>
     </>

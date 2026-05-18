@@ -69,12 +69,7 @@ export const productType = defineType({
       },
       initialValue: 'in_stock',
     }),
-    defineField({
-      name: 'shippingCost',
-      title: 'Default Shipping Cost (DZD) - Fallback',
-      type: 'number',
-      initialValue: 400,
-    }),
+    // Default shipping cost removed as requested
     defineField({
       name: 'shippingProfile',
       title: 'Shipping Profile (قائمة أسعار التوصيل)',

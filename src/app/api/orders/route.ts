@@ -20,16 +20,16 @@ function deliveryFeeForProduct(
   product: any,
   wilayaId: number,
   deliveryType: DeliveryType,
-  defaultHome: number,
-  defaultDesk: number
+  defaultHome: number | null,
+  defaultDesk: number | null
 ): number {
-  let home = Number(product.shippingCost ?? defaultHome);
-  let desk = Number(product.shippingCost ?? defaultDesk);
+  let home = defaultHome !== null ? defaultHome : 0;
+  let desk = defaultDesk !== null ? defaultDesk : 0;
   if (Array.isArray(product.customShipping)) {
     const custom = product.customShipping.find((c: any) => Number(c?.wilayaId) === wilayaId);
     if (custom) {
-      if (Number.isFinite(Number(custom.homePrice))) home = Number(custom.homePrice);
-      if (Number.isFinite(Number(custom.deskPrice))) desk = Number(custom.deskPrice);
+      if (custom.homePrice !== null && Number.isFinite(Number(custom.homePrice))) home = Number(custom.homePrice);
+      if (custom.deskPrice !== null && Number.isFinite(Number(custom.deskPrice))) desk = Number(custom.deskPrice);
     }
   }
   return deliveryType === 'home' ? home : desk;
