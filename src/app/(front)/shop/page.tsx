@@ -22,7 +22,7 @@ export default function Shop() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const PAGE_SIZE = 24;
+  const PAGE_SIZE = 50;
   const [catalogError, setCatalogError] = useState<string | null>(null);
   const rootRef = useRef<HTMLDivElement | null>(null);
   

@@ -22,7 +22,7 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
   const [loading, setLoading] = useState(true);
   const [categoryName, setCategoryName] = useState<string>(slug);
   const [currentPage, setCurrentPage] = useState(1);
-  const PAGE_SIZE = 24;
+  const PAGE_SIZE = 50;
   const rootRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
