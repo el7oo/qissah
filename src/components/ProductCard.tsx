@@ -7,7 +7,12 @@ import { Product } from '@/store/productStore';
 import toast from 'react-hot-toast';
 
 import { useState } from 'react';
-import { ProductModal } from './ui/ProductModal';
+import dynamic from 'next/dynamic';
+
+const ProductModal = dynamic(() => import('./ui/ProductModal').then(mod => mod.ProductModal), {
+  loading: () => null,
+  ssr: false,
+});
 
 export function ProductCard({ product }: { product: Product }) {
   const { addItem } = useCartStore();
@@ -36,6 +41,10 @@ export function ProductCard({ product }: { product: Product }) {
   const ratingNum = parseFloat(product.rating?.split('·')[0] || product.rating || '5');
   const sold = product.rating?.split('·')[1]?.trim() || '120';
 
+  const optimizedImage = product.image?.includes('cdn.sanity.io') 
+    ? `${product.image}${product.image.includes('?') ? '&' : '?'}auto=format&w=400&q=75`
+    : product.image;
+
   return (
     <>
       <div className="pc" onClick={() => { audio.playTap(); setModalOpen(true); }}>
@@ -46,7 +55,7 @@ export function ProductCard({ product }: { product: Product }) {
           <img 
             className="pc-img" 
             id={`pi_${product.id}`} 
-            src={product.image} 
+            src={optimizedImage} 
             loading="lazy" 
             onError={(e) => (e.currentTarget.src='https://placehold.co/300x300/FFE8D6/DC586D?text=🛍️')}
             alt={product.title}

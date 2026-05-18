@@ -7,6 +7,7 @@ import { Navigation } from "@/components/ui/Navigation";
 import { SideCart } from "@/components/ui/SideCart";
 import { ParticleBackground } from "@/utils/visualEffects";
 import { MotionProvider } from "@/components/gsap/MotionProvider";
+import { SystemSetup } from "@/components/SystemSetup";
 
 const alexandria = Alexandria({
   variable: "--font-alexandria",
@@ -34,6 +35,7 @@ export default function RootLayout({
     <html lang="ar" dir="rtl" className={`${alexandria.variable} ${cormorant.variable} antialiased`}>
       <body className="min-h-screen flex flex-col text-on-background m-0 p-0 overflow-hidden h-screen">
         <CartHydration>
+          <SystemSetup />
           <MotionProvider />
           <ParticleBackground />
           <div className="lx dark" id="app" dir="rtl">

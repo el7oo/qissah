@@ -81,7 +81,7 @@ export default function Home() {
   }, [products.length, sanityCategories.length]);
 
   const featuredProducts = products.filter(p => p.discount);
-  const newArrivals = products.slice(0, 4);
+  const newArrivals = products.slice(0, 8);
 
   const heroParticles = Array.from({length: 8}, (_, i) => (
     <div key={i} className="hp" style={{
@@ -187,8 +187,8 @@ export default function Home() {
           <div className="ttl"><AppleEmoji name="🔥" /> {lang === 'ar' ? 'الأكثر رواجاً' : 'Most Popular'}</div>
           <div className="view-all" onClick={() => router.push('/shop')}>{t.viewAll}</div>
         </div>
-        <div className="pg">
-          {products.slice(0, 4).map((p, i) => (
+        <div className="pg-swipe">
+          {products.slice(0, 8).map((p, i) => (
             <ProductCard key={p.id || `pop-${i}`} product={p} />
           ))}
         </div>
@@ -198,7 +198,7 @@ export default function Home() {
         <div className="sec-hd">
           <div className="ttl"><AppleEmoji name="✨" /> {t.newArrivals}</div>
         </div>
-        <div className="pg">
+        <div className="pg-swipe">
           {newArrivals.map((p, i) => (
             <ProductCard key={p.id || `new-${i}`} product={p} />
           ))}

@@ -1,0 +1,44 @@
+"use client";
+
+import { useEffect } from 'react';
+import { useLangStore } from '@/store/langStore';
+
+export function SystemSetup() {
+  const { lang, setLang } = useLangStore();
+
+  useEffect(() => {
+    // 1. Theme Detection
+    const lx = document.querySelector('.lx');
+    if (lx) {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (prefersDark) {
+        lx.classList.add('dark');
+      } else {
+        lx.classList.remove('dark');
+      }
+    }
+
+    // 2. Language Detection
+    const hasVisited = localStorage.getItem('luxara_visited');
+    if (!hasVisited) {
+      localStorage.setItem('luxara_visited', 'true');
+      const browserLang = navigator.language.toLowerCase();
+      if (browserLang.startsWith('en')) {
+        setLang('en');
+      } else if (browserLang.startsWith('fr')) {
+        setLang('fr');
+      } else {
+        setLang('ar');
+      }
+    } else {
+      // Apply saved lang to DOM just in case
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+      if (lx) {
+        lx.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+      }
+    }
+  }, []);
+
+  return null;
+}

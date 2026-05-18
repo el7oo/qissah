@@ -5,6 +5,7 @@ import { useRef } from 'react';
 import { useLangStore } from '@/store/langStore';
 import { useTranslation } from '@/utils/translations';
 import { ProductCard } from '@/components/ProductCard';
+import { ProductSkeleton } from '@/components/ProductSkeleton';
 import { AppleEmoji } from '@/components/ui/AppleEmoji';
 import { audio } from '@/utils/audioEngine';
 import { triggerRipple } from '@/utils/visualEffects';
@@ -20,6 +21,8 @@ export default function Shop() {
   const [sanityCategories, setSanityCategories] = useState<any[]>([]);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [search, setSearch] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const PAGE_SIZE = 24;
   const [catalogError, setCatalogError] = useState<string | null>(null);
   const rootRef = useRef<HTMLDivElement | null>(null);
   
@@ -55,7 +58,7 @@ export default function Shop() {
       { y: 8, opacity: 0 },
       { y: 0, opacity: 1, duration: 0.24, stagger: 0.05, ease: 'power2.out' }
     );
-  }, [products.length, activeCategory, search]);
+  }, [products.length, activeCategory, search, currentPage, loading]);
 
   const categoryList = [
     { id: 'clothing', nameKey: 'clothing', icon: '👗' },
@@ -99,6 +102,7 @@ export default function Shop() {
     triggerRipple(e as any);
     audio.playTap();
     setActiveCategory(id);
+    setCurrentPage(1);
   };
 
   const filteredProducts = products.filter(p => {
@@ -106,6 +110,14 @@ export default function Shop() {
     if (search && !p.title.toLowerCase().includes(search.toLowerCase())) return false;
     return true;
   });
+
+  const totalPages = Math.ceil(filteredProducts.length / PAGE_SIZE);
+  const paginatedProducts = filteredProducts.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+
+  const handleSearch = (v: string) => {
+    setSearch(v);
+    setCurrentPage(1);
+  };
 
   return (
     <div ref={rootRef} style={{ paddingTop: '10px', paddingBottom: '120px' }}>
@@ -119,13 +131,13 @@ export default function Shop() {
           className="search-inp" 
           placeholder="ابحث عن منتجات..." 
           value={search} 
-          onChange={(e) => setSearch(e.target.value)} 
+          onChange={(e) => handleSearch(e.target.value)} 
           dir="auto" 
         />
         {search && (
           <span 
             style={{ cursor: 'pointer', color: 'var(--txt2)', fontSize: '14px', padding: '2px 4px' }} 
-            onClick={() => { audio.playTap(); setSearch(''); }}
+            onClick={() => { audio.playTap(); handleSearch(''); }}
           >
             ✕
           </span>
@@ -169,6 +181,12 @@ export default function Shop() {
             {lang === 'ar' ? 'إعادة المحاولة' : 'Retry'}
           </button>
         </div>
+      ) : loading ? (
+        <div className="pg" data-shop-reveal>
+          {Array.from({ length: 12 }).map((_, i) => (
+            <ProductSkeleton key={i} />
+          ))}
+        </div>
       ) : filteredProducts.length === 0 ? (
         <div className="empty" data-shop-reveal>
           <span className="e-ico"><AppleEmoji name="🔍" /></span>
@@ -176,17 +194,55 @@ export default function Shop() {
           <button 
             className="btn btn-s" 
             style={{ width: 'auto', marginTop: '12px', padding: '10px 22px' }} 
-            onClick={() => { audio.playTap(); setSearch(''); setActiveCategory(null); }}
+            onClick={() => { audio.playTap(); handleSearch(''); setActiveCategory(null); }}
           >
             إعادة ضبط
           </button>
         </div>
       ) : (
-        <div className="pg" data-shop-reveal>
-          {filteredProducts.map(product => (
-            <ProductCard key={product.id} product={product as any} />
-          ))}
-        </div>
+        <>
+          <div className="pg" data-shop-reveal>
+            {paginatedProducts.map(product => (
+              <ProductCard key={product.id} product={product as any} />
+            ))}
+          </div>
+          {totalPages > 1 && (
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginTop: '30px' }} data-shop-reveal>
+              <button 
+                onClick={() => { setCurrentPage(p => Math.max(1, p - 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); audio.playTap(); }} 
+                disabled={currentPage === 1} 
+                className="ib"
+              >
+                &lt;
+              </button>
+              {Array.from({ length: totalPages }).map((_, i) => {
+                const pageNum = i + 1;
+                if (pageNum === 1 || pageNum === totalPages || Math.abs(pageNum - currentPage) <= 1) {
+                  return (
+                    <button 
+                      key={pageNum} 
+                      onClick={() => { setCurrentPage(pageNum); window.scrollTo({ top: 0, behavior: 'smooth' }); audio.playTap(); }}
+                      className={`ib ${currentPage === pageNum ? 'on' : ''}`}
+                      style={currentPage === pageNum ? { background: 'var(--p1)', color: 'white', borderColor: 'var(--p1)' } : {}}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                } else if (pageNum === currentPage - 2 || pageNum === currentPage + 2) {
+                  return <span key={pageNum} style={{ color: 'var(--txt2)', display: 'flex', alignItems: 'flex-end', padding: '0 4px' }}>...</span>;
+                }
+                return null;
+              })}
+              <button 
+                onClick={() => { setCurrentPage(p => Math.min(totalPages, p + 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); audio.playTap(); }} 
+                disabled={currentPage === totalPages} 
+                className="ib"
+              >
+                &gt;
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
