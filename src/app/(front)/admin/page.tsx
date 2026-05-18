@@ -22,24 +22,38 @@ export default function AdminPage() {
   const [loadingMetadata, setLoadingMetadata] = useState(false);
   const [orderMeta, setOrderMeta] = useState<Record<string, CatalogProduct>>({});
   const [orderError, setOrderError] = useState<string | null>(null);
+  const [deletingOrderId, setDeletingOrderId] = useState<string | null>(null);
+  const [orderLimit, setOrderLimit] = useState(30);
+
+  const fetchOrders = (limit: number) => {
+    setLoadingOrders(true);
+    setOrderError(null);
+    orderService
+      .getAllOrders(limit)
+      .then(data => setOrders(data))
+      .catch(err => setOrderError(err.message || 'Failed to fetch orders.'))
+      .finally(() => setLoadingOrders(false));
+  };
 
   useEffect(() => {
     if (activeTab === 'orders') {
-      setLoadingOrders(true);
-      setOrderError(null);
-      orderService
-        .getAllOrders()
-        .then(data => {
-          setOrders(data);
-        })
-        .catch(err => {
-          setOrderError(err.message || 'Failed to fetch orders. Please check your Firebase credentials and system time.');
-        })
-        .finally(() => {
-          setLoadingOrders(false);
-        });
+      fetchOrders(orderLimit);
     }
-  }, [activeTab]);
+  }, [activeTab, orderLimit]);
+
+  const handleDeleteOrder = async (orderId: string) => {
+    if (!window.confirm('هل أنت متأكد من حذف هذا الطلب نهائياً؟')) return;
+    setDeletingOrderId(orderId);
+    try {
+      const res = await fetch(`/api/orders?id=${orderId}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('فشل الحذف');
+      setOrders(orders.filter(o => o.id !== orderId));
+    } catch (err) {
+      alert('خطأ أثناء حذف الطلب');
+    } finally {
+      setDeletingOrderId(null);
+    }
+  };
 
   useEffect(() => {
     if (activeTab !== 'orders' || orders.length === 0) return;
@@ -227,6 +241,18 @@ export default function AdminPage() {
           <div className="pf-box" style={{ padding: '20px', textAlign: 'center' }}>
             <AppleEmoji name="📦" />
             <h2 style={{ color: 'var(--p1)', marginTop: '10px' }}>الطلبات الجديدة</h2>
+            <div style={{ marginTop: '10px', marginBottom: '20px' }}>
+              <label style={{ fontSize: '14px', color: 'var(--txt2)', marginLeft: '10px' }}>عدد الطلبات المعروضة:</label>
+              <select 
+                value={orderLimit} 
+                onChange={(e) => setOrderLimit(Number(e.target.value))}
+                style={{ padding: '5px 10px', borderRadius: '8px', border: '1px solid var(--bdr)', background: 'var(--bg)', color: 'var(--txt)' }}
+              >
+                <option value={30}>أحدث 30 طلب</option>
+                <option value={100}>أحدث 100 طلب</option>
+                <option value={500}>أحدث 500 طلب</option>
+              </select>
+            </div>
             {loadingOrders ? (
               <p style={{ color: 'var(--txt2)', fontSize: '14px', marginTop: '15px' }}>جاري جلب الطلبات...</p>
             ) : orderError ? (
@@ -243,7 +269,19 @@ export default function AdminPage() {
                   <div key={order.id} style={{ background: 'var(--bg)', border: '1px solid var(--bdr)', borderRadius: '12px', padding: '15px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--bdr)', paddingBottom: '10px', marginBottom: '10px' }}>
                       <span style={{ fontWeight: 'bold' }}>رقم الطلب: {order.id.substring(0, 8)}...</span>
-                      <span style={{ color: 'var(--p1)', fontWeight: 'bold', direction: 'ltr' }}>{order.total_amount?.toLocaleString()} دج</span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                        <span style={{ color: 'var(--p1)', fontWeight: 'bold', direction: 'ltr' }}>{order.total_amount?.toLocaleString()} دج</span>
+                        <button 
+                          onClick={() => handleDeleteOrder(order.id)}
+                          disabled={deletingOrderId === order.id}
+                          style={{
+                            background: '#ff4444', color: 'white', border: 'none', borderRadius: '6px', 
+                            padding: '4px 10px', fontSize: '12px', cursor: 'pointer', opacity: deletingOrderId === order.id ? 0.5 : 1
+                          }}
+                        >
+                          {deletingOrderId === order.id ? 'جاري الحذف...' : 'حذف'}
+                        </button>
+                      </div>
                     </div>
                     <div style={{ fontSize: '14px', color: 'var(--txt)' }}>
                       <p><b>العميل:</b> {order.shipping_address?.fullName}</p>

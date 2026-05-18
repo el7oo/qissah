@@ -42,8 +42,8 @@ export const orderService = {
     return Array.isArray(payload.orders) ? payload.orders : [];
   },
 
-  async getAllOrders() {
-    const res = await fetch('/api/orders?limit=100', {
+  async getAllOrders(limit: number = 100) {
+    const res = await fetch(`/api/orders?limit=${limit}`, {
       method: 'GET',
       credentials: 'same-origin',
       cache: 'no-store',

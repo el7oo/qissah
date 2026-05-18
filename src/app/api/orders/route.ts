@@ -308,3 +308,31 @@ export async function GET(request: Request) {
     );
   }
 }
+
+export async function DELETE(request: Request) {
+  try {
+    const jar = await cookies();
+    const admin = jar.get('luxara_admin_access')?.value === 'granted';
+    if (!admin) {
+      return NextResponse.json({ error: 'Unauthorized. Admin access required.' }, { status: 401 });
+    }
+
+    const url = new URL(request.url);
+    const id = url.searchParams.get('id');
+
+    if (!id) {
+      return NextResponse.json({ error: 'Order ID is required.' }, { status: 400 });
+    }
+
+    const adminDb = getAdminDb();
+    await adminDb.collection('orders').doc(id).delete();
+
+    return NextResponse.json({ success: true, message: 'Order deleted successfully.' });
+  } catch (error: any) {
+    console.error('DELETE /api/orders failed:', error);
+    return NextResponse.json(
+      { error: 'Failed to delete order.', detail: error?.message || 'Unknown error' },
+      { status: 500 }
+    );
+  }
+}

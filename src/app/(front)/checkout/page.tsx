@@ -61,12 +61,9 @@ export default function CheckoutPage() {
           }
         }
         
-        sumHome += (iHome * item.quantity);
-        sumDesk += (iDesk * item.quantity);
+        if (iHome > calcHome) calcHome = iHome;
+        if (iDesk > calcDesk) calcDesk = iDesk;
       });
-      
-      calcHome = sumHome;
-      calcDesk = sumDesk;
     }
     
     return { homeFee: calcHome, deskFee: calcDesk };
