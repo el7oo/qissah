@@ -76,24 +76,11 @@ export const productType = defineType({
       initialValue: 400,
     }),
     defineField({
-      name: 'customShipping',
-      title: 'Custom Wilaya Shipping Prices (Overrides Default)',
-      description: 'Add specific shipping prices for certain Wilayas for this product.',
-      type: 'array',
-      of: [{
-        type: 'object',
-        fields: [
-          { name: 'wilayaId', title: 'Wilaya Number (1-58)', type: 'number' },
-          { name: 'homePrice', title: 'Home Delivery Price', type: 'number' },
-          { name: 'deskPrice', title: 'Desk/Office Delivery Price', type: 'number' }
-        ],
-        preview: {
-          select: { title: 'wilayaId', home: 'homePrice', desk: 'deskPrice' },
-          prepare(selection: any) {
-            return { title: `Wilaya ${selection.title}`, subtitle: `Home: ${selection.home} DZD | Desk: ${selection.desk} DZD` }
-          }
-        }
-      }]
+      name: 'shippingProfile',
+      title: 'Shipping Profile (قائمة أسعار التوصيل)',
+      description: 'Select a pre-configured shipping profile for this product. If not set, the default store prices will be used.',
+      type: 'reference',
+      to: [{ type: 'shippingProfile' }],
     }),
     defineField({
       name: 'deliveryType',
