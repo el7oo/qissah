@@ -76,49 +76,61 @@ export default function CategoriesPage() {
     );
   }, [loading, categories.length]);
 
+  const gradients = [
+    'linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%)',
+    'linear-gradient(135deg, #fff1eb 0%, #ace0f9 100%)',
+    'linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)',
+    'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)',
+    'linear-gradient(135deg, #cfd9df 0%, #e2ebf0 100%)',
+    'linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%)',
+    'linear-gradient(135deg, #fdcbf1 0%, #fdcbf1 1%, #e6dee9 100%)',
+    'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)'
+  ];
+
   return (
     <div ref={rootRef} style={{ paddingTop: '10px', paddingBottom: '120px' }}>
       <div style={{ padding: '0 13px 20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
         <div className="ttl" style={{ flex: 1, fontSize: '28px' }}>
-          {lang === 'ar' ? 'تصفح الأقسام' : 'Browse Categories'}
+          <AppleEmoji name="🛍️" /> {lang === 'ar' ? 'تصفح الأقسام' : 'Browse Categories'}
         </div>
       </div>
 
       {loading ? (
-        <div style={{ padding: '0 13px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: '12px' }}>
+        <div style={{ padding: '0 13px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: '16px' }}>
           {Array.from({ length: 12 }).map((_, i) => (
-            <div key={i} className="skel" style={{ height: '140px', borderRadius: '12px' }}></div>
+            <div key={i} className="skel" style={{ height: '140px', borderRadius: '24px' }}></div>
           ))}
         </div>
       ) : (
-        <div style={{ padding: '0 13px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: '12px' }}>
+        <div style={{ padding: '0 13px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: '16px' }}>
           {categories.map((c, i) => (
             <div 
               key={c.id} 
               className="cat-grid-card"
               onClick={() => { audio.playTap(); router.push(`/category/${c.id}`); }}
               style={{ 
-                height: '130px', 
-                borderRadius: '8px', 
+                height: '140px', 
+                borderRadius: '24px', 
                 overflow: 'hidden', 
                 cursor: 'pointer', 
-                boxShadow: '0 4px 12px rgba(0,0,0,0.08)', 
-                background: '#00D4FF', 
+                boxShadow: '0 8px 24px rgba(0,0,0,0.08)', 
+                background: gradients[i % gradients.length], 
                 display: 'flex', 
                 flexDirection: 'column', 
-                position: 'relative',
+                alignItems: 'center', 
+                justifyContent: 'center',
                 transition: 'transform 0.2s',
-                border: '1px solid rgba(0,0,0,0.05)'
+                border: '1px solid rgba(255,255,255,0.4)'
               }}
               onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
               onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
               onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.95)'}
               onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
             >
-              <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '56px', filter: 'drop-shadow(0 6px 12px rgba(0,0,0,0.2))' }}>
+              <div style={{ fontSize: '42px', marginBottom: '12px', filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.15))' }}>
                 <AppleEmoji name={c.icon} />
               </div>
-              <div style={{ background: '#fff', padding: '6px 4px', textAlign: 'center', color: '#000', fontWeight: 800, fontSize: '11px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              <div style={{ textAlign: 'center', color: '#1a1a1a', fontWeight: 800, fontSize: '14px', padding: '0 12px', textShadow: '0 2px 4px rgba(255,255,255,0.8)' }}>
                 {c.name}
               </div>
             </div>
