@@ -64,6 +64,7 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
             position: 'relative'
           }}
           dir={lang === 'ar' ? 'rtl' : 'ltr'}
+        >
         <button onClick={() => { audio.playTap(); onClose(); }} style={{ position: 'absolute', top: '16px', left: lang === 'ar' ? '16px' : 'auto', right: lang === 'ar' ? 'auto' : '16px', zIndex: 10, background: 'var(--card)', backdropFilter: 'blur(10px)', border: '1px solid var(--bdr)', color: 'var(--txt)', cursor: 'pointer', padding: '10px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', transition: 'transform 0.2s' }}>
           <XIcon />
         </button>
