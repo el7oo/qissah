@@ -52,7 +52,7 @@ export default function CategoriesPage() {
           name: (t as any)[c.nameKey] || c.nameKey,
           icon: c.icon
         })),
-        ...sanityCategories.filter((sc: any) => !hardcodedCategories.some(hc => hc.id === sc.slug)).map((sc: any) => ({
+        ...(sanityCategories || []).filter((sc: any) => !hardcodedCategories.some(hc => hc.id === sc.slug)).map((sc: any) => ({
           id: sc.slug,
           name: sc.title?.ar || sc.title?.en || sc.title || sc.slug,
           icon: sc.icon || '📌'

@@ -57,7 +57,7 @@ export default function Home() {
         ]);
         if (cancelled) return;
         setProducts(items);
-        setSanityCategories(categories);
+        setSanityCategories(categories || []);
       } catch (err: any) {
         if (!cancelled) {
           setCatalogError(err?.message || 'Failed to load catalog');

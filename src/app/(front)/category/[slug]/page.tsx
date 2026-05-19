@@ -36,7 +36,7 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
         if (cancelled) return;
         
         // Find category name
-        const cat = categories.find((c: any) => c.slug === slug);
+        const cat = (categories || []).find((c: any) => c.slug === slug);
         if (cat) {
           setCategoryName(cat.title?.ar || cat.title?.en || cat.title || slug);
         } else {
