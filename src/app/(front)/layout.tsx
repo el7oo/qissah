@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Alexandria, Cormorant_Garamond } from "next/font/google";
+import { Alexandria, Cormorant_Garamond, Outfit } from "next/font/google";
 import "../globals.css";
 import { ToastProvider } from "@/components/ui/ToastProvider";
 import { CartHydration } from "@/components/CartHydration";
@@ -8,11 +8,13 @@ import { SideCart } from "@/components/ui/SideCart";
 import { ParticleBackground } from "@/utils/visualEffects";
 import { MotionProvider } from "@/components/gsap/MotionProvider";
 import { SystemSetup } from "@/components/SystemSetup";
+import { SplashIntro } from "@/components/SplashIntro";
+import { SplashScreen } from "@/components/ui/SplashScreen";
 
-const alexandria = Alexandria({
-  variable: "--font-alexandria",
+const tajawal = Alexandria({
+  variable: "--font-tajawal",
   subsets: ["latin", "arabic"],
-  weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
+  weight: ["200", "300", "400", "500", "700", "800", "900"],
 });
 
 const cormorant = Cormorant_Garamond({
@@ -21,9 +23,55 @@ const cormorant = Cormorant_Garamond({
   weight: ["300", "400", "500", "600", "700"],
 });
 
+const outfit = Outfit({
+  variable: "--font-outfit",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+});
+
 export const metadata: Metadata = {
-  title: "Luxara",
-  description: "Luminous Elegance E-commerce Experience",
+  title: "Qissa | قصة - متجر التسوق الفاخر في الجزائر",
+  description: "قصة هي الوجهة الأولى للتسوق الفاخر في الجزائر. تسوق أحدث المنتجات بأسعار ممتازة وتوصيل سريع لكافة 58 ولاية جزائرية.",
+  keywords: ["تسوق عبر الإنترنت", "قصة", "الجزائر", "ملابس", "Qissa", "E-commerce Algeria"],
+  openGraph: {
+    title: "Qissa | قصة - متجر التسوق الفاخر",
+    description: "اكتشف أفضل العروض والمنتجات المميزة في الجزائر وتوصيل لجميع الولايات.",
+    url: "https://luxara-dz.vercel.app", // Placeholder URL
+    siteName: "Qissa",
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?auto=format&w=1200&h=630&q=80",
+        width: 1200,
+        height: 630,
+        alt: "Qissa Store",
+      },
+    ],
+    locale: "ar_DZ",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Qissa | قصة - متجر التسوق الفاخر",
+    description: "اكتشف أفضل العروض والمنتجات المميزة في الجزائر.",
+    images: ["https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?auto=format&w=1200&h=630&q=80"],
+  },
+};
+
+const storeSchema = {
+  "@context": "https://schema.org",
+  "@type": "Store",
+  "name": "Qissa | قصة",
+  "image": "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04",
+  "description": "قصة هي الوجهة الأولى للتسوق الفاخر في الجزائر. توصيل سريع لكافة 58 ولاية.",
+  "url": "https://luxara-dz.vercel.app",
+  "telephone": "+213000000000",
+  "priceRange": "$$",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "الجزائر العاصمة",
+    "addressLocality": "الجزائر",
+    "addressCountry": "DZ"
+  }
 };
 
 export default function RootLayout({
@@ -32,8 +80,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ar" dir="rtl" className={`${alexandria.variable} ${cormorant.variable} antialiased`}>
+    <html lang="ar" dir="rtl" className={`${tajawal.variable} ${cormorant.variable} ${outfit.variable} antialiased`}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(storeSchema) }}
+        />
+      </head>
       <body className="min-h-screen flex flex-col text-on-background m-0 p-0 overflow-hidden h-screen">
+        <SplashScreen />
+        <SplashIntro />
         <CartHydration>
           <SystemSetup />
           <MotionProvider />

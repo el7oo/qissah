@@ -24,10 +24,19 @@ export type ProductPageResult = {
   };
 };
 
+let cachedProducts: Product[] | null = null;
+let cachedCategories: any[] | null = null;
+
 export const productService = {
-  async getAllProducts(_lang?: string, categoryId?: string): Promise<Product[]> {
+  async getAllProducts(_lang?: string, categoryId?: string, forceRefresh = false): Promise<Product[]> {
+    if (cachedProducts && !categoryId && !forceRefresh) {
+      return cachedProducts;
+    }
     const first = await this.getProductsPage(1, 250, categoryId);
-    if (!first.paging?.hasMore) return first.products;
+    if (!first.paging?.hasMore) {
+      if (!categoryId) cachedProducts = first.products;
+      return first.products;
+    }
 
     const results = [...first.products];
     let page = 2;
@@ -38,6 +47,7 @@ export const productService = {
       hasMore = Boolean(next.paging?.hasMore);
       page += 1;
     }
+    if (!categoryId) cachedProducts = results;
     return results;
   },
 
@@ -75,7 +85,8 @@ export const productService = {
     return list[0] || null;
   },
 
-  async getCategories() {
+  async getCategories(forceRefresh = false) {
+    if (cachedCategories && !forceRefresh) return cachedCategories;
     const res = await fetch('/api/products?type=categories', {
       method: 'GET',
       cache: 'no-store',
@@ -85,7 +96,8 @@ export const productService = {
       throw new Error(payload?.error || 'Failed to fetch categories');
     }
     const payload = await res.json();
-    return Array.isArray(payload.categories) ? payload.categories : [];
+    cachedCategories = Array.isArray(payload.categories) ? payload.categories : [];
+    return cachedCategories;
   },
 
   async getProductsByIds(ids: string[]): Promise<Product[]> {

@@ -9,6 +9,8 @@ import toast from 'react-hot-toast';
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
 
+import Image from 'next/image';
+
 const ProductModal = dynamic(() => import('./ui/ProductModal').then(mod => mod.ProductModal), {
   loading: () => null,
   ssr: false,
@@ -35,7 +37,29 @@ export function ProductCard({ product }: { product: Product }) {
       customShipping: product.customShipping
     } as any);
 
-    toast.success(`تمت إضافة ${product.title} للسلة`);
+    const optimizedImage = product.image?.includes('cdn.sanity.io') 
+      ? `${product.image}${product.image.includes('?') ? '&' : '?'}auto=format&w=100&q=75`
+      : product.image;
+
+    toast.custom((tItem) => (
+      <div
+        style={{
+          background: 'var(--card)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
+          border: '1px solid var(--bdr)', borderRadius: '16px', padding: '12px',
+          display: 'flex', alignItems: 'center', gap: '12px', boxShadow: '0 8px 30px rgba(0,0,0,0.12)',
+          cursor: 'pointer', transform: tItem.visible ? 'translateY(0)' : 'translateY(-20px)',
+          opacity: tItem.visible ? 1 : 0, transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
+          direction: 'rtl'
+        }}
+        onClick={() => { toast.dismiss(tItem.id); document.querySelector('.ni[data-tab="cart"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true })); }}
+      >
+        <Image src={optimizedImage || 'https://placehold.co/48x48/FFE8D6/DC586D?text=🛍️'} alt={product.title} width={48} height={48} style={{ borderRadius: '10px', objectFit: 'cover', width: '48px', height: '48px' }} />
+        <div style={{ flex: 1 }}>
+          <div style={{ fontWeight: 800, fontSize: '13px', color: 'var(--txt)', marginBottom: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '180px' }}>{product.title}</div>
+          <div style={{ fontSize: '11px', color: 'var(--txt2)', display: 'flex', alignItems: 'center', gap: '4px' }}>تمت الإضافة للسلة بنجاح 🎉</div>
+        </div>
+      </div>
+    ), { duration: 3000, position: 'top-center' });
   };
 
   const ratingNum = parseFloat(product.rating?.split('·')[0] || product.rating || '5');
@@ -52,13 +76,13 @@ export function ProductCard({ product }: { product: Product }) {
           <div className="disc-tag">{product.discount}</div>
         )}
         <div className="pc-img-wrap">
-          <img 
+          <Image 
             className="pc-img" 
             id={`pi_${product.id}`} 
-            src={optimizedImage} 
-            loading="lazy" 
-            onError={(e) => (e.currentTarget.src='https://placehold.co/300x300/FFE8D6/DC586D?text=🛍️')}
-            alt={product.title}
+            src={optimizedImage || 'https://placehold.co/300x300/FFE8D6/DC586D?text=🛍️'} 
+            width={300}
+            height={300}
+            alt={product.title || 'Product'}
           />
           <div className="pc-img-overlay"></div>
         </div>

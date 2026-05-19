@@ -9,6 +9,7 @@ import { audio } from '@/utils/audioEngine';
 import { triggerRipple } from '@/utils/visualEffects';
 import { AppleEmoji } from '@/components/ui/AppleEmoji';
 import gsap from 'gsap';
+import Image from 'next/image';
 
 export default function CartPage() {
   const router = useRouter();
@@ -73,7 +74,7 @@ export default function CartPage() {
           <div data-cart-section>
             {items.map(item => (
               <div key={item.id} id={'ci_' + item.id} className="ci">
-                <img className="ci-img" src={item.image} onError={(e) => (e.currentTarget.src='https://placehold.co/100/FFE8D6/DC586D')} alt={item.title} />
+                <Image className="ci-img" src={item.image || 'https://placehold.co/100x100/FFE8D6/DC586D?text=🛍️'} alt={item.title} width={100} height={100} />
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: '12px', fontWeight: 700, marginBottom: '3px' }}>{item.title}</div>
                   <div style={{ fontSize: '14px', color: 'var(--p1)', fontWeight: 900 }}>{item.price} دج</div>

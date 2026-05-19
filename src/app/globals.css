@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Amiri:wght@400;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 @import "tailwindcss";
 @import "./luxara.css";
 
@@ -61,13 +61,20 @@
   html {
     background-color: var(--bg);
   }
+  
+  html[lang="ar"] body {
+    font-family: 'Cairo', sans-serif !important;
+  }
+  
+  html[lang="en"] body, html[lang="fr"] body {
+    font-family: 'Outfit', sans-serif !important;
+  }
 
   body {
     margin: 0;
     padding: 0;
     background-color: transparent;
     color: var(--txt);
-    font-family: var(--font-sans), sans-serif;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
   }

@@ -102,11 +102,14 @@ export default function Home() {
       name: (t as any)[c.nameKey] || c.nameKey,
       icon: c.icon
     })),
-    ...sanityCategories.filter(sc => !categoryList.some(hc => hc.id === sc.slug)).map(sc => ({
-      id: sc.slug,
-      name: sc.title?.ar || sc.title?.en || sc.title || sc.slug,
-      icon: sc.icon || '📌'
-    }))
+    ...sanityCategories
+      .filter(sc => !categoryList.some(hc => hc.id === sc.slug))
+      .filter(sc => sc.slug !== 'all' && sc.title?.ar !== 'عرض الكل' && sc.title !== 'عرض الكل')
+      .map(sc => ({
+        id: sc.slug,
+        name: sc.title?.ar || sc.title?.en || sc.title || sc.slug,
+        icon: sc.icon || '📌'
+      }))
   ];
 
   return (
@@ -166,31 +169,48 @@ export default function Home() {
         </div>
       </div>
 
-      {featuredProducts.length > 0 && (
+      {featuredProducts.length > 0 ? (
         <div style={{ marginBottom: '24px', background: 'linear-gradient(135deg, rgba(220, 88, 109, 0.05) 0%, rgba(220, 88, 109, 0.15) 100%)', padding: '24px 0', borderRadius: '24px', margin: '0 13px', border: '1px solid rgba(220, 88, 109, 0.2)' }} data-home-reveal>
           <div className="sec-hd" style={{ padding: '0 16px', marginBottom: '16px' }}>
             <div className="ttl" style={{ color: 'var(--p1)', fontSize: '20px' }}><AppleEmoji name="⚡" /> {lang === 'ar' ? 'تخفيضات حصرية' : 'Exclusive Discounts'}</div>
-            <div className="view-all" style={{ color: 'var(--p1)', background: 'rgba(220, 88, 109, 0.1)' }} onClick={() => router.push('/shop')}>{t.viewAll}</div>
           </div>
           <div style={{ display: 'flex', gap: '12px', overflowX: 'auto', padding: '0 16px 12px 16px' }}>
-            {featuredProducts.slice(0, 6).map((p, i) => (
+            {featuredProducts.slice(0, 12).map((p, i) => (
               <div key={p.id || `feat-${i}`} style={{ width: '160px', flexShrink: 0 }}>
                 <ProductCard product={p} />
               </div>
             ))}
           </div>
         </div>
-      )}
+      ) : products.length === 0 && !catalogError ? (
+        <div style={{ marginBottom: '24px', padding: '24px 0', margin: '0 13px' }}>
+          <div className="sec-hd" style={{ padding: '0 16px', marginBottom: '16px' }}>
+            <div className="skel" style={{ width: '120px', height: '20px', borderRadius: '4px' }}></div>
+          </div>
+          <div style={{ display: 'flex', gap: '12px', overflowX: 'hidden', padding: '0 16px 12px 16px' }}>
+            {[1,2,3,4].map(i => (
+              <div key={`sk-f-${i}`} style={{ width: '160px', flexShrink: 0 }}>
+                <div className="skel-card" style={{ height: '240px' }}><div className="skel-img skel"></div><div className="skel-body"><div className="skel-line skel"></div><div className="skel-line skel" style={{ width: '60%' }}></div></div></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : null}
 
       <div style={{ marginBottom: '24px' }} data-home-reveal>
         <div className="sec-hd">
           <div className="ttl"><AppleEmoji name="🔥" /> {lang === 'ar' ? 'الأكثر رواجاً' : 'Most Popular'}</div>
-          <div className="view-all" onClick={() => router.push('/shop')}>{t.viewAll}</div>
         </div>
         <div className="pg-swipe">
-          {products.slice(0, 8).map((p, i) => (
-            <ProductCard key={p.id || `pop-${i}`} product={p} />
-          ))}
+          {products.length === 0 && !catalogError ? (
+            [1,2,3,4,5,6,7,8].map(i => (
+              <div key={`sk-p-${i}`} className="skel-card" style={{ height: '240px' }}><div className="skel-img skel"></div><div className="skel-body"><div className="skel-line skel"></div><div className="skel-line skel" style={{ width: '60%' }}></div></div></div>
+            ))
+          ) : (
+            products.slice(0, 12).map((p, i) => (
+              <ProductCard key={p.id || `pop-${i}`} product={p} />
+            ))
+          )}
         </div>
       </div>
 
@@ -199,9 +219,15 @@ export default function Home() {
           <div className="ttl"><AppleEmoji name="✨" /> {t.newArrivals}</div>
         </div>
         <div className="pg-swipe">
-          {newArrivals.map((p, i) => (
-            <ProductCard key={p.id || `new-${i}`} product={p} />
-          ))}
+          {products.length === 0 && !catalogError ? (
+            [1,2,3,4,5,6,7,8].map(i => (
+              <div key={`sk-n-${i}`} className="skel-card" style={{ height: '240px' }}><div className="skel-img skel"></div><div className="skel-body"><div className="skel-line skel"></div><div className="skel-line skel" style={{ width: '60%' }}></div></div></div>
+            ))
+          ) : (
+            products.slice(0, 12).map((p, i) => (
+              <ProductCard key={p.id || `new-${i}`} product={p} />
+            ))
+          )}
         </div>
         
         <div style={{ textAlign: 'center', marginTop: '24px', marginBottom: '32px' }}>

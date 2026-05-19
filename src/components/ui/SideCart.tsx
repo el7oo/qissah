@@ -9,6 +9,8 @@ import { triggerRipple } from '@/utils/visualEffects';
 import { XIcon, TrashIcon } from './Icons';
 import { AppleEmoji } from './AppleEmoji';
 
+import Image from 'next/image';
+
 export function SideCart() {
   const { items, isCartOpen, closeCart, updateQuantity, removeItem, totalPrice, totalShipping } = useCartStore();
   const { lang } = useLangStore();
@@ -65,11 +67,11 @@ export function SideCart() {
         dir={lang === 'ar' ? 'rtl' : 'ltr'}
       >
         <div style={{ padding: '24px 20px', borderBottom: '1px solid var(--bdr)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--card)' }}>
-          <h2 className="ttl" style={{ fontSize: '24px', margin: 0, color: 'var(--txt)', display: 'flex', flexDirection: 'column', fontFamily: 'var(--font-alexandria), sans-serif' }}>
+          <h2 className="ttl" style={{ fontSize: '24px', margin: 0, color: 'var(--txt)', display: 'flex', flexDirection: 'column' }}>
             <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               {lang === 'ar' ? 'سلة المشتريات' : lang === 'fr' ? 'Votre Panier' : 'Your Cart'} <AppleEmoji name="🛍️" />
             </span>
-            <span style={{ fontSize: '13px', fontWeight: 'normal', color: 'var(--txt2)', fontFamily: 'var(--font-alexandria), sans-serif', marginTop: '6px', opacity: 0.9 }}>
+            <span style={{ fontSize: '13px', fontWeight: 'normal', color: 'var(--txt2)', marginTop: '6px', opacity: 0.9 }}>
               {lang === 'ar' ? 'رحلة الأناقة تبدأ من هنا' : lang === 'fr' ? 'Le voyage de l\'élégance commence ici' : 'The journey of elegance begins here'} <AppleEmoji name="✨" />
             </span>
           </h2>
@@ -82,8 +84,8 @@ export function SideCart() {
           {items.length === 0 ? (
             <div style={{ textAlign: 'center', color: 'var(--txt2)', marginTop: '60px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <div style={{ fontSize: '56px', marginBottom: '20px', opacity: 0.5 }}><AppleEmoji name="🛒" /></div>
-              <div style={{ fontSize: '20px', fontWeight: 600, fontFamily: 'var(--font-alexandria), sans-serif', color: 'var(--txt)' }}>{t.emptyCart}</div>
-              <p style={{ fontSize: '14px', marginTop: '10px', opacity: 0.8, fontFamily: 'var(--font-alexandria), sans-serif', maxWidth: '240px', lineHeight: 1.6 }}>
+              <div style={{ fontSize: '20px', fontWeight: 600, color: 'var(--txt)' }}>{t.emptyCart}</div>
+              <p style={{ fontSize: '14px', marginTop: '10px', opacity: 0.8, maxWidth: '240px', lineHeight: 1.6 }}>
                 {lang === 'ar' ? 'تصفح منتجاتنا الفاخرة وأضف ما يعجبك هنا' : 'Browse our luxury products and add them here'}
               </p>
             </div>
@@ -91,10 +93,10 @@ export function SideCart() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               {items.map(item => (
                 <div key={item.id} style={{ display: 'flex', gap: '16px', background: 'var(--card)', padding: '16px', borderRadius: '16px', border: '1px solid var(--bdr)', alignItems: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.05)', transition: 'transform 0.2s' }}>
-                  <img src={item.image} alt={item.title} style={{ width: '70px', height: '70px', objectFit: 'cover', borderRadius: '12px' }} />
+                  <Image src={item.image || 'https://placehold.co/70x70/FFE8D6/DC586D?text=🛍️'} alt={item.title} width={70} height={70} style={{ width: '70px', height: '70px', objectFit: 'cover', borderRadius: '12px' }} />
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: 700, fontSize: '15px', color: 'var(--txt)', marginBottom: '4px', fontFamily: 'var(--font-alexandria), sans-serif' }}>{item.title}</div>
-                    <div style={{ color: 'var(--p1)', fontWeight: 800, fontSize: '16px', fontFamily: 'var(--font-alexandria), sans-serif' }}>{item.price} دج</div>
+                    <div style={{ fontWeight: 700, fontSize: '15px', color: 'var(--txt)', marginBottom: '4px' }}>{item.title}</div>
+                    <div style={{ color: 'var(--p1)', fontWeight: 800, fontSize: '16px' }}>{item.price} دج</div>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '12px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'var(--bg2)', padding: '4px 8px', borderRadius: '8px', border: '1px solid var(--bdr)' }}>
                         <button onClick={(e) => handleUpdateQty(item.id, item.quantity - 1, e)} style={{ background: 'none', border: 'none', color: 'var(--txt)', cursor: 'pointer', padding: '0 4px', fontSize: '16px' }}>-</button>
@@ -113,15 +115,15 @@ export function SideCart() {
         </div>
 
         <div style={{ padding: '24px', borderTop: '1px solid var(--bdr)', background: 'var(--card)', boxShadow: '0 -4px 20px rgba(0,0,0,0.1)' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '14px', color: 'var(--txt2)', fontFamily: 'var(--font-alexandria), sans-serif' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '14px', color: 'var(--txt2)' }}>
             <span>{t.subtotal}</span>
             <span>{totalPrice().toLocaleString()} دج</span>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px', fontSize: '14px', color: 'var(--txt2)', fontFamily: 'var(--font-alexandria), sans-serif' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px', fontSize: '14px', color: 'var(--txt2)' }}>
             <span>{t.shipping}</span>
             <span>{totalShipping() > 0 ? `${totalShipping()} دج` : t.free}</span>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px', fontWeight: 900, fontSize: '20px', color: 'var(--txt)', fontFamily: 'var(--font-alexandria), sans-serif' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px', fontWeight: 900, fontSize: '20px', color: 'var(--txt)' }}>
             <span>{t.total}</span>
             <span style={{ color: 'var(--p1)' }}>{(totalPrice() + totalShipping()).toLocaleString()} دج</span>
           </div>
@@ -141,8 +143,7 @@ export function SideCart() {
               justifyContent: 'center',
               gap: '12px',
               opacity: items.length === 0 ? 0.5 : 1,
-              cursor: items.length === 0 ? 'not-allowed' : 'pointer',
-              fontFamily: 'var(--font-alexandria), sans-serif'
+              cursor: items.length === 0 ? 'not-allowed' : 'pointer'
             }}
           >
             {t.checkout}

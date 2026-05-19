@@ -11,6 +11,13 @@ import { audio } from '@/utils/audioEngine';
 import { triggerRipple } from '@/utils/visualEffects';
 import { productService, Product } from '@/services/productService';
 import gsap from 'gsap';
+import dynamic from 'next/dynamic';
+import Image from 'next/image';
+
+const ProductModal = dynamic(() => import('@/components/ui/ProductModal').then(mod => mod.ProductModal), {
+  loading: () => null,
+  ssr: false,
+});
 
 export default function Shop() {
   const { lang } = useLangStore();
@@ -25,6 +32,9 @@ export default function Shop() {
   const PAGE_SIZE = 50;
   const [catalogError, setCatalogError] = useState<string | null>(null);
   const rootRef = useRef<HTMLDivElement | null>(null);
+  
+  const [searchFocused, setSearchFocused] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   
   useEffect(() => {
     let cancelled = false;
@@ -91,11 +101,14 @@ export default function Shop() {
       name: (t as any)[c.nameKey] || c.nameKey,
       icon: c.icon
     })),
-    ...sanityCategories.filter(sc => !categoryList.some(hc => hc.id === sc.slug)).map(sc => ({
-      id: sc.slug,
-      name: sc.title?.ar || sc.title?.en || sc.title || sc.slug,
-      icon: sc.icon || '📌'
-    }))
+    ...sanityCategories
+      .filter(sc => !categoryList.some(hc => hc.id === sc.slug))
+      .filter(sc => sc.slug !== 'all' && sc.title?.ar !== 'عرض الكل' && sc.title !== 'عرض الكل')
+      .map(sc => ({
+        id: sc.slug,
+        name: sc.title?.ar || sc.title?.en || sc.title || sc.slug,
+        icon: sc.icon || '📌'
+      }))
   ];
 
   const handleCatClick = (id: string | null, e: React.MouseEvent) => {
@@ -124,14 +137,15 @@ export default function Shop() {
       <div style={{ padding: '0 13px 10px', display: 'flex', alignItems: 'center', gap: '8px' }} data-shop-reveal>
         <div className="ttl" style={{ flex: 1 }}>{t.shop}</div>
       </div>
-      
-      <div className="search-wrap" data-shop-reveal>
+      <div className="search-wrap" data-shop-reveal style={{ position: 'relative', zIndex: searchFocused ? 100 : 1 }}>
         <span style={{ fontSize: '16px', flexShrink: 0 }}><AppleEmoji name="🔍" /></span>
         <input 
           className="search-inp" 
-          placeholder="ابحث عن منتجات..." 
+          placeholder={lang === 'ar' ? 'ابحث عن منتجات، فئات...' : 'Search products, categories...'}
           value={search} 
-          onChange={(e) => handleSearch(e.target.value)} 
+          onChange={(e) => handleSearch(e.target.value)}
+          onFocus={() => setSearchFocused(true)}
+          onBlur={() => setTimeout(() => setSearchFocused(false), 200)}
           dir="auto" 
         />
         {search && (
@@ -142,16 +156,40 @@ export default function Shop() {
             ✕
           </span>
         )}
+        
+        {searchFocused && search && (
+          <div style={{
+            position: 'absolute', top: '100%', left: 0, right: 0, marginTop: '8px',
+            background: 'var(--card)', borderRadius: '16px', border: '1px solid var(--bdr)',
+            boxShadow: '0 12px 40px rgba(0,0,0,0.15)', overflow: 'hidden', zIndex: 101,
+            backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', animation: 'fadeIn 0.2s ease'
+          }}>
+            {filteredProducts.slice(0, 5).length > 0 ? (
+              filteredProducts.slice(0, 5).map(p => (
+                <div 
+                  key={p.id} 
+                  style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 16px', cursor: 'pointer', borderBottom: '1px solid var(--bdr)', transition: 'background 0.2s' }}
+                  onClick={() => { audio.playTap(); setSelectedProduct(p); setSearchFocused(false); }}
+                >
+                  <Image src={p.image || 'https://placehold.co/40x40/FFE8D6/DC586D?text=🛍️'} alt={p.title} width={40} height={40} style={{ width: '40px', height: '40px', borderRadius: '8px', objectFit: 'cover' }} />
+                  <div style={{ flex: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--txt)' }}>{p.title}</div>
+                    <div style={{ fontSize: '12px', color: 'var(--p1)', fontWeight: 800 }}>{p.price} دج</div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div style={{ padding: '20px', textAlign: 'center', color: 'var(--txt2)', fontSize: '13px' }}>
+                {lang === 'ar' ? 'لا توجد نتائج مطابقة' : 'No results found'}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
+      {selectedProduct && <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} />}
+
       <div className="cat-scroll" style={{ marginBottom: '13px' }} data-shop-reveal>
-        <div 
-          className={`cat-chip ${!activeCategory ? 'sel' : ''}`} 
-          onClick={(e) => handleCatClick(null, e)}
-        >
-          <span className="cc-ico"><AppleEmoji name="🌟" /></span>
-          <span className="cc-lbl">{t.viewAll}</span>
-        </div>
         {categories.map(c => (
           <div 
             key={c.id} 
