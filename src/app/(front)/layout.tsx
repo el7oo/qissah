@@ -94,7 +94,14 @@ export default function RootLayout({
           <SystemSetup />
           <MotionProvider />
           <ParticleBackground />
-          <div className="lx dark" id="app" dir="rtl">
+          <div className="lx" id="app" dir="rtl">
+            <script dangerouslySetInnerHTML={{ __html: `
+              try {
+                if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                  document.getElementById('app').classList.add('dark');
+                }
+              } catch (e) {}
+            `}} />
             <div className="initial-loader-wrapper">
               <span className="loader"></span>
             </div>

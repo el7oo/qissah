@@ -10,12 +10,8 @@ export function SystemSetup() {
     // 1. Theme Detection
     const lx = document.querySelector('.lx');
     if (lx) {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (prefersDark) {
-        lx.classList.add('dark');
-      } else {
-        lx.classList.remove('dark');
-      }
+      // It's already handled by the inline script to avoid flash.
+      // But we can listen for system preference changes if needed.
     }
 
     // 2. Language Detection

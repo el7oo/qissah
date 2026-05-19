@@ -29,9 +29,23 @@ export function SplashScreen() {
         <div className="splash-loader-bar"></div>
       </div>
       <style>{`
+        :root {
+          --splash-bg: #fff8f3;
+          --splash-text: #DC586D;
+          --splash-sub: #852E4E;
+          --splash-glow: rgba(220,88,109,0.2);
+        }
+        @media (prefers-color-scheme: dark) {
+          :root {
+            --splash-bg: #020813;
+            --splash-text: #fff;
+            --splash-sub: #888;
+            --splash-glow: rgba(220,88,109,0.3);
+          }
+        }
         .splash-screen {
           position: fixed; inset: 0; z-index: 9999999;
-          background: #020813;
+          background: var(--splash-bg);
           display: flex; justify-content: center; align-items: center;
           animation: splashOut 0.8s cubic-bezier(0.8, 0, 0.2, 1) 2.2s forwards;
         }
@@ -45,23 +59,20 @@ export function SplashScreen() {
         }
         .splash-title {
           font-family: var(--font-tajawal), 'Tajawal', sans-serif;
-          font-size: 82px; font-weight: 900; color: #fff;
+          font-size: 82px; font-weight: 900; color: var(--splash-text);
           margin: 0; letter-spacing: 4px;
           position: relative; z-index: 2;
-          background: linear-gradient(135deg, #ffffff 0%, #a3a3a3 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          text-shadow: 0 10px 30px rgba(255,255,255,0.1);
+          text-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
         .splash-glow {
           position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-          width: 150%; height: 150%; background: radial-gradient(circle, rgba(220,88,109,0.3) 0%, transparent 60%);
+          width: 150%; height: 150%; background: radial-gradient(circle, var(--splash-glow) 0%, transparent 60%);
           z-index: 1; filter: blur(20px);
           animation: glowPulse 2s ease-in-out infinite alternate;
         }
         .splash-subtitle {
           font-family: var(--font-outfit), 'Outfit', sans-serif;
-          font-size: 14px; letter-spacing: 12px; color: #888;
+          font-size: 14px; letter-spacing: 12px; color: var(--splash-sub);
           margin-top: -10px; margin-bottom: 40px;
           opacity: 0; animation: fadeInSub 1s ease 0.5s forwards;
         }

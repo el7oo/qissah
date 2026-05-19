@@ -64,13 +64,9 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
             position: 'relative'
           }}
           dir={lang === 'ar' ? 'rtl' : 'ltr'}
-        >
-        <div style={{ padding: '16px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--bdr)' }}>
-          <div style={{ fontSize: '20px', fontFamily: "var(--font-cormorant), serif", fontWeight: 800, color: 'var(--txt)', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis', paddingRight: '10px' }}>{product.title}</div>
-          <button onClick={() => { audio.playTap(); onClose(); }} style={{ background: 'var(--card)', border: '1px solid var(--bdr)', color: 'var(--txt)', cursor: 'pointer', padding: '8px', borderRadius: '50%', flexShrink: 0, transition: 'transform 0.2s', display: 'flex', alignItems: 'center', justifyItems: 'center' }}>
-            <XIcon />
-          </button>
-        </div>
+        <button onClick={() => { audio.playTap(); onClose(); }} style={{ position: 'absolute', top: '16px', left: lang === 'ar' ? '16px' : 'auto', right: lang === 'ar' ? 'auto' : '16px', zIndex: 10, background: 'var(--card)', backdropFilter: 'blur(10px)', border: '1px solid var(--bdr)', color: 'var(--txt)', cursor: 'pointer', padding: '10px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', transition: 'transform 0.2s' }}>
+          <XIcon />
+        </button>
         
         <div className="product-modal-body" style={{ overflowY: 'auto', flex: 1, display: 'flex' }}>
           <div className="product-modal-image-col">
@@ -150,25 +146,27 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
           box-shadow: 0 30px 60px rgba(0,0,0,0.3);
           transform: translateZ(0);
           will-change: transform, opacity;
+          position: relative;
         }
         .product-modal-body {
           flex-direction: column;
         }
         .product-modal-image-col {
-          padding: 24px 24px 0;
+          padding: 30px 24px 0;
           width: 100%;
         }
         .product-modal-info-col {
           padding: 24px;
           display: flex; flex-direction: column;
+          scrollbar-width: none;
         }
-        .product-modal-body::-webkit-scrollbar { display: none; }
+        .product-modal-body::-webkit-scrollbar, .product-modal-info-col::-webkit-scrollbar { display: none; }
         @media (min-width: 768px) {
           .product-modal-wrapper {
             padding: 40px;
           }
           .product-modal-panel {
-            max-width: 900px;
+            max-width: 850px;
             border-radius: 36px;
           }
           .product-modal-body {
@@ -176,7 +174,7 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
           }
           .product-modal-image-col {
             width: 45%;
-            padding: 30px;
+            padding: 40px;
             background: var(--surf);
             border-left: 1px solid var(--bdr);
           }
