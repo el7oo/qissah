@@ -99,25 +99,19 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
           
           <div className="product-modal-info-col">
             <h2 className="ttl" style={{ fontSize: '32px', margin: '0 0 12px 0', color: 'var(--txt)', lineHeight: 1.2 }}>{product.title}</h2>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
               <div style={{ color: 'var(--p1)', fontSize: '32px', fontWeight: 900, fontFamily: "var(--font-outfit), sans-serif", textShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>{product.price} دج</div>
               {product.oldPrice && <div style={{ textDecoration: 'line-through', color: 'var(--txt2)', fontSize: '20px', opacity: 0.6, fontFamily: "var(--font-outfit), sans-serif" }}>{product.oldPrice}</div>}
             </div>
 
-            {product.description && (
-              <div style={{ fontSize: '16px', lineHeight: 1.8, color: 'var(--txt2)', marginBottom: '36px', padding: '20px', background: 'var(--card)', borderRadius: '24px', border: '1px solid var(--bdr)', boxShadow: 'inset 0 2px 10px rgba(0,0,0,0.02)' }}>
-                {product.description}
-              </div>
-            )}
-            
             <button 
               onClick={handleAdd}
               style={{ 
                 width: '100%', padding: '20px', background: 'linear-gradient(135deg, var(--p1), var(--p2))', color: '#fff',
                 border: 'none', borderRadius: '20px', fontSize: '20px', fontWeight: 900, 
                 cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px',
-                boxShadow: '0 10px 40px var(--glow)', transition: 'transform 0.2s, box-shadow 0.2s', marginTop: 'auto',
-                fontFamily: "inherit"
+                boxShadow: '0 10px 40px var(--glow)', transition: 'transform 0.2s, box-shadow 0.2s', marginBottom: '24px',
+                fontFamily: "inherit", flexShrink: 0
               }}
               onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.96)'}
               onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
@@ -126,6 +120,12 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
               <span style={{ width: '28px', height: '28px', display: 'inline-block' }}><BagsIcon active={true} /></span>
               {lang === 'ar' ? 'إضافة إلى السلة' : 'Add to cart'}
             </button>
+
+            {product.description && (
+              <div style={{ fontSize: '16px', lineHeight: 1.8, color: 'var(--txt2)', marginBottom: '20px', padding: '20px', background: 'var(--card)', borderRadius: '24px', border: '1px solid var(--bdr)', boxShadow: 'inset 0 2px 10px rgba(0,0,0,0.02)' }}>
+                {product.description}
+              </div>
+            )}
             
           </div>
         </div>

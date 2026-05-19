@@ -47,6 +47,9 @@ export default function Shop() {
         if (cancelled) return;
         setProducts(items);
         setSanityCategories(categories || []);
+        if (categories.length > 0 && !cancelled) {
+          setActiveCategory(categories[0].slug || categories[0].id || 'clothing');
+        }
       } catch (err: any) {
         if (cancelled) return;
         setCatalogError(err?.message || 'Failed to load catalog');
@@ -118,9 +121,25 @@ export default function Shop() {
     setCurrentPage(1);
   };
 
+  const normalizeArabic = (text: string) => {
+    if (!text) return '';
+    return text.toLowerCase()
+      .replace(/[أإآا]/g, 'ا')
+      .replace(/[ة]/g, 'ه')
+      .replace(/[ى]/g, 'ي')
+      .replace(/[\u064B-\u065F]/g, ''); // Remove tatweel/tashkeel
+  };
+
   const filteredProducts = products.filter(p => {
     if (activeCategory && p.categoryId !== activeCategory) return false;
-    if (search && !p.title.toLowerCase().includes(search.toLowerCase())) return false;
+    if (search) {
+      const normSearch = normalizeArabic(search);
+      const normTitle = normalizeArabic(p.title);
+      const normDesc = normalizeArabic(p.description || '');
+      if (!normTitle.includes(normSearch) && !normDesc.includes(normSearch)) {
+        return false;
+      }
+    }
     return true;
   });
 
@@ -245,36 +264,25 @@ export default function Shop() {
             ))}
           </div>
           {totalPages > 1 && (
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginTop: '30px' }} data-shop-reveal>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '16px', marginTop: '30px' }} data-shop-reveal>
               <button 
                 onClick={() => { setCurrentPage(p => Math.max(1, p - 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); audio.playTap(); }} 
                 disabled={currentPage === 1} 
                 className="ib"
+                style={{ width: '44px', height: '44px', opacity: currentPage === 1 ? 0.5 : 1 }}
               >
                 &lt;
               </button>
-              {Array.from({ length: totalPages }).map((_, i) => {
-                const pageNum = i + 1;
-                if (pageNum === 1 || pageNum === totalPages || Math.abs(pageNum - currentPage) <= 1) {
-                  return (
-                    <button 
-                      key={pageNum} 
-                      onClick={() => { setCurrentPage(pageNum); window.scrollTo({ top: 0, behavior: 'smooth' }); audio.playTap(); }}
-                      className={`ib ${currentPage === pageNum ? 'on' : ''}`}
-                      style={currentPage === pageNum ? { background: 'var(--p1)', color: 'white', borderColor: 'var(--p1)' } : {}}
-                    >
-                      {pageNum}
-                    </button>
-                  );
-                } else if (pageNum === currentPage - 2 || pageNum === currentPage + 2) {
-                  return <span key={pageNum} style={{ color: 'var(--txt2)', display: 'flex', alignItems: 'flex-end', padding: '0 4px' }}>...</span>;
-                }
-                return null;
-              })}
+              
+              <div style={{ fontSize: '15px', fontWeight: 800, color: 'var(--txt)' }}>
+                {lang === 'ar' ? `الصفحة ${currentPage} من ${totalPages}` : `Page ${currentPage} of ${totalPages}`}
+              </div>
+
               <button 
                 onClick={() => { setCurrentPage(p => Math.min(totalPages, p + 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); audio.playTap(); }} 
                 disabled={currentPage === totalPages} 
                 className="ib"
+                style={{ width: '44px', height: '44px', opacity: currentPage === totalPages ? 0.5 : 1 }}
               >
                 &gt;
               </button>

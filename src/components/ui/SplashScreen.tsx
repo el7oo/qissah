@@ -25,29 +25,15 @@ export function SplashScreen() {
           <h1 className="splash-title">قصــــــة</h1>
           <div className="splash-glow"></div>
         </div>
-        <p className="splash-subtitle">L U X U R Y   E S T A T E</p>
+        <div className="splash-emoji">✨🛍️</div>
         <div className="splash-loader-bar"></div>
       </div>
       <style>{`
-        :root {
-          --splash-bg: #fff8f3;
-          --splash-text: #DC586D;
-          --splash-sub: #852E4E;
-          --splash-glow: rgba(220,88,109,0.2);
-        }
-        @media (prefers-color-scheme: dark) {
-          :root {
-            --splash-bg: #020813;
-            --splash-text: #fff;
-            --splash-sub: #888;
-            --splash-glow: rgba(220,88,109,0.3);
-          }
-        }
         .splash-screen {
           position: fixed; inset: 0; z-index: 9999999;
-          background: var(--splash-bg);
+          background: var(--bg);
           display: flex; justify-content: center; align-items: center;
-          animation: splashOut 0.8s cubic-bezier(0.8, 0, 0.2, 1) 2.2s forwards;
+          animation: splashOut 0.8s cubic-bezier(0.8, 0, 0.2, 1) 1.8s forwards;
         }
         .splash-content {
           text-align: center;
@@ -55,26 +41,26 @@ export function SplashScreen() {
         }
         .splash-logo-container {
           position: relative;
-          animation: logoScale 1.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+          animation: logoScale 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
         }
         .splash-title {
           font-family: var(--font-tajawal), 'Tajawal', sans-serif;
-          font-size: 82px; font-weight: 900; color: var(--splash-text);
+          font-size: 82px; font-weight: 900; color: var(--txt);
           margin: 0; letter-spacing: 4px;
           position: relative; z-index: 2;
-          text-shadow: 0 10px 30px rgba(0,0,0,0.05);
+          text-shadow: 0 10px 30px var(--glow);
         }
         .splash-glow {
           position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-          width: 150%; height: 150%; background: radial-gradient(circle, var(--splash-glow) 0%, transparent 60%);
+          width: 150%; height: 150%; background: radial-gradient(circle, var(--glow) 0%, transparent 60%);
           z-index: 1; filter: blur(20px);
           animation: glowPulse 2s ease-in-out infinite alternate;
         }
-        .splash-subtitle {
-          font-family: var(--font-outfit), 'Outfit', sans-serif;
-          font-size: 14px; letter-spacing: 12px; color: var(--splash-sub);
-          margin-top: -10px; margin-bottom: 40px;
+        .splash-emoji {
+          font-size: 28px;
+          margin-top: -5px; margin-bottom: 30px;
           opacity: 0; animation: fadeInSub 1s ease 0.5s forwards;
+          font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
         }
         .splash-loader-bar {
           width: 60px; height: 3px; background: rgba(255,255,255,0.1);
