@@ -48,7 +48,7 @@ export default function Shop() {
         setProducts(items);
         setSanityCategories(categories || []);
         if (categories.length > 0 && !cancelled) {
-          setActiveCategory(categories[0].slug || categories[0].id || 'clothing');
+          setActiveCategory(null); // Default to 'All'
         }
       } catch (err: any) {
         if (cancelled) return;
@@ -99,16 +99,11 @@ export default function Shop() {
   ];
 
   const categories = [
-    ...categoryList.map(c => ({
-      id: c.id,
-      name: (t as any)[c.nameKey] || c.nameKey,
-      icon: c.icon
-    })),
+    { id: null, name: lang === 'ar' ? 'عرض الكل' : 'All', icon: '✨' },
     ...sanityCategories
-      .filter(sc => !categoryList.some(hc => hc.id === sc.slug))
       .filter(sc => sc.slug !== 'all' && sc.title?.ar !== 'عرض الكل' && sc.title !== 'عرض الكل')
       .map(sc => ({
-        id: sc.slug,
+        id: sc.slug || sc._id,
         name: sc.title?.ar || sc.title?.en || sc.title || sc.slug,
         icon: sc.icon || '📌'
       }))

@@ -55,14 +55,18 @@ export function SplashIntro() {
       
       <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <h1 className="splash-txt" style={{ 
-          fontFamily: "'Playfair Display', 'Cairo', serif", 
-          fontSize: '64px', 
+          fontFamily: "var(--font-tajawal), 'Tajawal', sans-serif", 
+          fontSize: '72px', 
           fontWeight: 900, 
-          color: 'var(--p1)',
+          color: 'var(--txt)',
           textShadow: '0 8px 30px var(--glow)',
-          letterSpacing: lang === 'ar' ? '0' : '8px'
+          letterSpacing: '2px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px'
         }}>
-          {lang === 'ar' ? 'قـصـة' : 'Q I S S A'}
+          {lang === 'ar' ? 'قـصـة' : 'QISSA'}
+          <span style={{ fontSize: '42px', fontFamily: '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif' }}>✨🛍️</span>
         </h1>
       </div>
     </div>

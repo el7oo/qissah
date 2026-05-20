@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Alexandria, Cormorant_Garamond, Outfit } from "next/font/google";
+import { Tajawal, Cormorant_Garamond, Outfit } from "next/font/google";
 import "../globals.css";
 import { ToastProvider } from "@/components/ui/ToastProvider";
 import { CartHydration } from "@/components/CartHydration";
@@ -8,12 +8,11 @@ import { SideCart } from "@/components/ui/SideCart";
 import { ParticleBackground } from "@/utils/visualEffects";
 import { MotionProvider } from "@/components/gsap/MotionProvider";
 import { SystemSetup } from "@/components/SystemSetup";
-import { SplashIntro } from "@/components/SplashIntro";
 import { SplashScreen } from "@/components/ui/SplashScreen";
 
-const tajawal = Alexandria({
+const tajawal = Tajawal({
   variable: "--font-tajawal",
-  subsets: ["latin", "arabic"],
+  subsets: ["arabic"],
   weight: ["200", "300", "400", "500", "700", "800", "900"],
 });
 
@@ -89,7 +88,6 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen flex flex-col text-on-background m-0 p-0 overflow-hidden h-screen">
         <SplashScreen />
-        <SplashIntro />
         <CartHydration>
           <SystemSetup />
           <MotionProvider />

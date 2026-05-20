@@ -1,75 +1,74 @@
-// scrape_ecomix.js
-// سكربت سحب المنتجات من موقع ecomix.vip ورفعها تلقائياً إلى Sanity
-// المتطلبات: 
-// 1. تثبيت الحزم: npm install axios cheerio @sanity/client
-// 2. تشغيل السكربت: node scrape_ecomix.js
+const puppeteer = require('puppeteer');
+const fs = require('fs');
 
-const axios = require('axios');
-const cheerio = require('cheerio');
-const { createClient } = require('@sanity/client');
-
-// --- إعدادات Sanity ---
-// يرجى استبدال هذه القيم بمعلومات مشروعك
-const sanityClient = createClient({
-  projectId: 'YOUR_PROJECT_ID', // تجده في ملف .env.local
-  dataset: 'production',
-  useCdn: false, // يجب أن تكون false عند إضافة البيانات
-  apiVersion: '2023-01-01',
-  token: 'YOUR_SANITY_WRITE_TOKEN', // تحتاج لإنشاء Token بصلاحية Editor من إعدادات Sanity
-});
-
-// --- إعدادات السحب ---
-const TARGET_URL = 'https://ecomix.vip/category/home-appliances'; // رابط القسم الذي تريد سحبه
-
-async function scrapeAndUpload() {
-  console.log(`🚀 جاري سحب المنتجات من: ${TARGET_URL}`);
+async function scrapeEcomix() {
+  console.log('🚀 بدء تشغيل بوت سحب المنتجات من Ecomix...');
+  
+  const browser = await puppeteer.launch({ 
+    headless: false,
+    defaultViewport: null,
+    args: ['--start-maximized']
+  });
+  
+  const page = await browser.newPage();
+  await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
   
   try {
-    // 1. سحب صفحة الويب
-    const { data: html } = await axios.get(TARGET_URL);
-    const $ = cheerio.load(html);
+    console.log('🌐 جاري الدخول إلى الأقسام...');
+    await page.goto('https://ecomix.vip/categories', { waitUntil: 'networkidle2', timeout: 60000 });
     
-    const products = [];
-
-    // 2. البحث عن المنتجات في الصفحة
-    // ملاحظة: الـ Classes هنا تعتمد على هيكل موقع ecomix، قد تحتاج لتعديلها إذا تغير الموقع
-    $('.product-card').each((index, element) => {
-      const title = $(element).find('.product-title').text().trim();
-      let priceText = $(element).find('.price').text().trim(); // مثال: "15,000 د.ج."
-      const imageUrl = $(element).find('img').attr('src');
-      
-      // تحويل السعر لرقم
-      let priceNum = parseInt(priceText.replace(/[^0-9]/g, ''));
-      if (!priceNum) priceNum = 0;
-
-      if (title && imageUrl) {
-        products.push({
-          _type: 'product',
-          title: { ar: title }, // دعم تعدد اللغات
-          slug: { _type: 'slug', current: `ecomix-${Date.now()}-${index}` },
-          price: priceNum,
-          category: { _type: 'reference', _ref: 'YOUR_CATEGORY_ID' }, // يجب استبداله بـ ID القسم في Sanity
-          imageTempUrl: imageUrl, // مؤقتاً، سنشرح كيفية رفع الصور
-        });
-      }
+    // Wait a bit
+    await new Promise(resolve => setTimeout(resolve, 5000));
+    
+    // Extract categories
+    const categories = await page.evaluate(() => {
+      const links = Array.from(document.querySelectorAll('a.category-tile'));
+      return links.map(a => ({
+        title: a.getAttribute('title') || a.innerText.trim(),
+        url: a.href,
+        image: a.querySelector('img')?.getAttribute('data-src') || a.querySelector('img')?.src
+      })).filter(c => c.title !== '');
     });
-
-    console.log(`✅ تم إيجاد ${products.length} منتج. جاري الرفع إلى Sanity...`);
-
-    // 3. رفع المنتجات إلى Sanity
-    for (const product of products) {
-      console.log(`⏳ جاري رفع: ${product.title.ar}`);
-      // حفظ المنتج في Sanity
-      // await sanityClient.create(product);
-      console.log(`✔️ تم الرفع بنجاح!`);
+    
+    console.log(`📦 تم العثور على ${categories.length} قسم!`);
+    console.log(categories.slice(0, 5)); // Show first 5
+    
+    fs.writeFileSync('ecomix_categories.json', JSON.stringify(categories, null, 2));
+    
+    if (categories.length > 0) {
+      const targetCategory = categories[0];
+      console.log(`\n🔍 جاري الدخول إلى قسم: ${targetCategory.title} وسحب المنتجات...`);
+      await page.goto(targetCategory.url, { waitUntil: 'networkidle2', timeout: 60000 });
+      await new Promise(resolve => setTimeout(resolve, 5000));
+      
+      const products = await page.evaluate(() => {
+        // Find product elements
+        const items = Array.from(document.querySelectorAll('.p-tile'));
+        return items.map(item => {
+          const titleEl = item.querySelector('.item-title') || item.querySelector('.title');
+          const priceEl = item.querySelector('.price');
+          const imgEl = item.querySelector('img');
+          const linkEl = item.querySelector('a');
+          return {
+            title: titleEl ? titleEl.innerText.trim() : '',
+            price: priceEl ? priceEl.innerText.replace(/[^0-9.]/g, '') : '',
+            image: imgEl ? (imgEl.getAttribute('data-src') || imgEl.src) : '',
+            url: linkEl ? linkEl.href : ''
+          };
+        }).filter(p => p.title !== '');
+      });
+      
+      console.log(`💎 تم العثور على ${products.length} منتج في هذا القسم!`);
+      fs.writeFileSync('ecomix_products.json', JSON.stringify(products, null, 2));
+      console.log(products.slice(0, 3)); // Show first 3
     }
-
-    console.log('🎉 اكتملت العملية بنجاح!');
-
+    
   } catch (error) {
-    console.error('❌ حدث خطأ أثناء السحب أو الرفع:', error.message);
+    console.error('❌ حدث خطأ أثناء السحب:', error.message);
+  } finally {
+    console.log('⏳ جاري إغلاق المتصفح...');
+    await browser.close();
   }
 }
 
-// scrapeAndUpload();
-console.log('ملاحظة: السكربت جاهز. يرجى قراءة التعليقات وتعبئة YOUR_PROJECT_ID و YOUR_SANITY_WRITE_TOKEN قبل التشغيل.');
+scrapeEcomix();
