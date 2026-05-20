@@ -96,6 +96,7 @@ async function scrapeAndImport() {
         icon: '📌'
       })).filter(c => c.title !== '');
     });
+    console.log(`تم العثور على ${categories.length} قسم`);
     
     for (const cat of categories) {
       if (cat.title.includes('بالجملة')) continue;
@@ -173,8 +174,9 @@ async function scrapeAndImport() {
               
               // Prices fix: remove commas used as thousands separators, then extract numbers
               const priceText = priceEl ? priceEl.innerText : '';
-              const cleanPriceText = priceText.replace(/,/g, ''); 
-              const numbers = cleanPriceText.match(/\d+/g) || [];
+              let noDecimals = priceText.replace(/\.00(?!\d)/g, '');
+              let justNumbers = noDecimals.replace(/[.,]/g, '');
+              const numbers = justNumbers.match(/\d+/g) || [];
               const possiblePrices = numbers.map(Number).filter(n => n > 99); 
               
               let currentPrice = possiblePrices[0] || 0;
@@ -198,12 +200,12 @@ async function scrapeAndImport() {
                   if (mainImg) galleryUrls.push(mainImg.getAttribute('data-src') || mainImg.src);
               }
               
-              return { titleRaw, descRaw, oldPrice, newPrice, images: [...new Set(galleryUrls)] };
+              return { titleRaw, descRaw, currentPrice, oldPrice, images: [...new Set(galleryUrls)] };
             });
             
             await pPage.close(); 
             
-            if (!pData.titleRaw || pData.oldPrice === 0) continue; 
+            if (!pData.titleRaw || pData.currentPrice === 0) continue; 
             
             const cleanTitle = premiumTitleCleaner(pData.titleRaw);
             

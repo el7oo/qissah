@@ -157,8 +157,9 @@ async function scrapeAndImport() {
               const descRaw = descEl ? descEl.innerText : '';
               
               const priceText = priceEl ? priceEl.innerText : '';
-              const cleanPriceText = priceText.replace(/\.00/g, '').replace(/[^\d\s-]/g, ' '); 
-              const numbers = cleanPriceText.match(/\d+/g) || [];
+              let noDecimals = priceText.replace(/\.00(?!\d)/g, '');
+              let justNumbers = noDecimals.replace(/[.,]/g, '');
+              const numbers = justNumbers.match(/\d+/g) || [];
               const possiblePrices = numbers.map(Number).filter(n => n > 99); 
               
               let currentPrice = possiblePrices[0] || 0;
@@ -180,7 +181,7 @@ async function scrapeAndImport() {
             
             await pPage.close(); 
             
-            if (!pData.titleRaw || pData.oldPrice === 0) continue; 
+            if (!pData.titleRaw || pData.currentPrice === 0) continue; 
             
             const cleanTitle = premiumTitleCleaner(pData.titleRaw);
             

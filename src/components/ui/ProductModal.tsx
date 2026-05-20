@@ -100,8 +100,8 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
           <div className="product-modal-info-col">
             <h2 className="ttl" style={{ fontSize: '32px', margin: '0 0 12px 0', color: 'var(--txt)', lineHeight: 1.2 }}>{product.title}</h2>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
-              <div style={{ color: 'var(--p1)', fontSize: '32px', fontWeight: 900, fontFamily: "var(--font-outfit), sans-serif", textShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>{product.price ? product.price.toLocaleString('en-US') : ''} د.ج</div>
-              {product.oldPrice && <div style={{ textDecoration: 'line-through', color: 'var(--txt2)', fontSize: '20px', opacity: 0.6, fontFamily: "var(--font-outfit), sans-serif" }}>{product.oldPrice.toLocaleString('en-US')} د.ج</div>}
+              <div style={{ color: 'var(--p1)', fontSize: '32px', fontWeight: 900, fontFamily: "var(--font-outfit), sans-serif", textShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>{product.price ? Number(product.price).toLocaleString('en-US') : ''} د.ج</div>
+              {product.oldPrice && <div style={{ textDecoration: 'line-through', color: 'var(--txt2)', fontSize: '20px', opacity: 0.6, fontFamily: "var(--font-outfit), sans-serif" }}>{Number(product.oldPrice).toLocaleString('en-US')} د.ج</div>}
             </div>
 
             <button 

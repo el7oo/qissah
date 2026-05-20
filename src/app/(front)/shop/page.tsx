@@ -47,7 +47,7 @@ export default function Shop() {
         if (cancelled) return;
         setProducts(items);
         setSanityCategories(categories || []);
-        if (categories.length > 0 && !cancelled) {
+        if (categories && categories.length > 0 && !cancelled) {
           setActiveCategory(null); // Default to 'All'
         }
       } catch (err: any) {

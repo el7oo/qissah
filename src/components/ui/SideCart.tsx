@@ -96,7 +96,7 @@ export function SideCart() {
                   <Image src={item.image || 'https://placehold.co/70x70/FFE8D6/DC586D?text=🛍️'} alt={item.title} width={70} height={70} style={{ width: '70px', height: '70px', objectFit: 'cover', borderRadius: '12px' }} />
                   <div style={{ flex: 1 }}>
                     <div style={{ fontWeight: 700, fontSize: '15px', color: 'var(--txt)', marginBottom: '4px' }}>{item.title}</div>
-                    <div style={{ color: 'var(--p1)', fontWeight: 800, fontSize: '16px' }}>{item.price.toLocaleString('en-US')} د.ج</div>
+                    <div style={{ color: 'var(--p1)', fontWeight: 800, fontSize: '16px' }}>{Number(item.price).toLocaleString('en-US')} د.ج</div>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '12px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'var(--bg2)', padding: '4px 8px', borderRadius: '8px', border: '1px solid var(--bdr)' }}>
                         <button onClick={(e) => handleUpdateQty(item.id, item.quantity - 1, e)} style={{ background: 'none', border: 'none', color: 'var(--txt)', cursor: 'pointer', padding: '0 4px', fontSize: '16px' }}>-</button>
