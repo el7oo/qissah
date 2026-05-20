@@ -89,9 +89,9 @@ export function ProductCard({ product }: { product: Product }) {
         <div className="pc-body">
           <div className="pc-name">{product.title}</div>
           <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2px' }}>
-            <span className="pc-pr">{product.price} دج</span>
+            <span className="pc-pr">{product.price ? product.price.toLocaleString('en-US') : ''} د.ج</span>
             {product.oldPrice && (
-              <span className="pc-old">{product.oldPrice}</span>
+              <span className="pc-old">{product.oldPrice.toLocaleString('en-US')} د.ج</span>
             )}
           </div>
           <div className="pc-rating">

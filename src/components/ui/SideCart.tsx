@@ -96,7 +96,7 @@ export function SideCart() {
                   <Image src={item.image || 'https://placehold.co/70x70/FFE8D6/DC586D?text=🛍️'} alt={item.title} width={70} height={70} style={{ width: '70px', height: '70px', objectFit: 'cover', borderRadius: '12px' }} />
                   <div style={{ flex: 1 }}>
                     <div style={{ fontWeight: 700, fontSize: '15px', color: 'var(--txt)', marginBottom: '4px' }}>{item.title}</div>
-                    <div style={{ color: 'var(--p1)', fontWeight: 800, fontSize: '16px' }}>{item.price} دج</div>
+                    <div style={{ color: 'var(--p1)', fontWeight: 800, fontSize: '16px' }}>{item.price.toLocaleString('en-US')} د.ج</div>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '12px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'var(--bg2)', padding: '4px 8px', borderRadius: '8px', border: '1px solid var(--bdr)' }}>
                         <button onClick={(e) => handleUpdateQty(item.id, item.quantity - 1, e)} style={{ background: 'none', border: 'none', color: 'var(--txt)', cursor: 'pointer', padding: '0 4px', fontSize: '16px' }}>-</button>
@@ -117,15 +117,15 @@ export function SideCart() {
         <div style={{ padding: '24px', borderTop: '1px solid var(--bdr)', background: 'var(--card)', boxShadow: '0 -4px 20px rgba(0,0,0,0.1)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '14px', color: 'var(--txt2)' }}>
             <span>{t.subtotal}</span>
-            <span>{totalPrice().toLocaleString()} دج</span>
+            <span>{totalPrice().toLocaleString('en-US')} د.ج</span>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px', fontSize: '14px', color: 'var(--txt2)' }}>
             <span>{t.shipping}</span>
-            <span>{totalShipping() > 0 ? `${totalShipping()} دج` : t.free}</span>
+            <span>{totalShipping() > 0 ? `${totalShipping().toLocaleString('en-US')} د.ج` : t.free}</span>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px', fontWeight: 900, fontSize: '20px', color: 'var(--txt)' }}>
             <span>{t.total}</span>
-            <span style={{ color: 'var(--p1)' }}>{(totalPrice() + totalShipping()).toLocaleString()} دج</span>
+            <span style={{ color: 'var(--p1)' }}>{(totalPrice() + totalShipping()).toLocaleString('en-US')} د.ج</span>
           </div>
           
           <button 
