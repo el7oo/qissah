@@ -1,27 +1,18 @@
 "use client";
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useCartStore } from '@/store/cartStore';
 import { Product } from '@/store/productStore';
 import { audio } from '@/utils/audioEngine';
 import { triggerRipple, flyToCart } from '@/utils/visualEffects';
 import { useTranslation } from '@/utils/translations';
 import { useLangStore } from '@/store/langStore';
-import { XIcon, BagsIcon } from './Icons';
-import gsap from 'gsap';
-import Image from 'next/image';
 
 export function ProductModal({ product, onClose }: { product: Product, onClose: () => void }) {
   const { addItem, openCart } = useCartStore();
   const { lang } = useLangStore();
   const t = useTranslation(lang);
   const [activeImage, setActiveImage] = useState(product.image);
-  const overlayRef = useRef<HTMLDivElement | null>(null);
-  const panelRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    // Relying entirely on CSS animations for smoother performance (no GSAP lagging)
-  }, []);
 
   const handleAdd = (e: React.MouseEvent) => {
     triggerRipple(e as any);
@@ -42,95 +33,97 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
     }, 400);
   };
 
+  const optimizedActiveImage = activeImage?.includes('cdn.sanity.io') 
+    ? `${activeImage}${activeImage.includes('?') ? '&' : '?'}auto=format&w=800&q=80`
+    : activeImage;
+
   return (
     <>
+      {/* Dark Blurred Backdrop */}
       <div
-        ref={overlayRef}
         style={{
-          position: 'fixed', inset: 0, background: 'rgba(0,10,30,0.65)', zIndex: 99998,
-          animation: 'fadeIn 0.25s ease forwards'
+          position: 'fixed', inset: 0, 
+          background: 'rgba(0,0,0,0.6)', 
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          zIndex: 99998,
+          animation: 'fadeIn 0.3s ease forwards'
         }}
         onClick={() => { audio.playTap(); onClose(); }}
       />
+      
+      {/* Modal Container */}
       <div className="product-modal-wrapper" onClick={(e) => { if (e.target === e.currentTarget) { audio.playTap(); onClose(); } }}>
         <div
-          ref={panelRef}
           className="product-modal-panel"
-          style={{
-            background: 'var(--bg)',
-            display: 'flex', flexDirection: 'column',
-            animation: 'modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-            boxShadow: '0 20px 60px rgba(0,0,0,0.4)',
-            position: 'relative'
-          }}
           dir={lang === 'ar' ? 'rtl' : 'ltr'}
         >
-        <button onClick={() => { audio.playTap(); onClose(); }} style={{ position: 'absolute', top: '16px', left: lang === 'ar' ? '16px' : 'auto', right: lang === 'ar' ? 'auto' : '16px', zIndex: 10, background: 'var(--card)', backdropFilter: 'blur(10px)', border: '1px solid var(--bdr)', color: 'var(--txt)', cursor: 'pointer', padding: '10px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', transition: 'transform 0.2s' }}>
-          <XIcon />
-        </button>
-        
-        <div className="product-modal-body" style={{ overflowY: 'auto', flex: 1, display: 'flex' }}>
-          <div className="product-modal-image-col">
-            <div style={{ borderRadius: '24px', overflow: 'hidden', background: '#fff', border: '1px solid var(--bdr)', position: 'relative', boxShadow: '0 8px 30px rgba(0,0,0,0.05)' }}>
-              <img src={activeImage || 'https://placehold.co/400x400/FFE8D6/DC586D?text=🛍️'} alt={product.title} style={{ width: '100%', aspectRatio: '1/1', objectFit: 'contain', background: '#fff', display: 'block' }} loading="lazy" />
-            </div>
+          {/* Close Button */}
+          <button 
+            onClick={() => { audio.playTap(); onClose(); }} 
+            className="pm-close-btn"
+          >
+            ✕
+          </button>
+          
+          {/* Image Area - Edge to Edge */}
+          <div className="pm-img-area">
+            <img 
+              src={optimizedActiveImage || 'https://placehold.co/800x600/222/FFF?text=Image'} 
+              alt={product.title} 
+              className="pm-main-img"
+              loading="lazy" 
+            />
+            
+            {/* Gallery Thumbnails Overlay */}
             {product.images && product.images.length > 0 && (
-              <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', marginTop: '16px', paddingBottom: '8px', scrollbarWidth: 'none' }}>
+              <div className="pm-gallery">
                 <img 
-                  src={product.image || 'https://placehold.co/64x64/FFE8D6/DC586D?text=🛍️'} 
+                  src={product.image || 'https://placehold.co/100x100/222/FFF'} 
                   onClick={() => setActiveImage(product.image)}
                   alt={product.title}
-                  style={{ width: '70px', height: '70px', objectFit: 'cover', borderRadius: '16px', border: activeImage === product.image ? '2px solid var(--p1)' : '2px solid var(--bdr)', cursor: 'pointer', transition: 'all 0.2s' }}
-                  loading="lazy"
+                  className={`pm-thumb ${activeImage === product.image ? 'active' : ''}`}
                 />
                 {product.images.map((img, i) => (
                   <img 
                     key={i} 
-                    src={img || 'https://placehold.co/64x64/FFE8D6/DC586D?text=🛍️'} 
+                    src={img || 'https://placehold.co/100x100/222/FFF'} 
                     onClick={() => setActiveImage(img)}
                     alt={`${product.title} ${i}`}
-                    style={{ width: '70px', height: '70px', objectFit: 'cover', borderRadius: '16px', border: activeImage === img ? '2px solid var(--p1)' : '2px solid var(--bdr)', cursor: 'pointer', flexShrink: 0, transition: 'all 0.2s' }}
-                    loading="lazy"
+                    className={`pm-thumb ${activeImage === img ? 'active' : ''}`}
                   />
                 ))}
               </div>
             )}
           </div>
           
-          <div className="product-modal-info-col">
-            <h2 className="ttl" style={{ fontSize: '32px', margin: '0 0 12px 0', color: 'var(--txt)', lineHeight: 1.2 }}>{product.title}</h2>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
-              <div style={{ color: 'var(--p1)', fontSize: '32px', fontWeight: 900, fontFamily: "var(--font-outfit), sans-serif", textShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>{product.price ? Number(product.price).toLocaleString('en-US') : ''} د.ج</div>
-              {product.oldPrice && <div style={{ textDecoration: 'line-through', color: 'var(--txt2)', fontSize: '20px', opacity: 0.6, fontFamily: "var(--font-outfit), sans-serif" }}>{Number(product.oldPrice).toLocaleString('en-US')} د.ج</div>}
-            </div>
-
-            <button 
-              onClick={handleAdd}
-              style={{ 
-                width: '100%', padding: '20px', background: 'linear-gradient(135deg, var(--p1), var(--p2))', color: '#fff',
-                border: 'none', borderRadius: '20px', fontSize: '20px', fontWeight: 900, 
-                cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px',
-                boxShadow: '0 10px 40px var(--glow)', transition: 'transform 0.2s, box-shadow 0.2s', marginBottom: '24px',
-                fontFamily: "inherit", flexShrink: 0
-              }}
-              onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.96)'}
-              onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
-              onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
-            >
-              <span style={{ width: '28px', height: '28px', display: 'inline-block' }}><BagsIcon active={true} /></span>
-              {lang === 'ar' ? 'إضافة إلى السلة' : 'Add to cart'}
-            </button>
-
-            {product.description && (
-              <div style={{ fontSize: '16px', lineHeight: 1.8, color: 'var(--txt2)', marginBottom: '20px', padding: '20px', background: 'var(--card)', borderRadius: '24px', border: '1px solid var(--bdr)', boxShadow: 'inset 0 2px 10px rgba(0,0,0,0.02)' }}>
-                {product.description}
-              </div>
+          {/* Content Area */}
+          <div className="pm-content">
+            {product.discount && (
+              <div className="pm-badge">SALE {product.discount}</div>
             )}
             
+            <div className="pm-title-row">
+              <h2 className="pm-title">{product.title}</h2>
+              <div className="pm-price">
+                <div className="pm-current-price">{product.price ? Number(product.price).toLocaleString('en-US') : ''} د.ج</div>
+                {product.oldPrice && (
+                  <div className="pm-old-price">{Number(product.oldPrice).toLocaleString('en-US')} د.ج</div>
+                )}
+              </div>
+            </div>
+
+            <div className="pm-desc">
+              {product.description ? product.description : 'نوعية ممتازة وعالية الجودة. يتميز هذا المنتج بمواصفات مذهلة تمنحك تجربة استخدام فريدة ومريحة. اطلبه الآن قبل نفاذ الكمية!'}
+            </div>
+
+            <button className="pm-add-btn" onClick={handleAdd}>
+              {lang === 'ar' ? 'إضافة إلى الطلب' : 'Add to Order'} — {product.price ? Number(product.price).toLocaleString('en-US') : ''} د.ج
+            </button>
           </div>
         </div>
       </div>
-      </div>
+
       <style>{`
         .product-modal-wrapper {
           position: fixed; inset: 0; z-index: 99999;
@@ -138,53 +131,172 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
           pointer-events: auto;
           padding: 20px;
         }
+        
         .product-modal-panel {
           width: 100%;
-          max-width: 440px;
-          border-radius: 32px;
-          max-height: 85vh;
-          border: 1px solid var(--bdr);
-          box-shadow: 0 30px 60px rgba(0,0,0,0.3);
-          transform: translateZ(0);
-          will-change: transform, opacity;
+          max-width: 500px;
+          background: #1A1A1A; /* Dark theme like the example */
+          border-radius: 24px;
+          border: 1px solid rgba(255,255,255,0.1);
+          box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+          transform: translateY(40px) scale(0.95);
+          opacity: 0;
+          animation: modalPop 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
           position: relative;
-        }
-        .product-modal-body {
+          overflow: hidden;
+          display: flex;
           flex-direction: column;
+          max-height: 90vh;
         }
-        .product-modal-image-col {
-          padding: 30px 24px 0;
+
+        .pm-close-btn {
+          position: absolute;
+          top: 16px;
+          right: 16px; /* Right by default, we can mirror if RTL but keeping right is universal for LTR/RTL modals sometimes, let's keep right */
+          width: 32px;
+          height: 32px;
+          background: rgba(0,0,0,0.5);
+          backdrop-filter: blur(8px);
+          border: none;
+          border-radius: 50%;
+          color: #FFF;
+          font-size: 16px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          z-index: 10;
+          transition: background 0.2s;
+        }
+        .pm-close-btn:hover {
+          background: rgba(0,0,0,0.8);
+        }
+
+        .pm-img-area {
+          position: relative;
           width: 100%;
+          height: 300px; /* fixed height for the image area */
+          background: #000;
+          flex-shrink: 0;
         }
-        .product-modal-info-col {
-          padding: 24px;
-          display: flex; flex-direction: column;
+        
+        .pm-main-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+        }
+
+        .pm-gallery {
+          position: absolute;
+          bottom: 16px;
+          left: 16px;
+          right: 16px;
+          display: flex;
+          gap: 10px;
+          overflow-x: auto;
           scrollbar-width: none;
         }
-        .product-modal-body::-webkit-scrollbar, .product-modal-info-col::-webkit-scrollbar { display: none; }
-        @media (min-width: 768px) {
-          .product-modal-wrapper {
-            padding: 40px;
-          }
-          .product-modal-panel {
-            max-width: 850px;
-            border-radius: 36px;
-          }
-          .product-modal-body {
-            flex-direction: row;
-          }
-          .product-modal-image-col {
-            width: 45%;
-            padding: 40px;
-            background: var(--surf);
-            border-left: 1px solid var(--bdr);
-          }
-          .product-modal-info-col {
-            width: 55%;
-            padding: 40px;
-            overflow-y: auto;
-          }
+        .pm-gallery::-webkit-scrollbar { display: none; }
+        
+        .pm-thumb {
+          width: 50px;
+          height: 50px;
+          object-fit: cover;
+          border-radius: 12px;
+          border: 2px solid rgba(255,255,255,0.2);
+          cursor: pointer;
+          transition: all 0.2s;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
+        .pm-thumb.active {
+          border-color: #FFDE59; /* Yellow theme */
+          transform: scale(1.05);
+        }
+
+        .pm-content {
+          padding: 24px;
+          display: flex;
+          flex-direction: column;
+          overflow-y: auto;
+          scrollbar-width: none;
+        }
+        .pm-content::-webkit-scrollbar { display: none; }
+
+        .pm-badge {
+          display: inline-block;
+          background: #FFDE59;
+          color: #000;
+          font-size: 10px;
+          font-weight: 800;
+          padding: 4px 10px;
+          border-radius: 20px;
+          align-self: flex-start;
+          margin-bottom: 12px;
+          letter-spacing: 0.5px;
+        }
+
+        .pm-title-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          gap: 16px;
+          margin-bottom: 12px;
+        }
+
+        .pm-title {
+          font-size: 22px;
+          font-weight: 800;
+          color: #FFF;
+          margin: 0;
+          line-height: 1.3;
+          font-family: var(--font-tajawal), sans-serif;
+        }
+
+        .pm-price {
+          text-align: right;
+          flex-shrink: 0;
+        }
+
+        .pm-current-price {
+          font-size: 20px;
+          font-weight: 900;
+          color: #FFDE59; /* Vibrant yellow */
+        }
+
+        .pm-old-price {
+          font-size: 14px;
+          color: rgba(255,255,255,0.4);
+          text-decoration: line-through;
+          margin-top: 2px;
+        }
+
+        .pm-desc {
+          font-size: 14px;
+          line-height: 1.6;
+          color: rgba(255,255,255,0.7);
+          margin-bottom: 24px;
+          font-family: var(--font-tajawal), sans-serif;
+        }
+
+        .pm-add-btn {
+          width: 100%;
+          background: #FFDE59; /* Vibrant yellow */
+          color: #000;
+          font-size: 16px;
+          font-weight: 800;
+          padding: 18px;
+          border-radius: 16px;
+          border: none;
+          cursor: pointer;
+          transition: transform 0.2s, background 0.2s;
+          box-shadow: 0 4px 20px rgba(255, 222, 89, 0.3);
+          font-family: var(--font-tajawal), sans-serif;
+        }
+        .pm-add-btn:active {
+          transform: scale(0.96);
+        }
+
         @keyframes fadeIn {
           from { opacity: 0; }
           to { opacity: 1; }

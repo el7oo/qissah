@@ -164,6 +164,12 @@ async function scrapeAndImport() {
           try {
             await pPage.goto(pUrl, { waitUntil: 'domcontentloaded', timeout: 60000 });
             
+            // Wait for the SPA to render the product details
+            try {
+               await pPage.waitForFunction(() => document.querySelector('h1') || document.querySelector('.product-title') || document.querySelector('.price'), { timeout: 15000 });
+            } catch(e) {}
+            
+            
             const pData = await pPage.evaluate(() => {
               const titleEl = document.querySelector('h1') || document.querySelector('.product-title');
               const priceEl = document.querySelector('.price') || document.querySelector('.product-price');
@@ -192,11 +198,11 @@ async function scrapeAndImport() {
               }
               
               // Gallery Images
-              const imgEls = Array.from(document.querySelectorAll('.gallery img, .product-images img, .slick-slide img, .swiper-slide img'));
-              let galleryUrls = imgEls.map(img => img.getAttribute('data-src') || img.src).filter(src => src && !src.includes('avatar'));
+              const imgEls = Array.from(document.querySelectorAll('.gallery img, .product-images img, .slick-slide img, .swiper-slide img, .pleceholder-zoomer-base-container img, .preload-img, .lazy-img'));
+              let galleryUrls = imgEls.map(img => img.getAttribute('data-src') || img.src).filter(src => src && !src.includes('avatar') && !src.includes('logo') && !src.includes('footer'));
               
               if (galleryUrls.length === 0) {
-                  const mainImg = document.querySelector('.main-image img') || document.querySelector('.product-main-img');
+                  const mainImg = document.querySelector('img.preload-img') || document.querySelector('img.lazy-img');
                   if (mainImg) galleryUrls.push(mainImg.getAttribute('data-src') || mainImg.src);
               }
               
