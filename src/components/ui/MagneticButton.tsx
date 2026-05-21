@@ -7,7 +7,8 @@ export function MagneticButton({
   children, 
   className, 
   onClick, 
-  disabled 
+  disabled,
+  style
 }: { 
   children: React.ReactNode, 
   className?: string, 

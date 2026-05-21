@@ -12,7 +12,7 @@ button, input, select, textarea { font-family: inherit; outline: none; }
   transition: background 0.5s, color 0.5s; position: relative; z-index: 1;
   width: 100%; max-width: 480px; margin: 0 auto; box-shadow: 0 0 50px rgba(0,0,0,0.1); border-left: 1px solid var(--bdr); border-right: 1px solid var(--bdr);
 }
-.lx.dark {
+.lx.dark, html.dark .lx {
   --bg: #021024; --bg2: #052659; --card: rgba(5,38,89,0.75); --surf: rgba(5,38,89,0.45);
   --p1: #7DA0CA; --p2: #5483B3; --p3: #C1E8FF; --p4: #C1E8FF; --p5: #5483B3;
   --txt: #C1E8FF; --txt2: #7DA0CA; --bdr: rgba(93,131,179,0.25); --shd: rgba(84,131,179,0.2);

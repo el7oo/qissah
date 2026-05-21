@@ -80,12 +80,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ar" dir="rtl" className={`${tajawal.variable} ${cormorant.variable} ${outfit.variable} antialiased`}>
+    <html lang="ar" dir="rtl" className={`${tajawal.variable} ${cormorant.variable} ${outfit.variable} antialiased`} suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(storeSchema) }}
         />
+        <script dangerouslySetInnerHTML={{ __html: `
+          try {
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+              document.documentElement.classList.add('dark');
+            }
+          } catch (e) {}
+        `}} />
       </head>
       <body className="min-h-screen flex flex-col text-on-background m-0 p-0 overflow-hidden h-screen">
         <SplashScreen />
@@ -95,13 +102,6 @@ export default function RootLayout({
           <ParticleBackground />
           <LenisProvider>
             <div className="lx" id="app" dir="rtl">
-              <script dangerouslySetInnerHTML={{ __html: `
-                try {
-                  if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                    document.getElementById('app').classList.add('dark');
-                  }
-                } catch (e) {}
-              `}} />
               <div className="initial-loader-wrapper">
                 <span className="loader"></span>
               </div>

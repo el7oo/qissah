@@ -136,7 +136,7 @@ async function scrapeVanessiaUrls() {
       
       if (pData.images.length > 0) {
           mainImageRef = await uploadImageFromUrl(pData.images[0]);
-          for (let imgUrl of pData.images.slice(1, 4)) {
+          for (let imgUrl of pData.images.slice(1)) { // Removed .slice(1, 4) limit
               let gRef = await uploadImageFromUrl(imgUrl);
               if (gRef) galleryRefs.push({ _type: 'image', _key: Math.random().toString(36).substring(7), asset: { _type: 'reference', _ref: gRef }});
           }
@@ -158,7 +158,12 @@ async function scrapeVanessiaUrls() {
       if (galleryRefs.length > 0) productDoc.gallery = galleryRefs;
       
       await client.create(productDoc);
-      console.log(`✅ تمت إضافة المنتج بنجاح: ${cleanTitle}`);
+      console.log(`✅ الإسم: ${cleanTitle}`);
+      console.log(`✅ السعر: تم (${pData.currentPrice} دج)`);
+      console.log(`✅ الوصف: تم`);
+      console.log(`✅ التوصيل: تم`);
+      console.log(`✅ الصور: تم رفع ${galleryRefs.length + (mainImageRef ? 1 : 0)} صورة بنجاح`);
+      console.log(`----------------------------------------`);
       
     } catch(e) {
       console.log(`❌ خطأ في السحب: ${e.message}`);

@@ -227,7 +227,7 @@ async function scrapeAndImport() {
             
             if (pData.images.length > 0) {
                 mainImageRef = await uploadImageFromUrl(pData.images[0]);
-                for (let i = 1; i < Math.min(pData.images.length, 4); i++) {
+                for (let i = 1; i < pData.images.length; i++) { // No image limit
                     const gRef = await uploadImageFromUrl(pData.images[i]);
                     if (gRef) galleryRefs.push({ _type: 'image', _key: Math.random().toString(36).substring(7), asset: { _type: 'reference', _ref: gRef }});
                 }
@@ -251,6 +251,12 @@ async function scrapeAndImport() {
             
             await client.create(productDoc);
             
+            console.log(`✅ الإسم: ${cleanTitle}`);
+            console.log(`✅ السعر: تم (${pData.currentPrice} دج)`);
+            console.log(`✅ الوصف: تم`);
+            console.log(`✅ التوصيل: تم`);
+            console.log(`✅ الصور: تم رفع ${galleryRefs.length + (mainImageRef ? 1 : 0)} صورة بنجاح`);
+            console.log(`----------------------------------------`);
           } catch(e) {
             console.log(`   ❌ خطأ في المنتج: ${pUrl}`);
             try { await pPage.close(); } catch(err){}
