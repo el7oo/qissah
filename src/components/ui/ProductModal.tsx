@@ -173,15 +173,19 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
         .pm-img-area {
           position: relative;
           width: 100%;
-          height: 300px; /* fixed height for the image area */
-          background: #000;
+          aspect-ratio: 4/3;
+          max-height: 280px;
+          background: #FFF;
           flex-shrink: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
         
         .pm-main-img {
           width: 100%;
           height: 100%;
-          object-fit: cover;
+          object-fit: contain;
           display: block;
         }
 
