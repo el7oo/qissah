@@ -44,7 +44,7 @@ export function ProductCard({ product }: { product: Product }) {
     toast.custom((tItem) => (
       <div
         style={{
-          background: 'var(--card)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
+          background: 'rgba(26, 26, 26, 0.95)',
           border: '1px solid var(--bdr)', borderRadius: '16px', padding: '12px',
           display: 'flex', alignItems: 'center', gap: '12px', boxShadow: '0 8px 30px rgba(0,0,0,0.12)',
           cursor: 'pointer', transform: tItem.visible ? 'translateY(0)' : 'translateY(-20px)',

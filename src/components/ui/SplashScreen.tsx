@@ -22,10 +22,12 @@ export function SplashScreen() {
     <div className="splash-screen">
       <div className="splash-content">
         <div className="splash-logo-container">
-          <h1 className="splash-title">قصــــــة</h1>
+          <h1 className="splash-title">قصة</h1>
           <div className="splash-glow"></div>
         </div>
-        <div className="splash-emoji">✨🛍️</div>
+        <div className="splash-emoji">
+          <span style={{ fontSize: '24px' }}>🛍️✨</span>
+        </div>
         <div className="splash-loader-bar"></div>
       </div>
       <style>{`

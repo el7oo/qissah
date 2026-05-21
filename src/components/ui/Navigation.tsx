@@ -50,8 +50,8 @@ export function Navigation({ children }: { children?: React.ReactNode }) {
   return (
     <>
       <div className="top-nav">
-        <span className="ttl" onClick={() => router.push('/')} style={{ cursor: "pointer", fontSize: "24px", color: "var(--p1)", display: "flex", alignItems: "center", gap: "6px" }}>
-          {t.luxara} <AppleEmoji name={isDark ? "🖤" : "❤️"} />
+        <span className="ttl" onClick={() => router.push('/')} style={{ cursor: "pointer", fontSize: "26px", color: "var(--p1)", display: "flex", alignItems: "center", gap: "8px", fontFamily: "var(--font-tajawal), sans-serif", fontWeight: 900 }}>
+          <AppleEmoji name="❤️" width={24} height={24} /> قصة
         </span>
         <div style={{display:"flex", gap:"4px", alignItems:"center", flexWrap:"nowrap"}}>
           <div style={{ position: "relative" }}>

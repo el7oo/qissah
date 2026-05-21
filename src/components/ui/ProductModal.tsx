@@ -43,9 +43,7 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
       <div
         style={{
           position: 'fixed', inset: 0, 
-          background: 'rgba(0,0,0,0.6)', 
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
+          background: 'rgba(0,0,0,0.85)', 
           zIndex: 99998,
           animation: 'fadeIn 0.3s ease forwards'
         }}

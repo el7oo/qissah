@@ -63,14 +63,7 @@ export default function Shop() {
   }, []);
 
   useEffect(() => {
-    const root = rootRef.current;
-    if (!root) return;
-    const sections = root.querySelectorAll('[data-shop-reveal]');
-    gsap.fromTo(
-      sections,
-      { y: 8, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.24, stagger: 0.05, ease: 'power2.out' }
-    );
+    // Disabled GSAP stagger to massively improve performance and prevent lagging
   }, [products.length, activeCategory, search, currentPage, loading]);
 
   const categoryList = [
