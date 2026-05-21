@@ -77,7 +77,19 @@
     color: var(--txt);
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
+    padding-bottom: env(safe-area-inset-bottom);
   }
+
+  ::selection {
+    background: var(--p1);
+    color: #fff;
+  }
+
+  *:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--p2);
+  }
+
   
   .lx::before {
     content: '';

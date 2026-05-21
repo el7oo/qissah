@@ -4,11 +4,12 @@ import "../globals.css";
 import { ToastProvider } from "@/components/ui/ToastProvider";
 import { CartHydration } from "@/components/CartHydration";
 import { Navigation } from "@/components/ui/Navigation";
-import { SideCart } from "@/components/ui/SideCart";
+import { SideCart } from '@/components/ui/SideCart';
 import { ParticleBackground } from "@/utils/visualEffects";
 import { MotionProvider } from "@/components/gsap/MotionProvider";
 import { SystemSetup } from "@/components/SystemSetup";
 import { SplashScreen } from "@/components/ui/SplashScreen";
+import { LenisProvider } from "@/components/ui/LenisProvider";
 
 const tajawal = Tajawal({
   variable: "--font-tajawal",
@@ -92,22 +93,24 @@ export default function RootLayout({
           <SystemSetup />
           <MotionProvider />
           <ParticleBackground />
-          <div className="lx" id="app" dir="rtl">
-            <script dangerouslySetInnerHTML={{ __html: `
-              try {
-                if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                  document.getElementById('app').classList.add('dark');
-                }
-              } catch (e) {}
-            `}} />
-            <div className="initial-loader-wrapper">
-              <span className="loader"></span>
+          <LenisProvider>
+            <div className="lx" id="app" dir="rtl">
+              <script dangerouslySetInnerHTML={{ __html: `
+                try {
+                  if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.getElementById('app').classList.add('dark');
+                  }
+                } catch (e) {}
+              `}} />
+              <div className="initial-loader-wrapper">
+                <span className="loader"></span>
+              </div>
+              <Navigation>
+                {children}
+              </Navigation>
+              <SideCart />
             </div>
-            <Navigation>
-              {children}
-            </Navigation>
-            <SideCart />
-          </div>
+          </LenisProvider>
           <ToastProvider />
         </CartHydration>
       </body>

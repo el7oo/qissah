@@ -136,8 +136,8 @@ button, input, select, textarea { font-family: inherit; outline: none; }
 .pc { border-radius: 24px; overflow: hidden; background: var(--card); border: 1px solid rgba(255,255,255,0.4); cursor: pointer; transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s; position: relative; box-shadow: 0 8px 24px rgba(0,0,0,0.06); height: 100%; display: flex; flex-direction: column; transform: translateZ(0); will-change: transform; }
 .pc:active { transform: scale(0.97) translateZ(0); box-shadow: 0 4px 12px rgba(0,0,0,0.04); }
 .pc-img-wrap { position: relative; overflow: hidden; border-radius: 24px 24px 0 0; }
-.pc-img { width: 100%; aspect-ratio: 1; object-fit: cover; transition: transform 0.5s cubic-bezier(0.34,1.56,0.64,1); }
-.pc:hover .pc-img { transform: scale(1.05); }
+.pc-img { width: 100%; aspect-ratio: 1; object-fit: cover; transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
+.pc:hover .pc-img { transform: scale(1.08); }
 .pc-img-overlay { position: absolute; inset: 0; background: linear-gradient(transparent 60%, rgba(0,0,0,0.18)); opacity: 0; transition: opacity 0.3s; }
 .pc:active .pc-img-overlay { opacity: 1; }
 .pc-body { padding: 9px 9px 7px; }

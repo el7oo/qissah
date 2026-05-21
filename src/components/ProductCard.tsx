@@ -10,6 +10,8 @@ import { useState } from 'react';
 import dynamic from 'next/dynamic';
 
 import Image from 'next/image';
+import { motion } from 'framer-motion';
+import { MagneticButton } from './ui/MagneticButton';
 
 const ProductModal = dynamic(() => import('./ui/ProductModal').then(mod => mod.ProductModal), {
   loading: () => null,
@@ -71,7 +73,15 @@ export function ProductCard({ product }: { product: Product }) {
 
   return (
     <>
-      <div className="pc" onClick={() => { audio.playTap(); setModalOpen(true); }}>
+      <motion.div 
+        className="pc" 
+        onClick={() => { audio.playTap(); setModalOpen(true); }}
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        whileHover={{ y: -5 }}
+      >
         {product.discount && (
           <div className="disc-tag">{product.discount}</div>
         )}
@@ -99,8 +109,8 @@ export function ProductCard({ product }: { product: Product }) {
             <span style={{ color: 'var(--txt2)', fontSize: '9px' }}> {ratingNum} · {sold} مبيع</span>
           </div>
         </div>
-        <button className="add-fab" onClick={handleAdd}>+</button>
-      </div>
+        <MagneticButton className="add-fab" onClick={handleAdd}>+</MagneticButton>
+      </motion.div>
       {modalOpen && <ProductModal product={product} onClose={() => setModalOpen(false)} />}
     </>
   );

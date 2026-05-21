@@ -6,6 +6,34 @@ import { verifyInsforgeBearerToken } from '@/lib/server/insforgeServer';
 import { orderRateLimit } from '@/lib/server/rateLimit';
 import { algeriaWilayas } from '@/lib/algeria-wilayas';
 import type { CreateOrderInput, DeliveryType } from '@/lib/types/order';
+import { z } from 'zod';
+
+const OrderItemSchema = z.object({
+  id: z.string().min(1),
+  quantity: z.number().int().positive()
+});
+
+const OrderShippingSchema = z.object({
+  fullName: z.string().min(2, "الاسم الكامل مطلوب"),
+  phone: z.string().regex(/^(05|06|07)[0-9]{8}$/, "رقم الهاتف غير صالح. يجب أن يبدأ بـ 05، 06، أو 07 ويتكون من 10 أرقام"),
+  wilayaId: z.number().int().min(1).max(58),
+  deliveryType: z.enum(['home', 'desk']),
+  addressLine1: z.string().optional(),
+  notes: z.string().optional()
+}).refine(data => {
+  if (data.deliveryType === 'home' && (!data.addressLine1 || data.addressLine1.trim().length === 0)) {
+    return false;
+  }
+  return true;
+}, {
+  message: "عنوان المنزل مطلوب عند اختيار التوصيل للمنزل",
+  path: ["addressLine1"]
+});
+
+const OrderSchema = z.object({
+  items: z.array(OrderItemSchema).min(1).max(50),
+  shipping: OrderShippingSchema
+});
 
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN?.trim();
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID?.trim();
@@ -36,45 +64,28 @@ function deliveryFeeForProduct(
 }
 
 function parseOrderBody(body: any): CreateOrderInput | null {
-  if (!body || typeof body !== 'object') return null;
-  if (!Array.isArray(body.items) || body.items.length === 0) return null;
-  if (body.items.length > 50) {
-    throw new Error('Maximum 50 items allowed per order');
+  try {
+    // Basic structural checks before zod parsing to handle empty/null gracefully
+    if (!body || typeof body !== 'object') return null;
+    
+    // Zod parsing will throw on validation errors
+    const parsedData = OrderSchema.parse(body);
+    
+    return {
+      items: parsedData.items,
+      shipping: {
+        fullName: parsedData.shipping.fullName,
+        phone: parsedData.shipping.phone,
+        wilayaId: parsedData.shipping.wilayaId,
+        deliveryType: parsedData.shipping.deliveryType,
+        addressLine1: parsedData.shipping.deliveryType === 'home' ? (parsedData.shipping.addressLine1 || '') : 'Stop Desk / Bureau',
+        notes: parsedData.shipping.notes || ''
+      }
+    };
+  } catch (error) {
+    console.error("Zod Validation Error:", error);
+    return null; // For now, we return null to mimic the previous behavior. In the future we can return 400 with the exact error.
   }
-  if (!body.shipping || typeof body.shipping !== 'object') return null;
-
-  const fullName = String(body.shipping.fullName || '').trim();
-  const phone = String(body.shipping.phone || '').trim();
-  const addressLine1 = String(body.shipping.addressLine1 || '').trim();
-  const wilayaId = Number(body.shipping.wilayaId);
-  const rawDeliveryType = String(body.shipping.deliveryType || '').trim().toLowerCase();
-  const deliveryType: DeliveryType =
-    rawDeliveryType === 'desk' || rawDeliveryType === 'pickup' ? 'desk' : 'home';
-  if (!fullName || !phone) return null;
-  if (!Number.isInteger(wilayaId) || wilayaId < 1) return null;
-  if (deliveryType !== 'home' && deliveryType !== 'desk') return null;
-  if (deliveryType === 'home' && !addressLine1) return null;
-
-  const items = body.items
-    .map((it: any) => ({
-      id: String(it?.id || '').trim(),
-      quantity: normalizeQty(it?.quantity),
-    }))
-    .filter((it: any) => it.id && it.quantity > 0);
-
-  if (items.length === 0) return null;
-
-  return {
-    items,
-    shipping: {
-      fullName,
-      phone,
-      wilayaId,
-      deliveryType,
-      addressLine1: deliveryType === 'home' ? addressLine1 : 'Stop Desk / Bureau',
-      notes: body.shipping.notes || '',
-    },
-  };
 }
 
 async function sendOrderTelegramNotification(order: {
