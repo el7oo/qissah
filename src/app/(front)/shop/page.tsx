@@ -93,7 +93,13 @@ export default function Shop() {
 
   const categories = [
     { id: null, name: lang === 'ar' ? 'عرض الكل' : 'All', icon: '✨' },
+    ...categoryList.map(c => ({
+      id: c.id,
+      name: (t as any)[c.nameKey] || c.nameKey,
+      icon: c.icon
+    })),
     ...sanityCategories
+      .filter(sc => !categoryList.some(hc => hc.id === sc.slug))
       .filter(sc => sc.slug !== 'all' && sc.title?.ar !== 'عرض الكل' && sc.title !== 'عرض الكل')
       .map(sc => ({
         id: sc.slug || sc._id,

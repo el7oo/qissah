@@ -239,11 +239,11 @@ export default function Home() {
 
       <div style={{ marginBottom: '22px' }} data-home-reveal>
         <div className="sec-hd">
-          <div className="ttl">{t.whyLuxara}</div>
+          <div className="ttl">{lang === 'ar' ? 'لماذا قصة' : 'Why Qissah'}</div>
         </div>
         <div className="feat-grid">
           {[
-            ['🚚', t.fastDelivery, '2.5s'],
+            ['🚚', lang === 'ar' ? 'التوصيل متوفر 58 ولاية' : 'Delivery to 58 Wilayas', '2.5s'],
             ['🔒', t.securePayment, '3.2s'],
             ['⭐', t.highQuality, '1.8s'],
             ['📞', t.support247, '4s']

@@ -22,7 +22,7 @@ export function SplashScreen() {
     <div className="splash-screen">
       <div className="splash-content">
         <div className="splash-logo-container">
-          <h1 className="splash-title">قصة</h1>
+          <h1 className="splash-title">قصــــة</h1>
           <div className="splash-glow"></div>
         </div>
         <div className="splash-emoji">

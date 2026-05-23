@@ -99,8 +99,8 @@ button, input, select, textarea { font-family: inherit; outline: none; }
 
 /* HERO */
 .hero-sec { margin: 15px 15px 25px; border-radius: 32px; background-size: 300% 300%; animation: meshMove 12s ease infinite; padding: 32px 24px 28px; position: relative; overflow: hidden; min-height: 200px; display: flex; align-items: center; box-shadow: 0 20px 40px var(--shd); border: 1px solid rgba(255,255,255,0.2); }
-.lx:not(.dark) .hero-sec { background-image: radial-gradient(circle at 0% 0%, #FFBB94 0%, transparent 50%), radial-gradient(circle at 100% 100%, #DC586D 0%, transparent 50%), radial-gradient(circle at 100% 0%, #A33757 0%, transparent 50%); background-color: #FB9590; }
-.lx.dark .hero-sec { background-image: radial-gradient(circle at 0% 0%, #052659 0%, transparent 50%), radial-gradient(circle at 100% 100%, #5483B3 0%, transparent 50%), radial-gradient(circle at 100% 0%, #7DA0CA 0%, transparent 50%); background-color: #021024; }
+html:not(.dark) .hero-sec { background-image: radial-gradient(circle at 0% 0%, #FFBB94 0%, transparent 50%), radial-gradient(circle at 100% 100%, #DC586D 0%, transparent 50%), radial-gradient(circle at 100% 0%, #A33757 0%, transparent 50%); background-color: #FB9590; }
+html.dark .hero-sec { background-image: radial-gradient(circle at 0% 0%, #052659 0%, transparent 50%), radial-gradient(circle at 100% 100%, #5483B3 0%, transparent 50%), radial-gradient(circle at 100% 0%, #7DA0CA 0%, transparent 50%); background-color: #021024; }
 .hero-sec::before { content: ''; position: absolute; inset: 0; background: rgba(255,255,255,0.05); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
 .hero-sec::after { content: ''; position: absolute; inset: 0; border-radius: 32px; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.2); pointer-events: none; }
 .hero-particles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 1; }
