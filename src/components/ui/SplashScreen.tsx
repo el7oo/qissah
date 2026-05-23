@@ -21,8 +21,8 @@ export function SplashScreen() {
 
   return (
     <div className="splash-screen">
-      <div className="splash-door splash-door-l"></div>
-      <div className="splash-door splash-door-r"></div>
+      <div className="splash-door splash-door-t"></div>
+      <div className="splash-door splash-door-b"></div>
       <div className="splash-content">
         <div className="splash-logo-container">
           <h1 className="splash-title">قصــــة</h1>
@@ -42,13 +42,13 @@ export function SplashScreen() {
           animation: screenHide 0s linear 2.8s forwards;
         }
         .splash-door {
-          position: absolute; top: 0; bottom: 0; width: 50%;
+          position: absolute; left: 0; right: 0; height: 50%;
           background: var(--bg);
           z-index: 1;
           animation: doorOpen 1s cubic-bezier(0.8, 0, 0.2, 1) 1.8s forwards;
         }
-        .splash-door-l { left: 0; --door-dir: -100%; border-right: 1px solid var(--bdr); }
-        .splash-door-r { right: 0; --door-dir: 100%; border-left: 1px solid var(--bdr); }
+        .splash-door-t { top: 0; --door-dir: -100%; border-bottom: 1px solid var(--bdr); }
+        .splash-door-b { bottom: 0; --door-dir: 100%; border-top: 1px solid var(--bdr); }
         
         .splash-content {
           position: relative; z-index: 2;
@@ -90,8 +90,8 @@ export function SplashScreen() {
         }
         
         @keyframes doorOpen {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(var(--door-dir)); }
+          0% { transform: translateY(0); }
+          100% { transform: translateY(var(--door-dir)); }
         }
         @keyframes contentFade {
           0% { opacity: 1; transform: scale(1); }

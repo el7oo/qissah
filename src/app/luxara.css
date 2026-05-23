@@ -28,8 +28,8 @@ button, input, select, textarea { font-family: inherit; outline: none; }
 
 .heart-dark { display: none !important; }
 .heart-light { display: inline-block !important; }
-.lx.dark .heart-dark { display: inline-block !important; }
-.lx.dark .heart-light { display: none !important; }
+html.dark .heart-dark { display: inline-block !important; }
+html.dark .heart-light { display: none !important; }
 
 .ttl {
   font-family: var(--font-cormorant), 'Playfair Display', serif !important;

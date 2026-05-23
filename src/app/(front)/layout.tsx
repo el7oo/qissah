@@ -31,7 +31,7 @@ const outfit = Outfit({
 
 export const metadata: Metadata = {
   title: "Qissa | قصة - متجر التسوق الفاخر في الجزائر",
-  description: "قصة هي الوجهة الأولى للتسوق الفاخر في الجزائر. تسوق أحدث المنتجات بأسعار ممتازة وتوصيل سريع لكافة 58 ولاية جزائرية.",
+  description: "قصة - كل منتج يضيف فصلاً جديداً لقصتك. اكتشف متعة التسوق الفاخر في الجزائر.",
   keywords: ["تسوق عبر الإنترنت", "قصة", "الجزائر", "ملابس", "Qissa", "E-commerce Algeria"],
   openGraph: {
     title: "Qissa | قصة - متجر التسوق الفاخر",
@@ -62,7 +62,7 @@ const storeSchema = {
   "@type": "Store",
   "name": "Qissa | قصة",
   "image": "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04",
-  "description": "قصة هي الوجهة الأولى للتسوق الفاخر في الجزائر. توصيل سريع لكافة 58 ولاية.",
+  "description": "قصة - كل منتج يضيف فصلاً جديداً لقصتك. اكتشف متعة التسوق الفاخر في الجزائر.",
   "url": "https://luxara-dz.vercel.app",
   "telephone": "+213000000000",
   "priceRange": "$$",
