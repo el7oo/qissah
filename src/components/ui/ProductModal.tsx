@@ -7,6 +7,7 @@ import { audio } from '@/utils/audioEngine';
 import { triggerRipple, flyToCart } from '@/utils/visualEffects';
 import { useTranslation } from '@/utils/translations';
 import { useLangStore } from '@/store/langStore';
+import Image from 'next/image';
 
 export function ProductModal({ product, onClose }: { product: Product, onClose: () => void }) {
   const { addItem, openCart } = useCartStore();
@@ -66,29 +67,36 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
           
           {/* Image Area - Edge to Edge */}
           <div className="pm-img-area">
-            <img 
+            <Image 
               src={optimizedActiveImage || 'https://placehold.co/800x600/222/FFF?text=Image'} 
               alt={product.title} 
               className="pm-main-img"
-              loading="lazy" 
+              width={800}
+              height={600}
+              placeholder="blur"
+              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII="
             />
             
             {/* Gallery Thumbnails Overlay */}
             {product.images && product.images.length > 0 && (
               <div className="pm-gallery">
-                <img 
+                <Image 
                   src={product.image || 'https://placehold.co/100x100/222/FFF'} 
                   onClick={() => setActiveImage(product.image)}
                   alt={product.title}
                   className={`pm-thumb ${activeImage === product.image ? 'active' : ''}`}
+                  width={100}
+                  height={100}
                 />
                 {product.images.map((img, i) => (
-                  <img 
+                  <Image 
                     key={i} 
                     src={img || 'https://placehold.co/100x100/222/FFF'} 
                     onClick={() => setActiveImage(img)}
                     alt={`${product.title} ${i}`}
                     className={`pm-thumb ${activeImage === img ? 'active' : ''}`}
+                    width={100}
+                    height={100}
                   />
                 ))}
               </div>

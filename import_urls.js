@@ -1,5 +1,6 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
+const path = require('path');
 const axios = require('axios');
 const { createClient } = require('@sanity/client');
 
@@ -11,17 +12,32 @@ const client = createClient({
   token: 'skazU0Rsj3mjdHt3iEtKNIhdnxA7HCr4KCbhEM8wUKuGVi2O3oNQKMNPGJ28aDAKLvEyMgKlVKb6DJD1srECtZ8op2HdpdxRT0efEZ8oZ9hjKMEGKr9opFeqAGmLdOVIks57fTb56EI24vEA29nBST72wu7px1z331qLryhH6U1RptarAGKi'
 });
 
+const MAX_IMAGES = 6; 
+const EXCLUDED_FILES = ['urls.txt', 'vanessia.txt', 'merged_urls.txt', 'requirements.txt'];
+
+function premiumTitleCleaner(title) {
+  return title
+    .replace(/[☆★]/g, '') 
+    .replace(/\s\d+\s*تقييمات/g, '')
+    .replace(/0 تقييمات/g, '') 
+    .replace(/\b(نوعية ممتازة|ممتازة|أصلي|جديد|تخفيض|شحن مجاني)\b/g, '') 
+    .replace(/[-\+]/g, ' ') 
+    .replace(/\n/g, ' ') 
+    .replace(/\s{2,}/g, ' ') 
+    .trim();
+}
+
 async function uploadImageFromUrl(url, retries = 3) {
   if (!url || url.includes('data:image') || url.includes('placeholder')) return null;
   let fullUrl = url.startsWith('/') ? 'https://ecomix.vip' + url : url;
   for (let i = 0; i < retries; i++) {
     try {
-      const response = await axios.get(fullUrl, { responseType: 'arraybuffer', timeout: 15000 });
+      const response = await axios.get(fullUrl, { responseType: 'arraybuffer', timeout: 20000 });
       const buffer = Buffer.from(response.data, 'binary');
-      const asset = await client.assets.upload('image', buffer, { filename: 'product-img.jpg' });
+      const asset = await client.assets.upload('image', buffer, { filename: fullUrl.split('/').pop().split('?')[0] || 'product-img.jpg' });
       return asset._id;
     } catch (err) {
-      await new Promise(res => setTimeout(res, 2000));
+      if (i < retries - 1) await new Promise(res => setTimeout(res, 2000));
     }
   }
   return null;
@@ -30,35 +46,46 @@ async function uploadImageFromUrl(url, retries = 3) {
 function slugify(text) {
   return text.toString().toLowerCase().trim()
     .replace(/[\s\W-]+/g, '-')
-    .replace(/^-+|-+$/g, '');
+    .replace(/^-+|-+$/g, '') || Math.random().toString(36).substring(7);
 }
 
-async function scrapeUrls() {
-  if (!fs.existsSync('urls.txt')) {
-    console.log('❌ ملف urls.txt غير موجود. الرجاء إنشاؤه ووضع الروابط فيه (رابط في كل سطر).');
-    return;
-  }
-  const urls = fs.readFileSync('urls.txt', 'utf8').split('\n').map(u => u.trim()).filter(u => u);
-  if (urls.length === 0) {
-    console.log('⚠️ ملف urls.txt فارغ!');
-    return;
-  }
+async function getOrCreateCategory(categoryName) {
+  const cSlug = slugify(categoryName);
+  const existing = await client.fetch(`*[_type == "category" && title == $title][0]`, { title: categoryName });
+  if (existing) return existing._id;
+  
+  const newCat = await client.create({
+    _type: 'category',
+    title: categoryName,
+    slug: { _type: 'slug', current: cSlug }
+  });
+  console.log(`📂 تم إنشاء قسم جديد: ${categoryName}`);
+  return newCat._id;
+}
 
-  console.log(`🚀 بدء سحب ${urls.length} منتج من الروابط اليدوية...`);
-  const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+async function processCategoryFile(filePath, categoryName, browser, shippingProfileId) {
+  const urls = fs.readFileSync(filePath, 'utf8')
+    .split('\n')
+    .map(u => u.trim())
+    .filter(u => u && !u.startsWith('//'));
+
+  if (urls.length === 0) return;
+
+  const categoryId = await getOrCreateCategory(categoryName);
+  console.log(`\n===========================================`);
+  console.log(`📁 قسم: ${categoryName} (${urls.length} منتج)`);
+  console.log(`===========================================`);
+
   const page = await browser.newPage();
-
-  // Get shipping profile
-  const vibeRes = await client.fetch('*[_type == "shippingProfile" && name == "vibe"][0]._id');
-  const vibeProfileId = vibeRes || '3cf38708-3ab0-47be-a577-c9d343f11559';
+  await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36');
 
   for (let i = 0; i < urls.length; i++) {
     const url = urls[i];
-    console.log(`\n⏳ سحب منتج ${i+1}/${urls.length}: ${url}`);
+    console.log(`\n⏳ [${i+1}/${urls.length}] سحب: ${url}`);
     
     try {
       await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
-      await page.waitForFunction(() => document.querySelector('h1') || document.querySelector('.product-title') || document.querySelector('.price'), { timeout: 10000 }).catch(()=>{});
+      await page.waitForFunction(() => document.querySelector('h1') || document.querySelector('.product-title') || document.querySelector('.price'), { timeout: 15000 }).catch(()=>{});
       
       const pData = await page.evaluate(() => {
         const titleEl = document.querySelector('h1') || document.querySelector('.product-title');
@@ -74,40 +101,57 @@ async function scrapeUrls() {
         const numbers = justNumbers.match(/\d+/g) || [];
         const possiblePrices = numbers.map(Number).filter(n => n > 99); 
         let currentPrice = possiblePrices[0] || 0;
-        let oldPrice = possiblePrices[1] || currentPrice;
+        let oldPrice = possiblePrices[1] || 0;
 
-        const imgEls = Array.from(document.querySelectorAll('.gallery img, .product-images img, .slick-slide img, .swiper-slide img, .pleceholder-zoomer-base-container img, .preload-img, .lazy-img'));
-        let galleryUrls = imgEls.map(img => img.getAttribute('data-src') || img.src).filter(src => src && !src.includes('avatar') && !src.includes('logo') && !src.includes('footer'));
-        
-        if (galleryUrls.length === 0) {
-            const mainImg = document.querySelector('img.preload-img') || document.querySelector('img.lazy-img') || document.querySelector('.main-image img');
-            if (mainImg) galleryUrls.push(mainImg.getAttribute('data-src') || mainImg.src);
+        if (oldPrice === 0 && currentPrice > 0) {
+           oldPrice = Math.round(currentPrice * 1.15);
+           oldPrice = Math.ceil(oldPrice / 100) * 100;
+        } else if (currentPrice > oldPrice && oldPrice !== 0) { 
+           let t = oldPrice; oldPrice = currentPrice; currentPrice = t; 
         }
+
+        const allImgEls = Array.from(document.querySelectorAll('img'));
+        let galleryUrls = allImgEls
+          .map(img => img.getAttribute('data-src') || img.src)
+          .filter(src => src && 
+            !src.includes('logo') && 
+            !src.includes('footer') && 
+            !src.includes('avatar') && 
+            !src.includes('icon') && 
+            !src.includes('banner') &&
+            !src.includes('data:image') &&
+            src.match(/\.(jpeg|jpg|png|webp|gif)/i)
+          );
+
+        if (galleryUrls.length === 0) {
+          const mainImg = document.querySelector('meta[property="og:image"]');
+          if (mainImg) galleryUrls.push(mainImg.content);
+        }
+
         return { titleRaw, descRaw, currentPrice, oldPrice, images: [...new Set(galleryUrls)] };
       });
 
       if (!pData.titleRaw || pData.currentPrice === 0) {
-        console.log('⚠️ تخطي: المنتج غير متاح أو لا يوجد سعر.');
+        console.log(`   ⚠️ تخطي: منتج غير متاح`);
         continue;
       }
 
-      let cleanTitle = pData.titleRaw.replace(/[\u{1F600}-\u{1F6FF}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '').trim();
-      let currentPrice = pData.currentPrice;
-      let finalPrice = Math.round(currentPrice * 1.15); // Add 15% automatically
-      let oldPrice = finalPrice + 900;
+      let cleanTitle = premiumTitleCleaner(pData.titleRaw);
       let pSlug = slugify(cleanTitle);
 
       const existing = await client.fetch(`*[_type == "product" && slug.current == $slug][0]`, { slug: pSlug });
       if (existing) {
-          console.log(`⚠️ المنتج "${cleanTitle}" موجود مسبقاً.`);
+          console.log(`   ⚠️ موجود مسبقاً.`);
           continue;
       }
 
       let mainImageRef = null;
       let galleryRefs = [];
-      if (pData.images.length > 0) {
-          mainImageRef = await uploadImageFromUrl(pData.images[0]);
-          for (let imgUrl of pData.images.slice(1, 4)) {
+      const imagesToUpload = pData.images.slice(0, MAX_IMAGES);
+
+      if (imagesToUpload.length > 0) {
+          mainImageRef = await uploadImageFromUrl(imagesToUpload[0]);
+          for (let imgUrl of imagesToUpload.slice(1)) {
               let ref = await uploadImageFromUrl(imgUrl);
               if (ref) galleryRefs.push({ _type: 'image', _key: Math.random().toString(36).substring(7), asset: { _type: 'reference', _ref: ref } });
           }
@@ -117,27 +161,56 @@ async function scrapeUrls() {
           _type: 'product',
           title: cleanTitle,
           slug: { _type: 'slug', current: pSlug },
-          price: finalPrice,
-          discountPrice: finalPrice, // Keep consistent
-          shippingProfile: { _type: 'reference', _ref: vibeProfileId },
+          price: pData.currentPrice,
+          discountPrice: pData.oldPrice,
+          description: pData.descRaw ? pData.descRaw.trim() : cleanTitle,
           stockStatus: 'in_stock',
-          description: pData.descRaw || cleanTitle,
-          categoryId: 'ecomix', // Defaulting to Ecomix category logic if needed, or null
+          deliveryType: 'home',
+          category: { _type: 'reference', _ref: categoryId }
       };
 
+      if (shippingProfileId) newProduct.shippingProfile = { _type: 'reference', _ref: shippingProfileId };
       if (mainImageRef) newProduct.mainImage = { _type: 'image', asset: { _type: 'reference', _ref: mainImageRef } };
       if (galleryRefs.length > 0) newProduct.gallery = galleryRefs;
 
       await client.create(newProduct);
-      console.log(`✅ تمت إضافة المنتج بنجاح: ${cleanTitle}`);
+      console.log(`   ✅ ${cleanTitle} (${pData.currentPrice} دج) -> ${categoryName}`);
 
     } catch (e) {
-      console.log(`❌ خطأ في السحب: ${e.message}`);
+      console.log(`   ❌ خطأ: ${e.message}`);
     }
   }
-
-  console.log('🎉 انتهى السحب اليدوي بنجاح!');
-  await browser.close();
+  await page.close();
 }
 
-scrapeUrls();
+async function main() {
+  const files = fs.readdirSync(__dirname);
+  const txtFiles = files.filter(f => f.endsWith('.txt') && !EXCLUDED_FILES.includes(f));
+
+  if (txtFiles.length === 0) {
+    console.log('⚠️ لا يوجد ملفات تصنيفات بصيغة txt.');
+    return;
+  }
+
+  console.log(`\n🚀 بدء بوت Qissah V7.0 - تحديث الأقسام الذكي 🚀`);
+  console.log(`📁 تم العثور على ${txtFiles.length} ملفات تصنيف.`);
+
+  const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+
+  let shippingProfileId = null;
+  try {
+    const profiles = await client.fetch(`*[_type == "shippingProfile" && (title match "vibe" || title match "Vibe")]{_id, title}`);
+    if (profiles.length > 0) shippingProfileId = profiles[0]._id;
+  } catch(e) {}
+
+  for (let file of txtFiles) {
+    const categoryName = path.basename(file, '.txt');
+    const filePath = path.join(__dirname, file);
+    await processCategoryFile(filePath, categoryName, browser, shippingProfileId);
+  }
+
+  await browser.close();
+  console.log(`\n🎉 اكتمل السحب والتصنيف بنجاح!`);
+}
+
+main();

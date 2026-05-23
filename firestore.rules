@@ -1,0 +1,14 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 🔐 Qissa Store Security Rules
+    // All read/write operations are handled securely via Next.js server actions / API routes
+    // using Firebase Admin SDK (which bypasses these rules).
+    // Therefore, we lock down direct client access completely to prevent unauthorized tampering.
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

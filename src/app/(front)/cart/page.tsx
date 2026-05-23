@@ -7,7 +7,7 @@ import { useLangStore } from '@/store/langStore';
 import { useTranslation } from '@/utils/translations';
 import { audio } from '@/utils/audioEngine';
 import { triggerRipple } from '@/utils/visualEffects';
-import { AppleEmoji } from '@/components/ui/AppleEmoji';
+import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import gsap from 'gsap';
 import Image from 'next/image';
 
@@ -65,7 +65,7 @@ export default function CartPage() {
       
       {items.length === 0 ? (
         <div className="empty" data-cart-section>
-          <span className="e-ico"><AppleEmoji name="🛒" /></span>
+          <span className="e-ico"><CategoryIcon name="🛒" size={48} className="text-primary" /></span>
           <div style={{ fontWeight: 700, fontSize: '15px', marginBottom: '6px' }}>{t.emptyCart}</div>
           <button className="btn btn-s" style={{ width: 'auto', marginTop: '12px', padding: '10px 22px' }} onClick={(e) => { triggerRipple(e as any); audio.playTap(); router.push('/shop'); }}>{t.shopNow}</button>
         </div>
@@ -84,7 +84,7 @@ export default function CartPage() {
                     <button className="qty-btn" onClick={(e) => handleUpdateQty(item.id, item.quantity + 1, e)}>+</button>
                   </div>
                 </div>
-                <button className="rm-btn" onClick={(e) => handleRemove(item.id, e)}><AppleEmoji name="🗑️" /></button>
+                <button className="rm-btn" onClick={(e) => handleRemove(item.id, e)}><CategoryIcon name="🗑️" size={16} className="text-primary" /></button>
               </div>
             ))}
           </div>
@@ -94,7 +94,7 @@ export default function CartPage() {
               <span>{t.subtotal}</span><span>{tot.toLocaleString()} دج</span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', fontSize: '12px', color: 'var(--txt2)' }}>
-              <span>{t.shipping}</span><span><AppleEmoji name="🚚" /> {t.free}</span>
+              <span>{t.shipping}</span><span><CategoryIcon name="🚚" size={16} className="inline-block" /> {t.free}</span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 800, fontSize: '16px', marginBottom: '16px' }}>
               <span>{t.total}</span><span style={{ color: 'var(--p1)' }}>{tot.toLocaleString()} دج</span>

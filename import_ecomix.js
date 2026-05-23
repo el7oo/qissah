@@ -34,14 +34,15 @@ async function uploadImageFromUrl(url, retries = 3) {
 
   for (let i = 0; i < retries; i++) {
     try {
-      const response = await axios.get(fullUrl, { responseType: 'arraybuffer', timeout: 15000 });
+      const response = await axios.get(fullUrl, { responseType: 'arraybuffer', timeout: 30000 });
       const buffer = Buffer.from(response.data, 'binary');
       const asset = await client.assets.upload('image', buffer, {
         filename: fullUrl.split('/').pop().split('?')[0] || 'luxury-product.jpg'
       });
       return asset._id;
     } catch (err) {
-      await new Promise(res => setTimeout(res, 2000));
+      console.log(`     ⚠️ فشل تحميل الصورة، محاولة ${i + 1} من ${retries}...`);
+      await new Promise(res => setTimeout(res, 3000));
     }
   }
   return null;
@@ -69,10 +70,13 @@ async function scrapeAndImport() {
   console.log('🚀 بدء تشغيل بوت Ecomix V5.0 (المثالي)...');
   
   let shippingProfileId = null;
-  const profiles = await client.fetch(`*[_type == "shippingProfile" && title match "vibe" || title match "Vibe"]`);
+  const profiles = await client.fetch(`*[_type == "shippingProfile" && (title match "فايب" || title match "vibe" || title match "Vibe")]`);
   if (profiles.length > 0) {
     shippingProfileId = profiles[0]._id;
+    console.log(`✅ تم العثور على ملف الشحن: ${profiles[0].title}`);
   }
+
+  let failedUrls = [];
 
   const browser = await puppeteer.launch({ 
     headless: false,
@@ -124,22 +128,21 @@ async function scrapeAndImport() {
         await page.goto(pageUrl, { waitUntil: 'networkidle2', timeout: 90000 });
         
         try {
-          // Wait longer, up to 10s for the page to render completely
-          await page.waitForSelector('.p-tile', { timeout: 10000 });
-        } catch(e) {
-          // It might be actually empty
-        }
+          // Wait longer, up to 15s for the page to render completely
+          await page.waitForSelector('a', { timeout: 15000 });
+        } catch(e) {}
 
         await autoScroll(page); 
         await new Promise(r => setTimeout(r, 2000)); 
         
         // Extract basic product info from category page to be faster
         const productsBasic = await page.evaluate(() => {
-          const items = Array.from(document.querySelectorAll('.p-tile'));
+          // Try multiple selectors that Ecomix might use
+          const items = Array.from(document.querySelectorAll('.p-tile, .product a, .p-card a, a[href*="/product/"]'));
           return items.map(item => {
-            const linkEl = item.querySelector('a');
+            const linkEl = item.tagName === 'A' ? item : item.querySelector('a');
             return linkEl ? linkEl.href : null;
-          }).filter(url => url !== null);
+          }).filter(url => url !== null && url.includes('/product/'));
         });
         
         if (productsBasic.length === 0) {
@@ -197,13 +200,22 @@ async function scrapeAndImport() {
                  let t = oldPrice; oldPrice = currentPrice; currentPrice = t; 
               }
               
-              // Gallery Images
-              const imgEls = Array.from(document.querySelectorAll('.gallery img, .product-images img, .slick-slide img, .swiper-slide img, .pleceholder-zoomer-base-container img, .preload-img, .lazy-img'));
-              let galleryUrls = imgEls.map(img => img.getAttribute('data-src') || img.src).filter(src => src && !src.includes('avatar') && !src.includes('logo') && !src.includes('footer'));
+              // ALL images on page that look like product images
+              const allImgEls = Array.from(document.querySelectorAll('img'));
+              let galleryUrls = allImgEls
+                .map(img => img.getAttribute('data-src') || img.src)
+                .filter(src => src && 
+                  !src.includes('logo') && 
+                  !src.includes('footer') && 
+                  !src.includes('avatar') && 
+                  !src.includes('icon') && 
+                  !src.includes('banner') &&
+                  src.match(/\.(jpeg|jpg|png|webp|gif)/i)
+                );
               
               if (galleryUrls.length === 0) {
-                  const mainImg = document.querySelector('img.preload-img') || document.querySelector('img.lazy-img');
-                  if (mainImg) galleryUrls.push(mainImg.getAttribute('data-src') || mainImg.src);
+                  const mainImg = document.querySelector('meta[property="og:image"]');
+                  if (mainImg) galleryUrls.push(mainImg.content);
               }
               
               return { titleRaw, descRaw, currentPrice, oldPrice, images: [...new Set(galleryUrls)] };
@@ -258,7 +270,8 @@ async function scrapeAndImport() {
             console.log(`✅ الصور: تم رفع ${galleryRefs.length + (mainImageRef ? 1 : 0)} صورة بنجاح`);
             console.log(`----------------------------------------`);
           } catch(e) {
-            console.log(`   ❌ خطأ في المنتج: ${pUrl}`);
+            console.log(`   ❌ خطأ في المنتج (تم الحفظ في القائمة الفاشلة): ${pUrl}`);
+            failedUrls.push(pUrl);
             try { await pPage.close(); } catch(err){}
           }
         }
@@ -267,7 +280,16 @@ async function scrapeAndImport() {
         currentPage++;
       }
     }
+    }
     console.log('\n🌟🌟🌟 انتهى السحب بنجاح!');
+    
+    if (failedUrls.length > 0) {
+       console.log('\n========================================');
+       console.log(`🚨 الروابط التي فشل البوت في رفعها (${failedUrls.length} رابط):`);
+       failedUrls.forEach(url => console.log(`- ${url}`));
+       console.log('يرجى رفعها يدويا!');
+       console.log('========================================\n');
+    }
   } catch (error) {
     console.error('❌ خطأ فادح:', error.message);
   } finally {

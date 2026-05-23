@@ -6,7 +6,7 @@ import { useLangStore } from '@/store/langStore';
 import { useTranslation } from '@/utils/translations';
 import { ProductCard } from '@/components/ProductCard';
 import { ProductSkeleton } from '@/components/ProductSkeleton';
-import { AppleEmoji } from '@/components/ui/AppleEmoji';
+import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import { audio } from '@/utils/audioEngine';
 import { triggerRipple } from '@/utils/visualEffects';
 import { productService, Product } from '@/services/productService';
@@ -145,7 +145,7 @@ export default function Shop() {
         <div className="ttl" style={{ flex: 1 }}>{t.shop}</div>
       </div>
       <div className="search-wrap" data-shop-reveal style={{ position: 'relative', zIndex: searchFocused ? 100 : 1 }}>
-        <span style={{ fontSize: '16px', flexShrink: 0 }}><AppleEmoji name="🔍" /></span>
+        <span style={{ fontSize: '16px', flexShrink: 0 }}><CategoryIcon name="🔍" size={16} className="text-primary" /></span>
         <input 
           className="search-inp" 
           placeholder={lang === 'ar' ? 'ابحث عن منتجات، فئات...' : 'Search products, categories...'}
@@ -203,7 +203,7 @@ export default function Shop() {
             className={`cat-chip ${activeCategory === c.id ? 'sel' : ''}`} 
             onClick={(e) => handleCatClick(c.id, e)}
           >
-            <span className="cc-ico"><AppleEmoji name={c.icon} /></span>
+            <span className="cc-ico"><CategoryIcon name={c.icon} size={20} className="text-primary" /></span>
             <span className="cc-lbl">{c.name}</span>
           </div>
         ))}
@@ -211,7 +211,7 @@ export default function Shop() {
 
       {catalogError ? (
         <div className="empty" data-shop-reveal>
-          <span className="e-ico"><AppleEmoji name="⚠️" /></span>
+          <span className="e-ico"><CategoryIcon name="⚠️" size={48} className="text-primary" /></span>
           <div style={{ fontWeight: 700, fontSize: '15px', marginBottom: '6px' }}>
             {lang === 'ar' ? 'تعذر تحميل الكتالوج' : 'Catalog unavailable'}
           </div>
@@ -234,7 +234,7 @@ export default function Shop() {
         </div>
       ) : filteredProducts.length === 0 ? (
         <div className="empty" data-shop-reveal>
-          <span className="e-ico"><AppleEmoji name="🔍" /></span>
+          <span className="e-ico"><CategoryIcon name="🔍" size={48} className="text-primary" /></span>
           <div style={{ fontWeight: 700, fontSize: '15px', marginBottom: '6px' }}>لا توجد منتجات</div>
           <button 
             className="btn btn-s" 

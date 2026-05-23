@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Tajawal, Cormorant_Garamond, Outfit } from "next/font/google";
+import { Tajawal, Playfair_Display, Outfit, Amiri } from "next/font/google";
 import "../globals.css";
 import { ToastProvider } from "@/components/ui/ToastProvider";
 import { CartHydration } from "@/components/CartHydration";
@@ -17,10 +17,16 @@ const tajawal = Tajawal({
   weight: ["200", "300", "400", "500", "700", "800", "900"],
 });
 
-const cormorant = Cormorant_Garamond({
-  variable: "--font-cormorant",
+const amiri = Amiri({
+  variable: "--font-amiri",
+  subsets: ["arabic"],
+  weight: ["400", "700"],
+});
+
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800", "900"],
 });
 
 const outfit = Outfit({
@@ -36,7 +42,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Qissa | قصة - متجر التسوق الفاخر",
     description: "اكتشف أفضل العروض والمنتجات المميزة في الجزائر وتوصيل لجميع الولايات.",
-    url: "https://luxara-dz.vercel.app", // Placeholder URL
+    url: "https://qissah.vercel.app", 
     siteName: "Qissa",
     images: [
       {
@@ -63,7 +69,7 @@ const storeSchema = {
   "name": "Qissa | قصة",
   "image": "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04",
   "description": "قصة هي الوجهة الأولى للتسوق الفاخر في الجزائر. توصيل سريع لكافة 58 ولاية.",
-  "url": "https://luxara-dz.vercel.app",
+  "url": "https://qissah.vercel.app",
   "telephone": "+213000000000",
   "priceRange": "$$",
   "address": {
@@ -80,7 +86,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ar" dir="rtl" className={`${tajawal.variable} ${cormorant.variable} ${outfit.variable} antialiased`} suppressHydrationWarning>
+    <html lang="ar" dir="rtl" className={`${tajawal.variable} ${amiri.variable} ${playfair.variable} ${outfit.variable} antialiased`} suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"

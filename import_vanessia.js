@@ -33,14 +33,15 @@ async function uploadImageFromUrl(url, retries = 3) {
 
   for (let i = 0; i < retries; i++) {
     try {
-      const response = await axios.get(fullUrl, { responseType: 'arraybuffer', timeout: 15000 });
+      const response = await axios.get(fullUrl, { responseType: 'arraybuffer', timeout: 30000 });
       const buffer = Buffer.from(response.data, 'binary');
       const asset = await client.assets.upload('image', buffer, {
         filename: fullUrl.split('/').pop().split('?')[0] || 'luxury-product.jpg'
       });
       return asset._id;
     } catch (err) {
-      await new Promise(res => setTimeout(res, 2000));
+      console.log(`     ⚠️ فشل تحميل الصورة، محاولة ${i + 1} من ${retries}...`);
+      await new Promise(res => setTimeout(res, 3000));
     }
   }
   return null;
@@ -62,13 +63,15 @@ async function getOrCreateCategory(title, icon) {
 async function scrapeAndImport() {
   console.log('🚀 بدء تشغيل بوت Vanessia V1.0...');
   
-  // Find shipping profile "vibe 2"
+  // Find shipping profile "محفوظ" or "vibe 2"
   let shippingProfileId = null;
-  const profiles = await client.fetch(`*[_type == "shippingProfile" && title match "vibe 2" || title match "Vibe 2"]`);
+  const profiles = await client.fetch(`*[_type == "shippingProfile" && (title match "محفوظ" || title match "vibe 2" || title match "Vibe 2")]`);
   if (profiles.length > 0) {
     shippingProfileId = profiles[0]._id;
     console.log(`✅ تم العثور على ملف الشحن: ${profiles[0].title}`);
   }
+
+  let failedUrls = [];
 
   // Define target categories on Vanessia and their Sanity equivalents
   // User requested: "ضعها كلها في قسم خاص سميه vanessia"
@@ -197,7 +200,7 @@ async function scrapeAndImport() {
             
             if (pData.images.length > 0) {
                 mainImageRef = await uploadImageFromUrl(pData.images[0]);
-                for (let i = 1; i < Math.min(pData.images.length, 4); i++) {
+                for (let i = 1; i < pData.images.length; i++) { // Download ALL images
                     const gRef = await uploadImageFromUrl(pData.images[i]);
                     if (gRef) galleryRefs.push({ _type: 'image', _key: Math.random().toString(36).substring(7), asset: { _type: 'reference', _ref: gRef }});
                 }
@@ -221,8 +224,11 @@ async function scrapeAndImport() {
             
             await client.create(productDoc);
             
+            console.log(`✅ الصور: تم رفع ${galleryRefs.length + (mainImageRef ? 1 : 0)} صورة بنجاح`);
+            console.log(`----------------------------------------`);
           } catch(e) {
-            console.log(`   ❌ خطأ في المنتج: ${pUrl}`);
+            console.log(`   ❌ خطأ في المنتج (تم الحفظ في القائمة الفاشلة): ${pUrl}`);
+            failedUrls.push(pUrl);
             try { await pPage.close(); } catch(err){}
           }
         }
@@ -231,7 +237,16 @@ async function scrapeAndImport() {
         currentPage++;
       }
     }
+    }
     console.log('\n🌟🌟🌟 انتهى السحب من موقع Vanessia بنجاح!');
+
+    if (failedUrls.length > 0) {
+       console.log('\n========================================');
+       console.log(`🚨 الروابط التي فشل البوت في رفعها (${failedUrls.length} رابط):`);
+       failedUrls.forEach(url => console.log(`- ${url}`));
+       console.log('يرجى رفعها يدويا!');
+       console.log('========================================\n');
+    }
   } catch (error) {
     console.error('❌ خطأ فادح:', error.message);
   } finally {

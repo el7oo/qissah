@@ -1,7 +1,7 @@
 "use client";
 
 import { ProductCard } from '@/components/ProductCard';
-import { AppleEmoji } from '@/components/ui/AppleEmoji';
+import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import { Navigation } from '@/components/ui/Navigation';
 import { TruckIcon, PadlockIcon, StarIcon, PhoneIcon } from '@/components/ui/Icons';
 
@@ -118,18 +118,18 @@ export default function Home() {
         <div className="hero-particles">{heroParticles}</div>
         <div className="hero-txt">
           <div className="hero-badge" style={{ fontFamily: "'Amiri', serif" }}>{t.heroBadge}</div>
-          <div className="hero-ttl">{t.heroTitle} <AppleEmoji name="✨" /></div>
+          <div className="hero-ttl flex items-center gap-2">{t.heroTitle} <CategoryIcon name="✨" size={36} className="text-primary" /></div>
           <div className="hero-sub">{t.heroSub}</div>
           <button className="hero-btn" onClick={() => router.push('/shop')}>
             {t.shopNow}
           </button>
         </div>
-        <div className="hero-bg"><AppleEmoji name="🌸" /></div>
+        <div className="hero-bg"><CategoryIcon name="🌸" size={140} className="text-primary opacity-20" /></div>
       </div>
 
       {catalogError ? (
         <div className="empty" style={{ marginTop: '12px' }}>
-          <span className="e-ico"><AppleEmoji name="⚠️" /></span>
+          <span className="e-ico"><CategoryIcon name="⚠️" size={54} className="text-txt" /></span>
           <div style={{ fontWeight: 700, fontSize: '15px', marginBottom: '6px' }}>
             {lang === 'ar' ? 'تعذر تحميل الكتالوج' : 'Catalog unavailable'}
           </div>
@@ -139,7 +139,7 @@ export default function Home() {
 
       <div style={{ marginBottom: '20px' }} data-home-reveal>
         <div className="sec-hd" style={{ marginTop: '20px' }}>
-          <div className="ttl"><AppleEmoji name="🛍️" /> {lang === 'ar' ? 'تسوق حسب الفئة' : 'Shop by Category'}</div>
+          <div className="ttl flex items-center gap-2"><CategoryIcon name="🛍️" size={24} className="text-primary" /> {lang === 'ar' ? 'تسوق حسب الفئة' : 'Shop by Category'}</div>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: '12px', padding: '0 13px' }}>
           {categories.slice(0, 8).map((c, i) => {
@@ -159,7 +159,7 @@ export default function Home() {
                 onClick={() => router.push('/shop')}
                 style={{ position: 'relative', height: '110px', borderRadius: '20px', overflow: 'hidden', cursor: 'pointer', boxShadow: '0 4px 15px var(--shd)', background: gradients[i % gradients.length], display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}
               >
-                <div style={{ fontSize: '32px', marginBottom: '8px', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))' }}><AppleEmoji name={c.icon} /></div>
+                <div style={{ marginBottom: '8px', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))' }}><CategoryIcon name={c.icon} size={32} className="text-primary drop-shadow-md" /></div>
                 <div style={{ textAlign: 'center', color: '#333', fontWeight: 800, fontSize: '13px', padding: '0 8px' }}>
                   {c.name}
                 </div>
@@ -172,7 +172,7 @@ export default function Home() {
       {featuredProducts.length > 0 ? (
         <div style={{ marginBottom: '24px', background: 'linear-gradient(135deg, rgba(220, 88, 109, 0.05) 0%, rgba(220, 88, 109, 0.15) 100%)', padding: '24px 0', borderRadius: '24px', margin: '0 13px', border: '1px solid rgba(220, 88, 109, 0.2)' }} data-home-reveal>
           <div className="sec-hd" style={{ padding: '0 16px', marginBottom: '16px' }}>
-            <div className="ttl" style={{ color: 'var(--p1)', fontSize: '20px' }}><AppleEmoji name="⚡" /> {lang === 'ar' ? 'تخفيضات حصرية' : 'Exclusive Discounts'}</div>
+            <div className="ttl flex items-center gap-2" style={{ color: 'var(--p1)', fontSize: '20px' }}><CategoryIcon name="⚡" size={24} className="text-primary" /> {lang === 'ar' ? 'تخفيضات حصرية' : 'Exclusive Discounts'}</div>
           </div>
           <div style={{ display: 'flex', gap: '12px', overflowX: 'auto', padding: '0 16px 12px 16px' }}>
             {featuredProducts.slice(0, 12).map((p, i) => (
@@ -199,7 +199,7 @@ export default function Home() {
 
       <div style={{ marginBottom: '24px' }} data-home-reveal>
         <div className="sec-hd">
-          <div className="ttl"><AppleEmoji name="🔥" /> {lang === 'ar' ? 'الأكثر رواجاً' : 'Most Popular'}</div>
+          <div className="ttl flex items-center gap-2"><CategoryIcon name="🔥" size={24} className="text-primary" /> {lang === 'ar' ? 'الأكثر رواجاً' : 'Most Popular'}</div>
         </div>
         <div className="pg-swipe">
           {products.length === 0 && !catalogError ? (
@@ -216,7 +216,7 @@ export default function Home() {
 
       <div style={{ marginBottom: '24px' }} data-home-reveal>
         <div className="sec-hd">
-          <div className="ttl"><AppleEmoji name="✨" /> {t.newArrivals}</div>
+          <div className="ttl flex items-center gap-2"><CategoryIcon name="✨" size={24} className="text-primary" /> {t.newArrivals}</div>
         </div>
         <div className="pg-swipe">
           {products.length === 0 && !catalogError ? (
@@ -250,7 +250,7 @@ export default function Home() {
           ].map(([ico, lbl, d], idx) => (
             <div key={idx} className="feat-card">
               <span className="feat-ico" style={{ animationDuration: d as string, animationDelay: `${idx * 0.2}s` }}>
-                <AppleEmoji name={ico as string} />
+                <CategoryIcon name={ico as string} size={28} className="text-primary" />
               </span>
               <div className="feat-lbl">{lbl}</div>
             </div>

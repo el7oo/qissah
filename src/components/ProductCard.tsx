@@ -93,6 +93,8 @@ export function ProductCard({ product }: { product: Product }) {
             width={300}
             height={300}
             alt={product.title || 'Product'}
+            placeholder="blur"
+            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII="
           />
           <div className="pc-img-overlay"></div>
         </div>

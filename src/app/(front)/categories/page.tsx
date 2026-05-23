@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLangStore } from '@/store/langStore';
 import { useTranslation } from '@/utils/translations';
-import { AppleEmoji } from '@/components/ui/AppleEmoji';
+import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import { productService } from '@/services/productService';
 import gsap from 'gsap';
 import { audio } from '@/utils/audioEngine';
@@ -91,7 +91,7 @@ export default function CategoriesPage() {
     <div ref={rootRef} style={{ paddingTop: '10px', paddingBottom: '120px' }}>
       <div style={{ padding: '0 13px 20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
         <div className="ttl" style={{ flex: 1, fontSize: '28px' }}>
-          <AppleEmoji name="🛍️" /> {lang === 'ar' ? 'تصفح الأقسام' : 'Browse Categories'}
+          <CategoryIcon name="🛍️" size={28} className="inline-block text-primary" /> {lang === 'ar' ? 'تصفح الأقسام' : 'Browse Categories'}
         </div>
       </div>
 
@@ -128,7 +128,7 @@ export default function CategoriesPage() {
               onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
             >
               <div style={{ fontSize: '42px', marginBottom: '12px', filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.15))' }}>
-                <AppleEmoji name={c.icon} />
+                <CategoryIcon name={c.icon} size={42} className="text-primary drop-shadow-md" />
               </div>
               <div style={{ textAlign: 'center', color: '#1a1a1a', fontWeight: 800, fontSize: '14px', padding: '0 12px', textShadow: '0 2px 4px rgba(255,255,255,0.8)' }}>
                 {c.name}
