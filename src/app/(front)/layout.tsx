@@ -4,7 +4,6 @@ import "../globals.css";
 import { ToastProvider } from "@/components/ui/ToastProvider";
 import { CartHydration } from "@/components/CartHydration";
 import { Navigation } from "@/components/ui/Navigation";
-import { SideCart } from '@/components/ui/SideCart';
 import { ParticleBackground } from "@/utils/visualEffects";
 import { MotionProvider } from "@/components/gsap/MotionProvider";
 import { SystemSetup } from "@/components/SystemSetup";
@@ -108,7 +107,6 @@ export default function RootLayout({
               <Navigation>
                 {children}
               </Navigation>
-              <SideCart />
             </div>
           </LenisProvider>
           <ToastProvider />

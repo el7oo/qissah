@@ -77,7 +77,7 @@ export function Navigation({ children }: { children?: React.ReactNode }) {
               </div>
             )}
           </div>
-          <div className="toggleWrapper">
+          <div className="toggleWrapper" dir="ltr">
             <input 
               className="input" 
               id="theme-toggle" 
@@ -99,7 +99,7 @@ export function Navigation({ children }: { children?: React.ReactNode }) {
               <span className="star star--6"></span>
             </label>
           </div>
-          <div className="cart-icon-wrap" style={{position:"relative", cursor:"pointer", flexShrink:0}} onClick={() => openCart()}>
+          <div className="cart-icon-wrap" style={{position:"relative", cursor:"pointer", flexShrink:0}} onClick={() => router.push('/cart')}>
             <div className="ib"><AppleEmoji name="🛒" width={20} height={20} className="" /></div>
             {isMounted && cartCount > 0 && <div className="cbadge">{cartCount}</div>}
           </div>

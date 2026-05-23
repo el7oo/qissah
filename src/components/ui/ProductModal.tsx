@@ -9,11 +9,13 @@ import { useTranslation } from '@/utils/translations';
 import { useLangStore } from '@/store/langStore';
 
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 
 export function ProductModal({ product, onClose }: { product: Product, onClose: () => void }) {
-  const { addItem, openCart } = useCartStore();
+  const { addItem } = useCartStore();
   const { lang } = useLangStore();
   const t = useTranslation(lang);
+  const router = useRouter();
   const [activeImage, setActiveImage] = useState(product.image);
 
   const handleAdd = (e: React.MouseEvent) => {
@@ -31,7 +33,7 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
     
     setTimeout(() => {
       onClose();
-      openCart();
+      router.push('/cart');
     }, 400);
   };
 
