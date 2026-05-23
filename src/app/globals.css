@@ -64,21 +64,13 @@
     background-color: var(--bg);
   }
   
-  html[lang="ar"] body {
+  html[lang="ar"] body, html[lang="ar"] h1, html[lang="ar"] h2, html[lang="ar"] h3, html[lang="ar"] h4, html[lang="ar"] h5, html[lang="ar"] h6 {
     font-family: var(--font-tajawal), 'Tajawal', sans-serif !important;
   }
   
-  html[lang="ar"] h1, html[lang="ar"] h2, html[lang="ar"] h3, html[lang="ar"] h4, html[lang="ar"] h5, html[lang="ar"] h6 {
-    font-family: var(--font-amiri), 'Amiri', serif !important;
-  }
-  
-  html[lang="en"] body, html[lang="fr"] body {
-    font-family: var(--font-outfit), 'Outfit', sans-serif !important;
-  }
-
-  html[lang="en"] h1, html[lang="en"] h2, html[lang="en"] h3, html[lang="en"] h4, html[lang="en"] h5, html[lang="en"] h6,
+  html[lang="en"] body, html[lang="fr"] body, html[lang="en"] h1, html[lang="en"] h2, html[lang="en"] h3, html[lang="en"] h4, html[lang="en"] h5, html[lang="en"] h6,
   html[lang="fr"] h1, html[lang="fr"] h2, html[lang="fr"] h3, html[lang="fr"] h4, html[lang="fr"] h5, html[lang="fr"] h6 {
-    font-family: var(--font-playfair), 'Playfair Display', serif !important;
+    font-family: var(--font-outfit), 'Outfit', sans-serif !important;
   }
 
   body {

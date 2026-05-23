@@ -42,8 +42,11 @@ export default function Home() {
   const { lang } = useLangStore();
   const t = useTranslation(lang);
   const [products, setProducts] = useState<Product[]>([]);
+  const [displayCount, setDisplayCount] = useState(24);
   const [catalogError, setCatalogError] = useState<string | null>(null);
   const rootRef = useRef<HTMLDivElement | null>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const bottomRef = useRef<HTMLDivElement | null>(null);
 
   const [sanityCategories, setSanityCategories] = useState<any[]>([]);
 
@@ -80,8 +83,23 @@ export default function Home() {
     );
   }, [products.length, sanityCategories.length]);
 
+  useEffect(() => {
+    if (observerRef.current) observerRef.current.disconnect();
+    
+    observerRef.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && products.length > displayCount) {
+        setDisplayCount(prev => prev + 24);
+      }
+    }, { rootMargin: '200px' });
+    
+    if (bottomRef.current) {
+      observerRef.current.observe(bottomRef.current);
+    }
+    
+    return () => observerRef.current?.disconnect();
+  }, [products.length, displayCount]);
+
   const featuredProducts = products.filter(p => p.discount);
-  const newArrivals = products.slice(0, 8);
 
   const heroParticles = Array.from({length: 8}, (_, i) => (
     <div key={i} className="hp" style={{
@@ -218,23 +236,23 @@ export default function Home() {
         <div className="sec-hd">
           <div className="ttl flex items-center gap-2"><CategoryIcon name="✨" size={24} className="text-primary" /> {t.newArrivals}</div>
         </div>
-        <div className="pg-swipe">
+        <div className="pg">
           {products.length === 0 && !catalogError ? (
             [1,2,3,4,5,6,7,8].map(i => (
               <div key={`sk-n-${i}`} className="skel-card" style={{ height: '240px' }}><div className="skel-img skel"></div><div className="skel-body"><div className="skel-line skel"></div><div className="skel-line skel" style={{ width: '60%' }}></div></div></div>
             ))
           ) : (
-            products.slice(0, 12).map((p, i) => (
+            products.slice(0, displayCount).map((p, i) => (
               <ProductCard key={p.id || `new-${i}`} product={p} />
             ))
           )}
         </div>
         
-        <div style={{ textAlign: 'center', marginTop: '24px', marginBottom: '32px' }}>
-          <button className="btn btn-p" onClick={() => router.push('/shop')} style={{ width: 'auto', padding: '14px 48px', fontSize: '18px', borderRadius: '100px' }}>
-            {lang === 'ar' ? 'اكتشف المزيد' : 'Discover More'}
-          </button>
-        </div>
+        {products.length > displayCount && (
+          <div ref={bottomRef} style={{ textAlign: 'center', padding: '20px', color: 'var(--txt2)' }}>
+            <span className="loader" style={{ width: '24px', height: '24px', borderWidth: '2px' }}></span>
+          </div>
+        )}
       </div>
 
       <div style={{ marginBottom: '22px' }} data-home-reveal>

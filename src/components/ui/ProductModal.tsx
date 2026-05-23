@@ -8,6 +8,7 @@ import { triggerRipple, flyToCart } from '@/utils/visualEffects';
 import { useTranslation } from '@/utils/translations';
 import { useLangStore } from '@/store/langStore';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 
 export function ProductModal({ product, onClose }: { product: Product, onClose: () => void }) {
   const { addItem, openCart } = useCartStore();
@@ -53,7 +54,8 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
       
       {/* Modal Container */}
       <div className="product-modal-wrapper" onClick={(e) => { if (e.target === e.currentTarget) { audio.playTap(); onClose(); } }}>
-        <div
+        <motion.div
+          layoutId={`product-modal-${product.id}`}
           className="product-modal-panel"
           dir={lang === 'ar' ? 'rtl' : 'ltr'}
         >
@@ -127,7 +129,7 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
               {lang === 'ar' ? 'إضافة إلى الطلب' : 'Add to Order'} — {product.price ? Number(product.price).toLocaleString('en-US') : ''} د.ج
             </button>
           </div>
-        </div>
+        </motion.div>
       </div>
 
       <style>{`
@@ -145,9 +147,6 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
           border-radius: 24px;
           border: 1px solid rgba(255,255,255,0.1);
           box-shadow: 0 40px 80px rgba(0,0,0,0.5);
-          transform: translateY(40px) scale(0.95);
-          opacity: 0;
-          animation: modalPop 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
           position: relative;
           overflow: hidden;
           display: flex;
@@ -310,10 +309,6 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
         @keyframes fadeIn {
           from { opacity: 0; }
           to { opacity: 1; }
-        }
-        @keyframes modalPop {
-          from { opacity: 0; transform: translateY(40px) scale(0.95); }
-          to { opacity: 1; transform: translateY(0) scale(1); }
         }
       `}</style>
     </>

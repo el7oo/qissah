@@ -6,7 +6,7 @@ import { useCartStore } from '@/store/cartStore';
 import { useLangStore } from '@/store/langStore';
 import { useTranslation } from '@/utils/translations';
 import { HouseIcon, BagsIcon, CartIcon, AdminIcon } from './Icons';
-import { Settings, ShoppingBag, Heart } from 'lucide-react';
+import { Settings, ShoppingBag, Heart, Sun, Moon } from 'lucide-react';
 import { audio } from '@/utils/audioEngine';
 
 export function Navigation({ children }: { children?: React.ReactNode }) {
@@ -72,27 +72,10 @@ export function Navigation({ children }: { children?: React.ReactNode }) {
               </div>
             )}
           </div>
-          <div className="toggleWrapper">
-            <input 
-              className="input" 
-              id="theme-toggle" 
-              type="checkbox" 
-              checked={isDark} 
-              readOnly
-            />
-            <label className="toggle" onClick={toggleTheme}>
-              <span className="toggle__handler">
-                <span className="crater crater--1"></span>
-                <span className="crater crater--2"></span>
-                <span className="crater crater--3"></span>
-              </span>
-              <span className="star star--1"></span>
-              <span className="star star--2"></span>
-              <span className="star star--3"></span>
-              <span className="star star--4"></span>
-              <span className="star star--5"></span>
-              <span className="star star--6"></span>
-            </label>
+          <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+            <button className="ib" onClick={toggleTheme} title="Toggle Theme">
+              {isDark ? <Sun size={18} strokeWidth={1.5} className="text-txt" /> : <Moon size={18} strokeWidth={1.5} className="text-txt" />}
+            </button>
           </div>
           <div className="cart-icon-wrap" style={{position:"relative", cursor:"pointer", flexShrink:0, marginLeft:"4px"}} onClick={() => openCart()}>
             <div className="ib"><ShoppingBag size={18} strokeWidth={1.5} className="text-txt" /></div>

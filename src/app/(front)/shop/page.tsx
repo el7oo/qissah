@@ -28,8 +28,9 @@ export default function Shop() {
   const [sanityCategories, setSanityCategories] = useState<any[]>([]);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [search, setSearch] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const PAGE_SIZE = 50;
+  const [displayCount, setDisplayCount] = useState(24);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const bottomRef = useRef<HTMLDivElement | null>(null);
   const [catalogError, setCatalogError] = useState<string | null>(null);
   const rootRef = useRef<HTMLDivElement | null>(null);
   
@@ -106,7 +107,7 @@ export default function Shop() {
     triggerRipple(e as any);
     audio.playTap();
     setActiveCategory(id);
-    setCurrentPage(1);
+    setDisplayCount(24);
   };
 
   const normalizeArabic = (text: string) => {
@@ -131,13 +132,26 @@ export default function Shop() {
     return true;
   });
 
-  const totalPages = Math.ceil(filteredProducts.length / PAGE_SIZE);
-  const paginatedProducts = filteredProducts.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
-
   const handleSearch = (v: string) => {
     setSearch(v);
-    setCurrentPage(1);
+    setDisplayCount(24);
   };
+
+  useEffect(() => {
+    if (observerRef.current) observerRef.current.disconnect();
+    
+    observerRef.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && filteredProducts.length > displayCount) {
+        setDisplayCount(prev => prev + 24);
+      }
+    }, { rootMargin: '400px' });
+    
+    if (bottomRef.current) {
+      observerRef.current.observe(bottomRef.current);
+    }
+    
+    return () => observerRef.current?.disconnect();
+  }, [filteredProducts.length, displayCount]);
 
   return (
     <div ref={rootRef} style={{ paddingTop: '10px', paddingBottom: '120px' }}>
@@ -247,33 +261,13 @@ export default function Shop() {
       ) : (
         <>
           <div className="pg" data-shop-reveal>
-            {paginatedProducts.map(product => (
+            {filteredProducts.slice(0, displayCount).map(product => (
               <ProductCard key={product.id} product={product as any} />
             ))}
           </div>
-          {totalPages > 1 && (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '16px', marginTop: '30px' }} data-shop-reveal>
-              <button 
-                onClick={() => { setCurrentPage(p => Math.max(1, p - 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); audio.playTap(); }} 
-                disabled={currentPage === 1} 
-                className="ib"
-                style={{ width: '44px', height: '44px', opacity: currentPage === 1 ? 0.5 : 1 }}
-              >
-                &lt;
-              </button>
-              
-              <div style={{ fontSize: '15px', fontWeight: 800, color: 'var(--txt)' }}>
-                {lang === 'ar' ? `الصفحة ${currentPage} من ${totalPages}` : `Page ${currentPage} of ${totalPages}`}
-              </div>
-
-              <button 
-                onClick={() => { setCurrentPage(p => Math.min(totalPages, p + 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); audio.playTap(); }} 
-                disabled={currentPage === totalPages} 
-                className="ib"
-                style={{ width: '44px', height: '44px', opacity: currentPage === totalPages ? 0.5 : 1 }}
-              >
-                &gt;
-              </button>
+          {filteredProducts.length > displayCount && (
+            <div ref={bottomRef} style={{ textAlign: 'center', padding: '30px', color: 'var(--txt2)' }}>
+              <span className="loader" style={{ width: '24px', height: '24px', borderWidth: '2px' }}></span>
             </div>
           )}
         </>
