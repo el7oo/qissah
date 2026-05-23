@@ -76,7 +76,6 @@ export function ProductCard({ product }: { product: Product }) {
       <motion.div 
         className="pc" 
         onClick={() => { audio.playTap(); setModalOpen(true); }}
-        layoutId={`product-card-${product.id}`}
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-50px" }}

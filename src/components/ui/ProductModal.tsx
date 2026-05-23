@@ -61,7 +61,10 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
         <motion.div
           className="product-modal-panel"
           dir={lang === 'ar' ? 'rtl' : 'ltr'}
-          layoutId={`product-card-${product.id}`}
+          initial={{ opacity: 0, y: 40, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 40, scale: 0.95 }}
+          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
         >
           {/* Close Button */}
           <button 
@@ -289,8 +292,8 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
 
         .pm-add-btn {
           width: 100%;
-          background: #FFDE59; /* Vibrant yellow */
-          color: #000;
+          background: var(--p1);
+          color: #FFF;
           font-size: 16px;
           font-weight: 800;
           padding: 18px;
@@ -298,7 +301,7 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
           border: none;
           cursor: pointer;
           transition: transform 0.2s, background 0.2s;
-          box-shadow: 0 4px 20px rgba(255, 222, 89, 0.3);
+          box-shadow: 0 4px 20px rgba(0,0,0,0.1);
           font-family: var(--font-tajawal), sans-serif;
         }
         .pm-add-btn:active {
