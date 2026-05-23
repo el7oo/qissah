@@ -6,7 +6,7 @@ import { useLangStore } from '@/store/langStore';
 import { useTranslation } from '@/utils/translations';
 import { ProductCard } from '@/components/ProductCard';
 import { ProductSkeleton } from '@/components/ProductSkeleton';
-import { CategoryIcon } from '@/components/ui/CategoryIcon';
+import { AppleEmoji } from '@/components/ui/AppleEmoji';
 import { audio } from '@/utils/audioEngine';
 import { triggerRipple } from '@/utils/visualEffects';
 import { productService, Product } from '@/services/productService';
@@ -28,9 +28,8 @@ export default function Shop() {
   const [sanityCategories, setSanityCategories] = useState<any[]>([]);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [search, setSearch] = useState('');
-  const [displayCount, setDisplayCount] = useState(24);
-  const observerRef = useRef<IntersectionObserver | null>(null);
-  const bottomRef = useRef<HTMLDivElement | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const PAGE_SIZE = 50;
   const [catalogError, setCatalogError] = useState<string | null>(null);
   const rootRef = useRef<HTMLDivElement | null>(null);
   
@@ -107,7 +106,7 @@ export default function Shop() {
     triggerRipple(e as any);
     audio.playTap();
     setActiveCategory(id);
-    setDisplayCount(24);
+    setCurrentPage(1);
   };
 
   const normalizeArabic = (text: string) => {
@@ -132,26 +131,13 @@ export default function Shop() {
     return true;
   });
 
+  const totalPages = Math.ceil(filteredProducts.length / PAGE_SIZE);
+  const paginatedProducts = filteredProducts.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+
   const handleSearch = (v: string) => {
     setSearch(v);
-    setDisplayCount(24);
+    setCurrentPage(1);
   };
-
-  useEffect(() => {
-    if (observerRef.current) observerRef.current.disconnect();
-    
-    observerRef.current = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting && filteredProducts.length > displayCount) {
-        setDisplayCount(prev => prev + 24);
-      }
-    }, { rootMargin: '400px' });
-    
-    if (bottomRef.current) {
-      observerRef.current.observe(bottomRef.current);
-    }
-    
-    return () => observerRef.current?.disconnect();
-  }, [filteredProducts.length, displayCount]);
 
   return (
     <div ref={rootRef} style={{ paddingTop: '10px', paddingBottom: '120px' }}>
@@ -159,7 +145,7 @@ export default function Shop() {
         <div className="ttl" style={{ flex: 1 }}>{t.shop}</div>
       </div>
       <div className="search-wrap" data-shop-reveal style={{ position: 'relative', zIndex: searchFocused ? 100 : 1 }}>
-        <span style={{ fontSize: '16px', flexShrink: 0 }}><CategoryIcon name="🔍" size={16} className="text-primary" /></span>
+        <span style={{ fontSize: '16px', flexShrink: 0 }}><AppleEmoji name="🔍" /></span>
         <input 
           className="search-inp" 
           placeholder={lang === 'ar' ? 'ابحث عن منتجات، فئات...' : 'Search products, categories...'}
@@ -217,7 +203,7 @@ export default function Shop() {
             className={`cat-chip ${activeCategory === c.id ? 'sel' : ''}`} 
             onClick={(e) => handleCatClick(c.id, e)}
           >
-            <span className="cc-ico"><CategoryIcon name={c.icon} size={20} className="text-primary" /></span>
+            <span className="cc-ico"><AppleEmoji name={c.icon} /></span>
             <span className="cc-lbl">{c.name}</span>
           </div>
         ))}
@@ -225,7 +211,7 @@ export default function Shop() {
 
       {catalogError ? (
         <div className="empty" data-shop-reveal>
-          <span className="e-ico"><CategoryIcon name="⚠️" size={48} className="text-primary" /></span>
+          <span className="e-ico"><AppleEmoji name="⚠️" /></span>
           <div style={{ fontWeight: 700, fontSize: '15px', marginBottom: '6px' }}>
             {lang === 'ar' ? 'تعذر تحميل الكتالوج' : 'Catalog unavailable'}
           </div>
@@ -248,7 +234,7 @@ export default function Shop() {
         </div>
       ) : filteredProducts.length === 0 ? (
         <div className="empty" data-shop-reveal>
-          <span className="e-ico"><CategoryIcon name="🔍" size={48} className="text-primary" /></span>
+          <span className="e-ico"><AppleEmoji name="🔍" /></span>
           <div style={{ fontWeight: 700, fontSize: '15px', marginBottom: '6px' }}>لا توجد منتجات</div>
           <button 
             className="btn btn-s" 
@@ -261,13 +247,33 @@ export default function Shop() {
       ) : (
         <>
           <div className="pg" data-shop-reveal>
-            {filteredProducts.slice(0, displayCount).map(product => (
+            {paginatedProducts.map(product => (
               <ProductCard key={product.id} product={product as any} />
             ))}
           </div>
-          {filteredProducts.length > displayCount && (
-            <div ref={bottomRef} style={{ textAlign: 'center', padding: '30px', color: 'var(--txt2)' }}>
-              <span className="loader" style={{ width: '24px', height: '24px', borderWidth: '2px' }}></span>
+          {totalPages > 1 && (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '16px', marginTop: '30px' }} data-shop-reveal>
+              <button 
+                onClick={() => { setCurrentPage(p => Math.max(1, p - 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); audio.playTap(); }} 
+                disabled={currentPage === 1} 
+                className="ib"
+                style={{ width: '44px', height: '44px', opacity: currentPage === 1 ? 0.5 : 1 }}
+              >
+                &lt;
+              </button>
+              
+              <div style={{ fontSize: '15px', fontWeight: 800, color: 'var(--txt)' }}>
+                {lang === 'ar' ? `الصفحة ${currentPage} من ${totalPages}` : `Page ${currentPage} of ${totalPages}`}
+              </div>
+
+              <button 
+                onClick={() => { setCurrentPage(p => Math.min(totalPages, p + 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); audio.playTap(); }} 
+                disabled={currentPage === totalPages} 
+                className="ib"
+                style={{ width: '44px', height: '44px', opacity: currentPage === totalPages ? 0.5 : 1 }}
+              >
+                &gt;
+              </button>
             </div>
           )}
         </>

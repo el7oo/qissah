@@ -9,6 +9,7 @@ import { orderService } from '@/services/orderService';
 import toast from 'react-hot-toast';
 import { audio } from '@/utils/audioEngine';
 import { triggerConfetti, triggerRipple } from '@/utils/visualEffects';
+import { AppleEmoji } from '@/components/ui/AppleEmoji';
 import { algeriaWilayas } from '@/lib/algeria-wilayas';
 
 export default function CheckoutPage() {

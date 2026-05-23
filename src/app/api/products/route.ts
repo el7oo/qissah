@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server';
 import { fetchCategoriesFromSanity, fetchProductsByIds, fetchProductsFromSanity } from '@/lib/server/sanityServer';
 
-export const revalidate = 60; // 1 minute ISR revalidation
-
 function mapProduct(p: any) {
   const currentPrice = Number(p.discountPrice ?? p.price ?? 0);
   const originalPrice = Number(p.price ?? 0);

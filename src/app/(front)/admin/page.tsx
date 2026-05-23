@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { audio } from '@/utils/audioEngine';
 import { triggerRipple } from '@/utils/visualEffects';
-import { CategoryIcon } from '@/components/ui/CategoryIcon';
+import { AppleEmoji } from '@/components/ui/AppleEmoji';
 
 import { useProductStore, Product } from '@/store/productStore';
 import { orderService } from '@/services/orderService';
@@ -158,7 +158,7 @@ export default function AdminPage() {
             e.currentTarget.style.background = 'rgba(255, 50, 50, 0.08)';
           }}
         >
-          خروج <CategoryIcon name="🚪" size={18} className="text-primary" />
+          خروج <AppleEmoji name="🚪" />
         </button>
       </div>
 
@@ -171,7 +171,7 @@ export default function AdminPage() {
       <div className="fw" style={{ padding: '0 13px', border: 'none', background: 'transparent' }}>
         {activeTab === 'products' && (
           <div className="pf-box" style={{ padding: '30px 20px', textAlign: 'center' }}>
-            <CategoryIcon name="🛍️" size={48} className="text-primary" />
+            <AppleEmoji name="🛍️" />
             <h2 style={{ color: 'var(--p1)', marginTop: '10px', fontSize: '20px' }}>إدارة المنتجات والفئات</h2>
             <p style={{ color: 'var(--txt2)', fontSize: '14px', marginTop: '10px', lineHeight: '1.6' }}>
               تم ربط لوحة التحكم الخاصة بك بنظام <b>Sanity CMS</b> بنجاح!
@@ -211,7 +211,7 @@ export default function AdminPage() {
         
         {activeTab === 'dashboard' && (
           <div className="pf-box" style={{ padding: '20px', textAlign: 'center' }}>
-            <CategoryIcon name="👑" size={48} className="text-primary" />
+            <AppleEmoji name="👑" />
             <h2 style={{ color: 'var(--p1)', marginTop: '10px' }}>مرحباً بك يا مدير!</h2>
             <p style={{ color: 'var(--txt2)', fontSize: '14px', marginTop: '5px' }}>
               غرفة الأدمن جاهزة. تم الآن دمج Sanity Studio بالكامل لإدارة آلاف المنتجات بكفاءة!
@@ -239,7 +239,7 @@ export default function AdminPage() {
 
         {activeTab === 'orders' && (
           <div className="pf-box" style={{ padding: '20px', textAlign: 'center' }}>
-            <CategoryIcon name="📦" size={48} className="text-primary" />
+            <AppleEmoji name="📦" />
             <h2 style={{ color: 'var(--p1)', marginTop: '10px' }}>الطلبات الجديدة</h2>
             <div style={{ marginTop: '10px', marginBottom: '20px' }}>
               <label style={{ fontSize: '14px', color: 'var(--txt2)', marginLeft: '10px' }}>عدد الطلبات المعروضة:</label>

@@ -6,7 +6,7 @@ import { useCartStore } from '@/store/cartStore';
 import { useLangStore } from '@/store/langStore';
 import { useTranslation } from '@/utils/translations';
 import { HouseIcon, BagsIcon, CartIcon, AdminIcon } from './Icons';
-import { Settings, ShoppingBag, Heart, Sun, Moon } from 'lucide-react';
+import { AppleEmoji } from './AppleEmoji';
 import { audio } from '@/utils/audioEngine';
 
 export function Navigation({ children }: { children?: React.ReactNode }) {
@@ -50,13 +50,13 @@ export function Navigation({ children }: { children?: React.ReactNode }) {
   return (
     <>
       <div className="top-nav">
-        <span className="ttl" onClick={() => router.push('/')} style={{ cursor: "pointer", fontSize: "26px", color: "var(--txt)", display: "flex", alignItems: "center", gap: "8px", fontFamily: "var(--font-amiri), serif", fontWeight: 700 }}>
-          <Heart size={20} className="text-primary fill-primary" /> قصة
+        <span className="ttl" onClick={() => router.push('/')} style={{ cursor: "pointer", fontSize: "26px", color: "var(--p1)", display: "flex", alignItems: "center", gap: "8px", fontFamily: "var(--font-tajawal), sans-serif", fontWeight: 900 }}>
+          <AppleEmoji name="❤️" width={24} height={24} /> قصة
         </span>
-        <div style={{display:"flex", gap:"8px", alignItems:"center", flexWrap:"nowrap"}}>
+        <div style={{display:"flex", gap:"4px", alignItems:"center", flexWrap:"nowrap"}}>
           <div style={{ position: "relative" }}>
             <button className="ib" onClick={() => setLangOpen(!langOpen)} title="settings">
-              <Settings size={18} strokeWidth={1.5} className="text-txt" />
+              <AppleEmoji name="⚙️" width={20} height={20} className="" />
             </button>
             {langOpen && (
               <div style={{ position: "absolute", top: "100%", left: 0, marginTop: "8px", background: "var(--card)", borderRadius: "12px", padding: "8px", boxShadow: "0 4px 12px var(--shd)", zIndex: 100, border: "1px solid var(--bdr)" }}>
@@ -72,13 +72,30 @@ export function Navigation({ children }: { children?: React.ReactNode }) {
               </div>
             )}
           </div>
-          <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-            <button className="ib" onClick={toggleTheme} title="Toggle Theme">
-              {isDark ? <Sun size={18} strokeWidth={1.5} className="text-txt" /> : <Moon size={18} strokeWidth={1.5} className="text-txt" />}
-            </button>
+          <div className="toggleWrapper">
+            <input 
+              className="input" 
+              id="theme-toggle" 
+              type="checkbox" 
+              checked={isDark} 
+              readOnly
+            />
+            <label className="toggle" onClick={toggleTheme}>
+              <span className="toggle__handler">
+                <span className="crater crater--1"></span>
+                <span className="crater crater--2"></span>
+                <span className="crater crater--3"></span>
+              </span>
+              <span className="star star--1"></span>
+              <span className="star star--2"></span>
+              <span className="star star--3"></span>
+              <span className="star star--4"></span>
+              <span className="star star--5"></span>
+              <span className="star star--6"></span>
+            </label>
           </div>
-          <div className="cart-icon-wrap" style={{position:"relative", cursor:"pointer", flexShrink:0, marginLeft:"4px"}} onClick={() => openCart()}>
-            <div className="ib"><ShoppingBag size={18} strokeWidth={1.5} className="text-txt" /></div>
+          <div className="cart-icon-wrap" style={{position:"relative", cursor:"pointer", flexShrink:0}} onClick={() => openCart()}>
+            <div className="ib"><AppleEmoji name="🛒" width={20} height={20} className="" /></div>
             {isMounted && cartCount > 0 && <div className="cbadge">{cartCount}</div>}
           </div>
         </div>

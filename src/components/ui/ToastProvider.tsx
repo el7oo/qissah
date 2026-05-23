@@ -1,7 +1,7 @@
 "use client";
 
 import { Toaster, resolveValue } from "react-hot-toast";
-import { CategoryIcon } from "./CategoryIcon";
+import { AppleEmoji } from "./AppleEmoji";
 
 export function ToastProvider() {
   return (
@@ -34,8 +34,8 @@ export function ToastProvider() {
             margin: '4px 0',
           }}
         >
-          {t.type === 'success' && <CategoryIcon name="✨" size={18} className="text-primary" />}
-          {t.type === 'error' && <CategoryIcon name="⚠️" size={18} className="text-primary" />}
+          {t.type === 'success' && <AppleEmoji name="✨" />}
+          {t.type === 'error' && <AppleEmoji name="⚠️" />}
           {resolveValue(t.message, t)}
         </div>
       )}

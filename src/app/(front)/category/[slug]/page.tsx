@@ -6,7 +6,7 @@ import { useLangStore } from '@/store/langStore';
 import { useTranslation } from '@/utils/translations';
 import { ProductCard } from '@/components/ProductCard';
 import { ProductSkeleton } from '@/components/ProductSkeleton';
-import { CategoryIcon } from '@/components/ui/CategoryIcon';
+import { AppleEmoji } from '@/components/ui/AppleEmoji';
 import { audio } from '@/utils/audioEngine';
 import { productService, Product } from '@/services/productService';
 import gsap from 'gsap';
@@ -101,7 +101,7 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
         </div>
       ) : products.length === 0 ? (
         <div className="empty" data-shop-reveal>
-          <span className="e-ico"><CategoryIcon name="🔍" size={48} className="text-primary" /></span>
+          <span className="e-ico"><AppleEmoji name="🔍" /></span>
           <div style={{ fontWeight: 700, fontSize: '15px', marginBottom: '6px' }}>
             {lang === 'ar' ? 'لا توجد منتجات في هذا القسم' : 'No products found in this category'}
           </div>

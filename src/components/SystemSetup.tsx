@@ -1,10 +1,7 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
-import { useCartStore } from '@/store/cartStore';
+import { useEffect } from 'react';
 import { useLangStore } from '@/store/langStore';
-import { MobileKeyboardHandler } from './ui/MobileKeyboardHandler';
 
 export function SystemSetup() {
   const { lang, setLang } = useLangStore();
@@ -39,5 +36,5 @@ export function SystemSetup() {
     }
   }, []);
 
-  return <MobileKeyboardHandler />;
+  return null;
 }

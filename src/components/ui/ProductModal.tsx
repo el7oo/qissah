@@ -7,8 +7,6 @@ import { audio } from '@/utils/audioEngine';
 import { triggerRipple, flyToCart } from '@/utils/visualEffects';
 import { useTranslation } from '@/utils/translations';
 import { useLangStore } from '@/store/langStore';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
 
 export function ProductModal({ product, onClose }: { product: Product, onClose: () => void }) {
   const { addItem, openCart } = useCartStore();
@@ -54,8 +52,7 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
       
       {/* Modal Container */}
       <div className="product-modal-wrapper" onClick={(e) => { if (e.target === e.currentTarget) { audio.playTap(); onClose(); } }}>
-        <motion.div
-          layoutId={`product-modal-${product.id}`}
+        <div
           className="product-modal-panel"
           dir={lang === 'ar' ? 'rtl' : 'ltr'}
         >
@@ -69,36 +66,29 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
           
           {/* Image Area - Edge to Edge */}
           <div className="pm-img-area">
-            <Image 
+            <img 
               src={optimizedActiveImage || 'https://placehold.co/800x600/222/FFF?text=Image'} 
               alt={product.title} 
               className="pm-main-img"
-              width={800}
-              height={600}
-              placeholder="blur"
-              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII="
+              loading="lazy" 
             />
             
             {/* Gallery Thumbnails Overlay */}
             {product.images && product.images.length > 0 && (
               <div className="pm-gallery">
-                <Image 
+                <img 
                   src={product.image || 'https://placehold.co/100x100/222/FFF'} 
                   onClick={() => setActiveImage(product.image)}
                   alt={product.title}
                   className={`pm-thumb ${activeImage === product.image ? 'active' : ''}`}
-                  width={100}
-                  height={100}
                 />
                 {product.images.map((img, i) => (
-                  <Image 
+                  <img 
                     key={i} 
                     src={img || 'https://placehold.co/100x100/222/FFF'} 
                     onClick={() => setActiveImage(img)}
                     alt={`${product.title} ${i}`}
                     className={`pm-thumb ${activeImage === img ? 'active' : ''}`}
-                    width={100}
-                    height={100}
                   />
                 ))}
               </div>
@@ -129,7 +119,7 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
               {lang === 'ar' ? 'إضافة إلى الطلب' : 'Add to Order'} — {product.price ? Number(product.price).toLocaleString('en-US') : ''} د.ج
             </button>
           </div>
-        </motion.div>
+        </div>
       </div>
 
       <style>{`
@@ -147,6 +137,9 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
           border-radius: 24px;
           border: 1px solid rgba(255,255,255,0.1);
           box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+          transform: translateY(40px) scale(0.95);
+          opacity: 0;
+          animation: modalPop 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
           position: relative;
           overflow: hidden;
           display: flex;
@@ -309,6 +302,10 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
         @keyframes fadeIn {
           from { opacity: 0; }
           to { opacity: 1; }
+        }
+        @keyframes modalPop {
+          from { opacity: 0; transform: translateY(40px) scale(0.95); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
         }
       `}</style>
     </>
