@@ -132,7 +132,32 @@ export default function Shop() {
   });
 
   const totalPages = Math.ceil(filteredProducts.length / PAGE_SIZE);
-  const paginatedProducts = filteredProducts.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+  const paginatedProducts = filteredProducts.slice(0, currentPage * PAGE_SIZE);
+
+  const loaderRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      const target = entries[0];
+      if (target.isIntersecting && currentPage < totalPages) {
+        setCurrentPage(prev => prev + 1);
+      }
+    }, {
+      root: null,
+      rootMargin: '100px',
+      threshold: 0.1
+    });
+
+    if (loaderRef.current) {
+      observer.observe(loaderRef.current);
+    }
+
+    return () => {
+      if (loaderRef.current) {
+        observer.unobserve(loaderRef.current);
+      }
+    };
+  }, [currentPage, totalPages]);
 
   const handleSearch = (v: string) => {
     setSearch(v);
@@ -251,29 +276,9 @@ export default function Shop() {
               <ProductCard key={product.id} product={product as any} />
             ))}
           </div>
-          {totalPages > 1 && (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '16px', marginTop: '30px' }} data-shop-reveal>
-              <button 
-                onClick={() => { setCurrentPage(p => Math.max(1, p - 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); audio.playTap(); }} 
-                disabled={currentPage === 1} 
-                className="ib"
-                style={{ width: '44px', height: '44px', opacity: currentPage === 1 ? 0.5 : 1 }}
-              >
-                &lt;
-              </button>
-              
-              <div style={{ fontSize: '15px', fontWeight: 800, color: 'var(--txt)' }}>
-                {lang === 'ar' ? `الصفحة ${currentPage} من ${totalPages}` : `Page ${currentPage} of ${totalPages}`}
-              </div>
-
-              <button 
-                onClick={() => { setCurrentPage(p => Math.min(totalPages, p + 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); audio.playTap(); }} 
-                disabled={currentPage === totalPages} 
-                className="ib"
-                style={{ width: '44px', height: '44px', opacity: currentPage === totalPages ? 0.5 : 1 }}
-              >
-                &gt;
-              </button>
+          {currentPage < totalPages && (
+            <div ref={loaderRef} style={{ display: 'flex', justifyContent: 'center', padding: '30px 0' }}>
+              <div className="skel" style={{ width: '40px', height: '40px', borderRadius: '50%' }}></div>
             </div>
           )}
         </>

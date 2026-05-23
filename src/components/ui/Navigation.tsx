@@ -23,10 +23,14 @@ export function Navigation({ children }: { children?: React.ReactNode }) {
 
   useEffect(() => {
     setIsMounted(true);
-    // Check initial theme
-    const lx = document.querySelector('.lx');
-    if (lx && lx.classList.contains('dark')) {
+    // Check initial theme on HTML tag or localStorage
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark' || (!savedTheme && document.documentElement.classList.contains('dark'))) {
       setIsDark(true);
+      document.documentElement.classList.add('dark');
+    } else {
+      setIsDark(false);
+      document.documentElement.classList.remove('dark');
     }
   }, []);
 
@@ -35,15 +39,14 @@ export function Navigation({ children }: { children?: React.ReactNode }) {
   }, [pathname]);
 
   const toggleTheme = () => {
-    const lx = document.querySelector('.lx');
-    if (!lx) return;
-    
     if (isDark) {
-      lx.classList.remove('dark');
+      document.documentElement.classList.remove('dark');
       setIsDark(false);
+      localStorage.setItem('theme', 'light');
     } else {
-      lx.classList.add('dark');
+      document.documentElement.classList.add('dark');
       setIsDark(true);
+      localStorage.setItem('theme', 'dark');
     }
   };
 

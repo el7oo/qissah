@@ -8,6 +8,8 @@ import { triggerRipple, flyToCart } from '@/utils/visualEffects';
 import { useTranslation } from '@/utils/translations';
 import { useLangStore } from '@/store/langStore';
 
+import { motion } from 'framer-motion';
+
 export function ProductModal({ product, onClose }: { product: Product, onClose: () => void }) {
   const { addItem, openCart } = useCartStore();
   const { lang } = useLangStore();
@@ -40,21 +42,24 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
   return (
     <>
       {/* Dark Blurred Backdrop */}
-      <div
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
         style={{
           position: 'fixed', inset: 0, 
           background: 'rgba(0,0,0,0.85)', 
           zIndex: 99998,
-          animation: 'fadeIn 0.3s ease forwards'
         }}
         onClick={() => { audio.playTap(); onClose(); }}
       />
       
       {/* Modal Container */}
       <div className="product-modal-wrapper" onClick={(e) => { if (e.target === e.currentTarget) { audio.playTap(); onClose(); } }}>
-        <div
+        <motion.div
           className="product-modal-panel"
           dir={lang === 'ar' ? 'rtl' : 'ltr'}
+          layoutId={`product-card-${product.id}`}
         >
           {/* Close Button */}
           <button 
@@ -119,7 +124,7 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
               {lang === 'ar' ? 'إضافة إلى الطلب' : 'Add to Order'} — {product.price ? Number(product.price).toLocaleString('en-US') : ''} د.ج
             </button>
           </div>
-        </div>
+        </motion.div>
       </div>
 
       <style>{`
@@ -139,7 +144,6 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
           box-shadow: 0 40px 80px rgba(0,0,0,0.5);
           transform: translateY(40px) scale(0.95);
           opacity: 0;
-          animation: modalPop 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
           position: relative;
           overflow: hidden;
           display: flex;

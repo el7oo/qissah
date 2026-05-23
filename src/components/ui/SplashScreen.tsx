@@ -86,9 +86,15 @@ export function SplashScreen() {
           100% { transform: translateX(300%); }
         }
         @keyframes splashOut {
-          0% { opacity: 1; transform: scale(1); }
-          40% { transform: scale(1.05); opacity: 1; }
-          100% { opacity: 0; transform: scale(1.2); visibility: hidden; pointer-events: none; }
+          0% { opacity: 1; transform: scale(1); clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+          40% { transform: scale(1.05); opacity: 1; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+          100% { 
+            opacity: 0; 
+            transform: scale(1.1); 
+            visibility: hidden; 
+            pointer-events: none; 
+            clip-path: polygon(0 50%, 100% 50%, 100% 50%, 0 50%); 
+          }
         }
       `}</style>
     </div>

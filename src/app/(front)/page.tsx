@@ -207,7 +207,7 @@ export default function Home() {
               <div key={`sk-p-${i}`} className="skel-card" style={{ height: '240px' }}><div className="skel-img skel"></div><div className="skel-body"><div className="skel-line skel"></div><div className="skel-line skel" style={{ width: '60%' }}></div></div></div>
             ))
           ) : (
-            products.slice(0, 12).map((p, i) => (
+            products.slice(0, 50).map((p, i) => (
               <ProductCard key={p.id || `pop-${i}`} product={p} />
             ))
           )}
@@ -224,7 +224,7 @@ export default function Home() {
               <div key={`sk-n-${i}`} className="skel-card" style={{ height: '240px' }}><div className="skel-img skel"></div><div className="skel-body"><div className="skel-line skel"></div><div className="skel-line skel" style={{ width: '60%' }}></div></div></div>
             ))
           ) : (
-            products.slice(0, 12).map((p, i) => (
+            products.slice(0, 50).map((p, i) => (
               <ProductCard key={p.id || `new-${i}`} product={p} />
             ))
           )}
