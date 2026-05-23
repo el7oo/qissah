@@ -210,7 +210,7 @@ async function scrapeAndImport() {
                   !src.includes('avatar') && 
                   !src.includes('icon') && 
                   !src.includes('banner') &&
-                  src.match(/\.(jpeg|jpg|png|webp|gif)/i)
+                  (src.match(/\.(jpeg|jpg|png|webp|gif)/i) || src.includes('uploads') || src.includes('product'))
                 );
               
               if (galleryUrls.length === 0) {
@@ -266,7 +266,7 @@ async function scrapeAndImport() {
             console.log(`✅ الإسم: ${cleanTitle}`);
             console.log(`✅ السعر: تم (${pData.currentPrice} دج)`);
             console.log(`✅ الوصف: تم`);
-            console.log(`✅ التوصيل: تم`);
+            console.log(`✅ التوصيل: تم (vibe)`);
             console.log(`✅ الصور: تم رفع ${galleryRefs.length + (mainImageRef ? 1 : 0)} صورة بنجاح`);
             console.log(`----------------------------------------`);
           } catch(e) {
@@ -279,7 +279,6 @@ async function scrapeAndImport() {
         console.log(`✅ انتهت الصفحة ${currentPage}`);
         currentPage++;
       }
-    }
     }
     console.log('\n🌟🌟🌟 انتهى السحب بنجاح!');
     

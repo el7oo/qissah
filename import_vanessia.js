@@ -224,6 +224,10 @@ async function scrapeAndImport() {
             
             await client.create(productDoc);
             
+            console.log(`✅ الإسم: ${cleanTitle}`);
+            console.log(`✅ السعر: تم (${pData.currentPrice} دج)`);
+            console.log(`✅ الوصف: تم`);
+            console.log(`✅ التوصيل: تم (vibe 2)`);
             console.log(`✅ الصور: تم رفع ${galleryRefs.length + (mainImageRef ? 1 : 0)} صورة بنجاح`);
             console.log(`----------------------------------------`);
           } catch(e) {
@@ -236,7 +240,6 @@ async function scrapeAndImport() {
         console.log(`✅ انتهت الصفحة ${currentPage}`);
         currentPage++;
       }
-    }
     }
     console.log('\n🌟🌟🌟 انتهى السحب من موقع Vanessia بنجاح!');
 

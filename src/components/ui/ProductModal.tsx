@@ -48,7 +48,9 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
         exit={{ opacity: 0 }}
         style={{
           position: 'fixed', inset: 0, 
-          background: 'rgba(0,0,0,0.85)', 
+          background: 'rgba(0,0,0,0.65)', 
+          backdropFilter: 'blur(25px)',
+          WebkitBackdropFilter: 'blur(25px)',
           zIndex: 99998,
         }}
         onClick={() => { audio.playTap(); onClose(); }}
@@ -137,11 +139,11 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
         
         .product-modal-panel {
           width: 100%;
-          max-width: 500px;
-          background: #1A1A1A; /* Dark theme like the example */
-          border-radius: 24px;
-          border: 1px solid rgba(255,255,255,0.1);
-          box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+          max-width: 480px;
+          background: var(--card);
+          border-radius: 32px;
+          border: 1px solid var(--bdr);
+          box-shadow: 0 40px 80px rgba(0,0,0,0.2);
           transform: translateY(40px) scale(0.95);
           opacity: 0;
           position: relative;
@@ -178,8 +180,8 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
           position: relative;
           width: 100%;
           aspect-ratio: 4/3;
-          max-height: 280px;
-          background: #FFF;
+          max-height: 350px;
+          background: var(--bg);
           flex-shrink: 0;
           display: flex;
           align-items: center;
@@ -210,13 +212,13 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
           height: 50px;
           object-fit: cover;
           border-radius: 12px;
-          border: 2px solid rgba(255,255,255,0.2);
+          border: 2px solid rgba(0,0,0,0.1);
           cursor: pointer;
           transition: all 0.2s;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
         .pm-thumb.active {
-          border-color: #FFDE59; /* Yellow theme */
+          border-color: var(--p1);
           transform: scale(1.05);
         }
 
@@ -231,8 +233,8 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
 
         .pm-badge {
           display: inline-block;
-          background: #FFDE59;
-          color: #000;
+          background: var(--p1);
+          color: #FFF;
           font-size: 10px;
           font-weight: 800;
           padding: 4px 10px;
@@ -253,7 +255,7 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
         .pm-title {
           font-size: 22px;
           font-weight: 800;
-          color: #FFF;
+          color: var(--txt);
           margin: 0;
           line-height: 1.3;
           font-family: var(--font-tajawal), sans-serif;
@@ -267,12 +269,12 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
         .pm-current-price {
           font-size: 20px;
           font-weight: 900;
-          color: #FFDE59; /* Vibrant yellow */
+          color: var(--p1);
         }
 
         .pm-old-price {
           font-size: 14px;
-          color: rgba(255,255,255,0.4);
+          color: var(--txt2);
           text-decoration: line-through;
           margin-top: 2px;
         }
@@ -280,7 +282,7 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
         .pm-desc {
           font-size: 14px;
           line-height: 1.6;
-          color: rgba(255,255,255,0.7);
+          color: var(--txt2);
           margin-bottom: 24px;
           font-family: var(--font-tajawal), sans-serif;
         }
