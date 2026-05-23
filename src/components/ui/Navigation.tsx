@@ -54,7 +54,9 @@ export function Navigation({ children }: { children?: React.ReactNode }) {
     <>
       <div className="top-nav">
         <span className="ttl" onClick={() => router.push('/')} style={{ cursor: "pointer", fontSize: "26px", color: "var(--p1)", display: "flex", alignItems: "center", gap: "8px", fontFamily: "var(--font-tajawal), sans-serif", fontWeight: 900 }}>
-          <AppleEmoji name="❤️" width={24} height={24} /> قصة
+          <span className="heart-light"><AppleEmoji name="❤️" width={24} height={24} /></span>
+          <span className="heart-dark"><AppleEmoji name="🤍" width={24} height={24} /></span>
+          قصــــة
         </span>
         <div style={{display:"flex", gap:"4px", alignItems:"center", flexWrap:"nowrap"}}>
           <div style={{ position: "relative" }}>
