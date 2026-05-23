@@ -17,7 +17,7 @@ import { orderService } from '@/services/orderService';
 import toast from 'react-hot-toast';
 
 export function SideCart() {
-  const { items, isCartOpen, closeCart, updateQuantity, removeItem, totalPrice, totalShipping } = useCartStore();
+  const { items, isCartOpen, closeCart, updateQuantity, removeItem, totalPrice, totalShipping, clearCart } = useCartStore();
   const { lang } = useLangStore();
   const t = useTranslation(lang);
   const router = useRouter();
