@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from 'react';
+import { AppleEmoji } from './AppleEmoji';
 
 export function SplashScreen() {
   const [show, setShow] = useState(true);
