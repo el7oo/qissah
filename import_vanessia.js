@@ -175,9 +175,40 @@ async function scrapeAndImport() {
                  let t = oldPrice; oldPrice = currentPrice; currentPrice = t; 
               }
               
-              // Find WooCommerce gallery images
-              const imgEls = Array.from(document.querySelectorAll('.woocommerce-product-gallery__image a, .woocommerce-product-gallery__image img'));
-              let galleryUrls = imgEls.map(img => img.getAttribute('href') || img.src || img.getAttribute('data-src')).filter(src => src && !src.includes('avatar') && !src.includes('placeholder'));
+              // Find WooCommerce gallery images + any product images
+              let rawUrls = [];
+              
+              document.querySelectorAll('img').forEach(img => {
+                 let src = img.getAttribute('data-large_image') || img.getAttribute('data-src') || img.getAttribute('data-lazy') || img.getAttribute('srcset') || img.getAttribute('src') || img.src;
+                 if (src) {
+                     if (src.includes(',')) {
+                         let parts = src.split(',');
+                         src = parts[parts.length - 1].trim().split(' ')[0];
+                     } else {
+                         src = src.split(' ')[0];
+                     }
+                     rawUrls.push(src);
+                 }
+              });
+              
+              document.querySelectorAll('[style*="background-image"]').forEach(el => {
+                 let bg = el.style.backgroundImage;
+                 if (bg && bg.includes('url(')) {
+                     let urlMatch = bg.match(/url\(['"]?(.*?)['"]?\)/);
+                     if (urlMatch && urlMatch[1]) rawUrls.push(urlMatch[1]);
+                 }
+              });
+              
+              let galleryUrls = rawUrls.filter(src => src && typeof src === 'string' && src.length > 15)
+                .filter(src => 
+                  !src.includes('logo') && 
+                  !src.includes('footer') && 
+                  !src.includes('avatar') && 
+                  !src.includes('icon') && 
+                  !src.includes('banner') &&
+                  !src.includes('.svg') &&
+                  !src.includes('placeholder')
+                );
               
               return { titleRaw, descRaw, currentPrice, oldPrice, images: [...new Set(galleryUrls)] };
             });

@@ -9,23 +9,24 @@ const client = createClient({
 });
 
 async function deleteAllProducts() {
-  console.log('🗑️ جاري مسح جميع المنتجات القديمة لضمان بيانات نظيفة 100%...');
   try {
+    console.log('Fetching products to delete...');
     const products = await client.fetch(`*[_type == "product"]{_id}`);
-    console.log(`تم العثور على ${products.length} منتج لحذفه.`);
+    console.log(`Found ${products.length} products.`);
     
-    // Delete in batches to avoid rate limits
-    for (let i = 0; i < products.length; i += 50) {
-      const batch = products.slice(i, i + 50);
-      const transaction = client.transaction();
-      batch.forEach(p => transaction.delete(p._id));
-      await transaction.commit();
-      console.log(`✅ تم حذف ${i + batch.length} من ${products.length} منتج...`);
+    if (products.length === 0) {
+      console.log('No products to delete.');
+      return;
     }
+
+    const transaction = client.transaction();
+    products.forEach(p => transaction.delete(p._id));
     
-    console.log('\n🎉 تم مسح كافة المنتجات بنجاح! المتجر الآن نظيف وجاهز.');
-  } catch (err) {
-    console.error('❌ خطأ أثناء الحذف:', err.message);
+    console.log('Committing deletion transaction...');
+    await transaction.commit();
+    console.log('✅ Successfully deleted all products!');
+  } catch (error) {
+    console.error('Error deleting products:', error);
   }
 }
 

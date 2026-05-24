@@ -201,16 +201,41 @@ async function scrapeAndImport() {
               }
               
               // ALL images on page that look like product images
-              const allImgEls = Array.from(document.querySelectorAll('img'));
-              let galleryUrls = allImgEls
-                .map(img => img.getAttribute('data-src') || img.src)
-                .filter(src => src && 
+              let rawUrls = [];
+              
+              // 1. All img tags
+              document.querySelectorAll('img').forEach(img => {
+                 let src = img.getAttribute('data-src') || img.getAttribute('data-lazy') || img.getAttribute('srcset') || img.getAttribute('src') || img.src;
+                 if (src) {
+                     // if srcset, get the first one (usually largest in some setups or smallest, but let's just split by comma and get last which is usually largest)
+                     if (src.includes(',')) {
+                         let parts = src.split(',');
+                         src = parts[parts.length - 1].trim().split(' ')[0];
+                     } else {
+                         src = src.split(' ')[0];
+                     }
+                     rawUrls.push(src);
+                 }
+              });
+              
+              // 2. All background images
+              document.querySelectorAll('[style*="background-image"]').forEach(el => {
+                 let bg = el.style.backgroundImage;
+                 if (bg && bg.includes('url(')) {
+                     let urlMatch = bg.match(/url\(['"]?(.*?)['"]?\)/);
+                     if (urlMatch && urlMatch[1]) rawUrls.push(urlMatch[1]);
+                 }
+              });
+              
+              let galleryUrls = rawUrls.filter(src => src && typeof src === 'string' && src.length > 15)
+                .filter(src => 
                   !src.includes('logo') && 
                   !src.includes('footer') && 
                   !src.includes('avatar') && 
                   !src.includes('icon') && 
                   !src.includes('banner') &&
-                  (src.match(/\.(jpeg|jpg|png|webp|gif)/i) || src.includes('uploads') || src.includes('product'))
+                  !src.includes('.svg') &&
+                  !src.includes('placeholder')
                 );
               
               if (galleryUrls.length === 0) {

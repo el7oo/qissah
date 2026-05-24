@@ -13,10 +13,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { MagneticButton } from './ui/MagneticButton';
 
-const ProductModal = dynamic(() => import('./ui/ProductModal').then(mod => mod.ProductModal), {
-  loading: () => null,
-  ssr: false,
-});
+import { ProductModal } from './ui/ProductModal';
 
 export function ProductCard({ product }: { product: Product }) {
   const { addItem } = useCartStore();

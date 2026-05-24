@@ -149,8 +149,6 @@ export function ProductModal({ product, onClose }: { product: Product, onClose: 
           border-radius: 32px;
           border: 1px solid var(--bdr);
           box-shadow: 0 40px 80px rgba(0,0,0,0.2);
-          transform: translateY(40px) scale(0.95);
-          opacity: 0;
           position: relative;
           overflow: hidden;
           display: flex;
