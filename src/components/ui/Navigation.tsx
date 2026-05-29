@@ -5,13 +5,13 @@ import { usePathname } from 'next/navigation';
 import { useCartStore } from '@/store/cartStore';
 import { useLangStore } from '@/store/langStore';
 import { useTranslation } from '@/utils/translations';
-import { HouseIcon, BagsIcon, CartIcon, AdminIcon } from './Icons';
+import { HouseIcon, BagsIcon, CartIcon } from './Icons';
 import { AppleEmoji } from './AppleEmoji';
 import { audio } from '@/utils/audioEngine';
 
 export function Navigation({ children }: { children?: React.ReactNode }) {
   const pathname = usePathname();
-  const { totalItems, openCart } = useCartStore();
+  const { totalItems } = useCartStore();
   const { lang, setLang } = useLangStore();
   const t = useTranslation(lang);
   const cartCount = totalItems();
@@ -62,22 +62,22 @@ export function Navigation({ children }: { children?: React.ReactNode }) {
   return (
     <>
       <div className="top-nav">
-        <span className="ttl" onClick={() => router.push('/')} style={{ cursor: "pointer", fontSize: "26px", color: "var(--p1)", display: "flex", alignItems: "center", gap: "8px", fontFamily: "var(--font-tajawal), sans-serif", fontWeight: 900 }}>
-          <span className="heart-light"><AppleEmoji name="❤️" width={24} height={24} /></span>
-          <span className="heart-dark"><AppleEmoji name="🤍" width={24} height={24} /></span>
+        <span className="ttl" onClick={() => router.push('/')} style={{ cursor: "pointer", fontSize: "24px", color: "var(--p1)", display: "flex", alignItems: "center", gap: "6px", fontFamily: "var(--font-tajawal), sans-serif", fontWeight: 900 }}>
+          <span className="heart-light"><AppleEmoji name="❤️" width={22} height={22} /></span>
+          <span className="heart-dark"><AppleEmoji name="🤍" width={22} height={22} /></span>
           قصــــة
         </span>
-        <div style={{display:"flex", gap:"4px", alignItems:"center", flexWrap:"nowrap"}}>
+        <div style={{display:"flex", gap:"8px", alignItems:"center", flexWrap:"nowrap"}}>
           <div style={{ position: "relative" }}>
-            <button className="ib" onClick={() => setLangOpen(!langOpen)} title="settings">
-              <AppleEmoji name="⚙️" width={20} height={20} className="" />
+            <button className="ib-small" onClick={() => setLangOpen(!langOpen)} title="Language">
+              <span style={{ fontSize: '13px', fontWeight: 'bold', color: 'var(--txt)' }}>{lang.toUpperCase()}</span>
             </button>
             {langOpen && (
-              <div style={{ position: "absolute", top: "100%", left: 0, marginTop: "8px", background: "var(--card)", borderRadius: "12px", padding: "8px", boxShadow: "0 4px 12px var(--shd)", zIndex: 100, border: "1px solid var(--bdr)" }}>
+              <div style={{ position: "absolute", top: "100%", right: 0, marginTop: "8px", background: "var(--card)", borderRadius: "12px", padding: "6px", boxShadow: "0 8px 24px var(--shd)", zIndex: 100, border: "1px solid var(--bdr)", minWidth: "80px" }}>
                 {(['ar','fr','en'] as const).map(l => (
                   <button 
                     key={l} 
-                    style={{ display: "block", width: "100%", padding: "4px 12px", background: lang === l ? "var(--p1)" : "transparent", color: lang === l ? "#fff" : "var(--txt)", borderRadius: "6px", marginBottom: "4px", border: "none", cursor: "pointer", fontWeight: "bold" }}
+                    style={{ display: "block", width: "100%", padding: "6px 12px", background: lang === l ? "var(--p1)" : "transparent", color: lang === l ? "#fff" : "var(--txt)", borderRadius: "8px", marginBottom: "2px", border: "none", cursor: "pointer", fontWeight: "bold", textAlign: "center" }}
                     onClick={() => { setLang(l); setLangOpen(false); }}
                   >
                     {l.toUpperCase()}
@@ -86,14 +86,12 @@ export function Navigation({ children }: { children?: React.ReactNode }) {
               </div>
             )}
           </div>
-          <div style={{ position: "relative" }}>
-            <button className="ib" onClick={toggleTheme} title="Toggle Theme">
-              {isDark ? <AppleEmoji name="🌙" width={20} height={20} /> : <AppleEmoji name="☀️" width={20} height={20} />}
-            </button>
-          </div>
-          <div className="cart-icon-wrap" style={{position:"relative", cursor:"pointer", flexShrink:0}} onClick={() => router.push('/cart')}>
-            <div className="ib"><AppleEmoji name="🛒" width={20} height={20} className="" /></div>
-            {isMounted && cartCount > 0 && <div className="cbadge">{cartCount}</div>}
+          <button className="ib-small" onClick={toggleTheme} title="Toggle Theme">
+            {isMounted && isDark ? <AppleEmoji name="🌙" width={18} height={18} /> : <AppleEmoji name="☀️" width={18} height={18} />}
+          </button>
+          <div className="cart-icon-wrap" style={{position:"relative", cursor:"pointer", flexShrink:0, display:"flex", alignItems:"center", justifyContent:"center", width: "36px", height: "36px", background: "var(--card)", borderRadius: "50%", border: "1px solid var(--bdr)"}} onClick={() => router.push('/cart')}>
+            <AppleEmoji name="🛒" width={18} height={18} />
+            {isMounted && cartCount > 0 && <div className="cbadge" style={{ top: "-4px", right: "-4px" }}>{cartCount}</div>}
           </div>
         </div>
       </div>

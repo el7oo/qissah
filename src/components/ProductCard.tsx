@@ -10,12 +10,11 @@ import { useState, useRef, useEffect } from 'react';
 
 import Image from 'next/image';
 import { MagneticButton } from './ui/MagneticButton';
-
-import { ProductModal } from './ui/ProductModal';
+import { useRouter } from 'next/navigation';
 
 export function ProductCard({ product }: { product: Product }) {
   const { addItem } = useCartStore();
-  const [modalOpen, setModalOpen] = useState(false);
+  const router = useRouter();
   const cardRef = useRef<HTMLDivElement>(null);
   const hasAnimated = useRef(false);
 
@@ -92,7 +91,7 @@ export function ProductCard({ product }: { product: Product }) {
       <div 
         ref={cardRef}
         className="pc pc-animate" 
-        onClick={() => { audio.playTap(); setModalOpen(true); }}
+        onClick={() => { audio.playTap(); router.push(`/product/${product.id}`); }}
       >
         {product.discount && (
           <div className="disc-tag">{product.discount}</div>
@@ -123,7 +122,6 @@ export function ProductCard({ product }: { product: Product }) {
         </div>
         <MagneticButton className="add-fab" onClick={handleAdd}>+</MagneticButton>
       </div>
-      {modalOpen && <ProductModal product={product} onClose={() => setModalOpen(false)} />}
     </>
   );
 }

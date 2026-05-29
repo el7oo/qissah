@@ -40,9 +40,9 @@ html.dark .heart-light { display: none !important; }
 .glass { background: var(--card); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid var(--bdr); border-radius: 20px; box-shadow: 0 8px 32px var(--shd), inset 0 1px 0 rgba(255,255,255,0.15); }
 
 /* NAVIGATION */
-.top-nav { flex-shrink: 0; background: var(--nav); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); padding: 9px 13px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--bdr); gap: 6px; z-index: 50; box-shadow: 0 2px 12px var(--shd); }
+.top-nav { flex-shrink: 0; background: var(--nav); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--bdr); gap: 6px; z-index: 50; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
 .scroll-area { flex: 1; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; position: relative; z-index: 1; }
-.bot-nav { flex-shrink: 0; background: var(--nav); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-top: 1px solid var(--bdr); display: flex; padding: 12px 0 calc(14px + env(safe-area-inset-bottom)); z-index: 50; box-shadow: 0 -8px 30px rgba(0,0,0,0.08); }
+.bot-nav { flex-shrink: 0; background: var(--nav); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-top: 1px solid var(--bdr); display: flex; padding: 8px 0 calc(8px + env(safe-area-inset-bottom)); z-index: 50; box-shadow: 0 -8px 30px rgba(0,0,0,0.05); justify-content: space-around; }
 .ni { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 4px; cursor: pointer; position: relative; transition: transform 0.2s; min-height: 48px; justify-content: center; }
 .ni:active { transform: scale(0.88); }
 .ni-ico { font-size: 23px; transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), filter 0.3s; opacity: 0.8; }
@@ -90,6 +90,8 @@ html.dark .heart-light { display: none !important; }
 /* ICON BUTTONS */
 .ib { width: 34px; height: 34px; min-width: 34px; border-radius: 50%; background: var(--card); backdrop-filter: blur(12px); border: 1px solid var(--bdr); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s; flex-shrink: 0; position: relative; overflow: hidden; }
 .ib:active { transform: scale(0.92); }
+.ib-small { width: 36px; height: 36px; min-width: 36px; border-radius: 50%; background: var(--card); border: 1px solid var(--bdr); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px; transition: all 0.2s; position: relative; overflow: hidden; flex-shrink: 0; }
+.ib-small:active { transform: scale(0.92); background: var(--bg2); }
 .lb { padding: 3px 8px; border-radius: 8px; font-size: 10px; font-weight: 800; cursor: pointer; border: 1.5px solid var(--bdr); background: var(--card); color: var(--txt); transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); font-family: inherit; position: relative; overflow: hidden; }
 .lb.on { background: var(--p1); color: #fff; border-color: var(--p1); box-shadow: 0 4px 16px var(--glow); }
 

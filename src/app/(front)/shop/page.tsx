@@ -88,7 +88,8 @@ export default function Shop() {
     { id: 'hijab', nameKey: 'hijab', icon: '🧕' },
     { id: 'womenAcc', nameKey: 'womenAccessories', icon: '💍' },
     { id: 'makeup', nameKey: 'makeup', icon: '💄' },
-    { id: 'womenClothes', nameKey: 'womenClothing', icon: '👚' }
+    { id: 'womenClothes', nameKey: 'womenClothing', icon: '👚' },
+    { id: 'doors', nameKey: 'doors', icon: '🚪' }
   ];
 
   const allCategories = [
@@ -101,11 +102,30 @@ export default function Shop() {
     ...sanityCategories
       .filter(sc => !categoryList.some(hc => hc.id === sc.slug))
       .filter(sc => sc.slug !== 'all' && sc.title?.ar !== 'عرض الكل' && sc.title !== 'عرض الكل')
-      .map(sc => ({
-        id: sc.slug || sc._id,
-        name: sc.title?.ar || sc.title?.en || sc.title || sc.slug,
-        icon: sc.icon || '📌'
-      }))
+      .map(sc => {
+        let scIcon = sc.icon;
+        if (!scIcon || scIcon === '📌') {
+          const title = (sc.title?.ar || sc.title?.en || sc.title || sc.slug).toLowerCase();
+          if (title.includes('جمال') || title.includes('beauty')) scIcon = '✨';
+          else if (title.includes('مطبخ') || title.includes('kitchen')) scIcon = '🍳';
+          else if (title.includes('سيار') || title.includes('car')) scIcon = '🚗';
+          else if (title.includes('هاتف') || title.includes('phone')) scIcon = '📱';
+          else if (title.includes('أمن') || title.includes('security')) scIcon = '📹';
+          else if (title.includes('كهربا') || title.includes('electric')) scIcon = '⚡';
+          else if (title.includes('ملابس') || title.includes('clothes')) scIcon = '👕';
+          else if (title.includes('أحذية') || title.includes('shoes')) scIcon = '👟';
+          else if (title.includes('عطور') || title.includes('perfume')) scIcon = '💨';
+          else if (title.includes('صحة') || title.includes('health')) scIcon = '🩺';
+          else if (title.includes('أطفال') || title.includes('baby')) scIcon = '👶';
+          else if (title.includes('تخييم') || title.includes('camping')) scIcon = '🏕️';
+          else scIcon = '🏷️';
+        }
+        return {
+          id: sc.slug || sc._id,
+          name: sc.title?.ar || sc.title?.en || sc.title || sc.slug,
+          icon: scIcon
+        };
+      })
   ];
 
   const categories = allCategories.filter(c => 

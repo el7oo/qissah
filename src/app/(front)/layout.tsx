@@ -87,8 +87,11 @@ export default function RootLayout({
         />
         <script dangerouslySetInnerHTML={{ __html: `
           try {
-            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            var savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
               document.documentElement.classList.add('dark');
+            } else {
+              document.documentElement.classList.remove('dark');
             }
           } catch (e) {}
         `}} />
