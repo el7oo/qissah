@@ -29,15 +29,25 @@ export default function CheckoutPage() {
     deliveryType: 'home' as 'home' | 'desk'
   });
 
+  const availableWilayas = useMemo(() => {
+    return algeriaWilayas.filter(w => {
+      // Must support all items in cart
+      return items.every(item => {
+        if (item.customShipping && item.customShipping.length > 0) {
+          return item.customShipping.some((c: any) => c.wilayaId === w.id);
+        }
+        return true;
+      });
+    });
+  }, [items]);
+
   const selectedWilaya = useMemo(() => {
-    return algeriaWilayas.find(w => w.id.toString() === formData.wilaya);
-  }, [formData.wilaya]);
+    return availableWilayas.find(w => w.id.toString() === formData.wilaya);
+  }, [formData.wilaya, availableWilayas]);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
-
-
 
   const { homeFee, deskFee } = useMemo(() => {
     if (!selectedWilaya) return { homeFee: 0, deskFee: 0 };
@@ -46,21 +56,33 @@ export default function CheckoutPage() {
     let calcDesk: number | null = selectedWilaya.deskPrice;
     
     if (selectedWilaya) {
+      let isHomeAvailable = true;
+      let isDeskAvailable = true;
+
       items.forEach(item => {
-        let iHome = selectedWilaya.homePrice;
-        let iDesk = selectedWilaya.deskPrice;
+        let iHome: number | null = selectedWilaya.homePrice;
+        let iDesk: number | null = selectedWilaya.deskPrice;
         
         if (item.customShipping && item.customShipping.length > 0) {
           const custom = item.customShipping.find((c: any) => c.wilayaId === selectedWilaya.id);
           if (custom) {
             iHome = custom.homePrice;
             iDesk = custom.deskPrice;
+          } else {
+            iHome = null;
+            iDesk = null;
           }
         }
         
-        if (calcHome !== null && iHome !== null && iHome > calcHome) calcHome = iHome;
-        if (calcDesk !== null && iDesk !== null && iDesk > calcDesk) calcDesk = iDesk;
+        if (iHome === null) isHomeAvailable = false;
+        if (iDesk === null) isDeskAvailable = false;
+
+        if (iHome !== null && (calcHome === null || iHome > calcHome)) calcHome = iHome;
+        if (iDesk !== null && (calcDesk === null || iDesk > calcDesk)) calcDesk = iDesk;
       });
+
+      if (!isHomeAvailable) calcHome = null;
+      if (!isDeskAvailable) calcDesk = null;
     }
     
     return { homeFee: calcHome, deskFee: calcDesk };
@@ -166,7 +188,7 @@ export default function CheckoutPage() {
             dir={lang === 'ar' ? 'rtl' : 'ltr'}
           >
             <option value="" disabled>{t.wilaya}</option>
-            {algeriaWilayas.map(w => (
+            {availableWilayas.map(w => (
               <option key={w.id} value={w.id}>{w.id} - {lang === 'ar' ? w.nameAr : w.nameEn}</option>
             ))}
           </select>
@@ -237,13 +259,18 @@ export default function CheckoutPage() {
         )}
 
         <div className="fg">
+          <label className="fl">
+            {lang === 'ar' ? '📝 تفاصيل الطلب' : '📝 Order Details'}
+          </label>
           <textarea 
             className="fi" 
             name="notes" 
-            placeholder={lang === 'ar' ? 'ملاحظات إضافية (مثال: لون الحذاء، مقاس معين...)' : 'Additional notes (e.g., shoe color, size...)'} 
+            placeholder={lang === 'ar' 
+              ? 'اكتب تفاصيل طلبك هنا:\n• اللون المطلوب (أسود، أبيض، أحمر، أزرق...)\n• المقاس (S, M, L, XL, XXL, 38, 39, 40...)\n• الحجم أو الوزن المطلوب\n• أي ملاحظة أخرى تخص الطلب...'
+              : 'Write your order details here:\n• Color (black, white, red, blue...)\n• Size (S, M, L, XL, XXL, 38, 39, 40...)\n• Weight or volume needed\n• Any other note about the order...'}
             dir="auto" 
-            rows={3}
-            style={{ resize: 'vertical', paddingTop: '12px' }}
+            rows={4}
+            style={{ resize: 'vertical', paddingTop: '12px', lineHeight: '1.6' }}
             value={formData.notes} 
             onChange={handleInputChange as any} 
           />

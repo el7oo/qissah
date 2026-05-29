@@ -148,6 +148,17 @@ html.dark .hero-sec { background-image: radial-gradient(circle at 0% 0%, #052659
 .add-fab { position: absolute; bottom: 52px; right: 7px; width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, var(--p1), var(--p2)); color: #fff; font-size: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px var(--glow); border: none; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; z-index: 2; line-height: 1; }
 .add-fab:active { transform: scale(0.78); }
 
+/* Card reveal animation (lightweight, no framer-motion) */
+.pc.pc-animate {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.pc.pc-animate.pc-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* SKELETON */
 .skel { background: linear-gradient(90deg, var(--bg2) 25%, var(--card) 50%, var(--bg2) 75%); background-size: 400px 100%; animation: shimmer 1.4s infinite; border-radius: 12px; }
 .skel-card { border-radius: 20px; overflow: hidden; background: var(--card); border: 1px solid var(--bdr); }

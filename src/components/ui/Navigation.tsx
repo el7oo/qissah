@@ -25,12 +25,21 @@ export function Navigation({ children }: { children?: React.ReactNode }) {
     setIsMounted(true);
     // Check initial theme on HTML tag or localStorage
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark' || (!savedTheme && document.documentElement.classList.contains('dark'))) {
+    if (savedTheme === 'dark') {
       setIsDark(true);
       document.documentElement.classList.add('dark');
-    } else {
+    } else if (savedTheme === 'light') {
       setIsDark(false);
       document.documentElement.classList.remove('dark');
+    } else {
+      // Auto detect if no saved theme
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        setIsDark(true);
+        document.documentElement.classList.add('dark');
+      } else {
+        setIsDark(false);
+        document.documentElement.classList.remove('dark');
+      }
     }
   }, []);
 
@@ -77,27 +86,10 @@ export function Navigation({ children }: { children?: React.ReactNode }) {
               </div>
             )}
           </div>
-          <div className="toggleWrapper" dir="ltr">
-            <input 
-              className="input" 
-              id="theme-toggle" 
-              type="checkbox" 
-              checked={isDark} 
-              readOnly
-            />
-            <label className="toggle" onClick={toggleTheme}>
-              <span className="toggle__handler">
-                <span className="crater crater--1"></span>
-                <span className="crater crater--2"></span>
-                <span className="crater crater--3"></span>
-              </span>
-              <span className="star star--1"></span>
-              <span className="star star--2"></span>
-              <span className="star star--3"></span>
-              <span className="star star--4"></span>
-              <span className="star star--5"></span>
-              <span className="star star--6"></span>
-            </label>
+          <div style={{ position: "relative" }}>
+            <button className="ib" onClick={toggleTheme} title="Toggle Theme">
+              {isDark ? <AppleEmoji name="🌙" width={20} height={20} /> : <AppleEmoji name="☀️" width={20} height={20} />}
+            </button>
           </div>
           <div className="cart-icon-wrap" style={{position:"relative", cursor:"pointer", flexShrink:0}} onClick={() => router.push('/cart')}>
             <div className="ib"><AppleEmoji name="🛒" width={20} height={20} className="" /></div>

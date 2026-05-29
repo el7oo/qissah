@@ -96,7 +96,8 @@ export default function Home() {
   ));
 
   // Merge hardcoded and sanity categories, giving priority to Sanity for new ones
-  const categories = [
+  const allCategories = [
+    { id: null, name: lang === 'ar' ? 'عرض الكل' : 'All', icon: '✨' },
     ...categoryList.map(c => ({
       id: c.id,
       name: (t as any)[c.nameKey] || c.nameKey,
@@ -106,11 +107,16 @@ export default function Home() {
       .filter(sc => !categoryList.some(hc => hc.id === sc.slug))
       .filter(sc => sc.slug !== 'all' && sc.title?.ar !== 'عرض الكل' && sc.title !== 'عرض الكل')
       .map(sc => ({
-        id: sc.slug,
+        id: sc.slug || sc._id,
         name: sc.title?.ar || sc.title?.en || sc.title || sc.slug,
         icon: sc.icon || '📌'
       }))
   ];
+
+  // Only show categories that have products, plus the "All" category
+  const categories = allCategories.filter(c => 
+    c.id === null || products.some(p => p.categoryId === c.id)
+  );
 
   return (
     <div ref={rootRef} style={{ paddingTop: '6px' }}>

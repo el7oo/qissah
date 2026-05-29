@@ -91,7 +91,7 @@ export default function Shop() {
     { id: 'womenClothes', nameKey: 'womenClothing', icon: '👚' }
   ];
 
-  const categories = [
+  const allCategories = [
     { id: null, name: lang === 'ar' ? 'عرض الكل' : 'All', icon: '✨' },
     ...categoryList.map(c => ({
       id: c.id,
@@ -107,6 +107,10 @@ export default function Shop() {
         icon: sc.icon || '📌'
       }))
   ];
+
+  const categories = allCategories.filter(c => 
+    c.id === null || products.some(p => p.categoryId === c.id)
+  );
 
   const handleCatClick = (id: string | null, e: React.MouseEvent) => {
     triggerRipple(e as any);

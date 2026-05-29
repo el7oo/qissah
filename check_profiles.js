@@ -8,7 +8,7 @@ const client = createClient({
 });
 
 async function check() {
-  const p = await client.fetch('*[_type=="shippingProfile"]{_id, name}');
+  const p = await client.fetch('*[_type=="product"][0]{_id, title, category, categories, shippingProfile}');
   console.log(p);
 }
 check();

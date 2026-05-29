@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Qissa | قصة - متجر التسوق الفاخر",
     description: "اكتشف أفضل العروض والمنتجات المميزة في الجزائر وتوصيل لجميع الولايات.",
-    url: "https://luxara-dz.vercel.app", // Placeholder URL
+    url: "https://qissah.qzz.io",
     siteName: "Qissa",
     images: [
       {
@@ -62,7 +62,7 @@ const storeSchema = {
   "name": "Qissa | قصة",
   "image": "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04",
   "description": "قصة - كل منتج يضيف فصلاً جديداً لقصتك. اكتشف متعة التسوق الفاخر في الجزائر.",
-  "url": "https://luxara-dz.vercel.app",
+  "url": "https://qissah.qzz.io",
   "telephone": "+213000000000",
   "priceRange": "$$",
   "address": {

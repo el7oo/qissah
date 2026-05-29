@@ -6,11 +6,9 @@ import { triggerRipple, flyToCart } from '@/utils/visualEffects';
 import { Product } from '@/store/productStore';
 import toast from 'react-hot-toast';
 
-import { useState } from 'react';
-import dynamic from 'next/dynamic';
+import { useState, useRef, useEffect } from 'react';
 
 import Image from 'next/image';
-import { motion } from 'framer-motion';
 import { MagneticButton } from './ui/MagneticButton';
 
 import { ProductModal } from './ui/ProductModal';
@@ -18,6 +16,27 @@ import { ProductModal } from './ui/ProductModal';
 export function ProductCard({ product }: { product: Product }) {
   const { addItem } = useCartStore();
   const [modalOpen, setModalOpen] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const hasAnimated = useRef(false);
+
+  // Intersection Observer for reveal animation (lightweight, no framer-motion)
+  useEffect(() => {
+    const el = cardRef.current;
+    if (!el || hasAnimated.current) return;
+    
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.classList.add('pc-visible');
+          hasAnimated.current = true;
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '-30px', threshold: 0.1 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -70,14 +89,10 @@ export function ProductCard({ product }: { product: Product }) {
 
   return (
     <>
-      <motion.div 
-        className="pc" 
+      <div 
+        ref={cardRef}
+        className="pc pc-animate" 
         onClick={() => { audio.playTap(); setModalOpen(true); }}
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-50px" }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        whileHover={{ y: -5 }}
       >
         {product.discount && (
           <div className="disc-tag">{product.discount}</div>
@@ -107,7 +122,7 @@ export function ProductCard({ product }: { product: Product }) {
           </div>
         </div>
         <MagneticButton className="add-fab" onClick={handleAdd}>+</MagneticButton>
-      </motion.div>
+      </div>
       {modalOpen && <ProductModal product={product} onClose={() => setModalOpen(false)} />}
     </>
   );
