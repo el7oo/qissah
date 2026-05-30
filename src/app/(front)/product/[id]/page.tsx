@@ -207,10 +207,10 @@ export default function ProductPage() {
 
       <style>{`
         .product-page {
-          min-height: 100vh;
-          background: var(--bg);
-          padding-top: 16px;
-          padding-bottom: 90px; /* space for mobile footer */
+          padding: 16px 16px 140px;
+          animation: fadeIn 0.4s ease;
+          max-width: 1200px;
+          margin: 0 auto;
         }
         
         .container {
@@ -391,7 +391,7 @@ export default function ProductPage() {
 
         .mobile-sticky-footer {
           position: fixed;
-          bottom: 0; left: 0; right: 0;
+          bottom: 65px; left: 0; right: 0;
           background: var(--card);
           padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
           border-top: 1px solid var(--bdr);

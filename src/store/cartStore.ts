@@ -81,23 +81,19 @@ export const useCartStore = create<CartState>()(
 
       totalShipping: () => {
         const items = get().items;
-        const shippingByCategory = new Map<string, number>();
+        let total = 0;
         
         items.forEach(item => {
+          // Calculate shipping for each different product type
+          // If a user orders quantity=2 of the *same* product, shipping is added only once.
+          // If a user orders two *different* products, shipping is added twice.
           const shippingStr = (item as any).shippingPrice || '0';
           const shipping = parseFloat(String(shippingStr).replace(/,/g, '')) || 0;
-          const catId = item.categoryId || 'default';
-          
-          const currentCatShipping = shippingByCategory.get(catId) || 0;
-          if (shipping > currentCatShipping) {
-            shippingByCategory.set(catId, shipping);
-          }
+          total += shipping;
         });
-        
-        let total = 0;
-        shippingByCategory.forEach(val => total += val);
+
         return total;
-      }
+      },
     }),
     {
       name: 'souq-pro-cart',
