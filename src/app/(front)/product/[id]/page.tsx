@@ -222,10 +222,10 @@ export default function ProductPage() {
         .product-layout {
           display: flex;
           flex-direction: column;
-          gap: 24px;
+          gap: 16px;
           background: var(--card);
-          border-radius: 24px;
-          padding: 16px;
+          border-radius: 20px;
+          padding: 12px;
           border: 1px solid var(--bdr);
         }
 
@@ -290,11 +290,11 @@ export default function ProductPage() {
         }
 
         .pi-title {
-          font-size: 22px;
+          font-size: 20px;
           font-weight: 800;
           color: var(--txt);
-          line-height: 1.4;
-          margin-bottom: 8px;
+          line-height: 1.3;
+          margin-bottom: 6px;
           font-family: var(--font-tajawal);
         }
 
@@ -308,27 +308,27 @@ export default function ProductPage() {
           display: inline-flex;
           align-items: baseline;
           gap: 12px;
-          padding: 12px 16px;
+          padding: 12px;
           background: var(--bg2);
           border-radius: 12px;
-          margin-bottom: 20px;
+          margin-bottom: 16px;
           border: 1px solid var(--bdr);
         }
         .pi-price-current {
-          font-size: 26px; font-weight: 900; color: var(--p1);
+          font-size: 22px; font-weight: 900; color: var(--p1);
         }
         .pi-price-old {
-          font-size: 15px; color: var(--txt2); text-decoration: line-through;
+          font-size: 14px; color: var(--txt2); text-decoration: line-through;
         }
 
         /* Scrollable Description Box */
         .pi-desc-box {
-          background: var(--bg2);
+          background: var(--bg);
           border: 1px solid var(--bdr);
-          border-radius: 16px;
-          padding: 16px;
-          margin-bottom: 20px;
-          max-height: 250px;
+          border-radius: 12px;
+          padding: 12px;
+          margin-bottom: 16px;
+          max-height: 200px;
           display: flex;
           flex-direction: column;
         }
@@ -361,7 +361,7 @@ export default function ProductPage() {
         }
 
         .pi-notes {
-          margin-bottom: 20px;
+          margin-bottom: 16px;
         }
         .pi-notes-lbl {
           display: block; font-size: 13px; font-weight: 700; color: var(--txt); margin-bottom: 8px;
@@ -382,10 +382,9 @@ export default function ProductPage() {
           background: var(--p1);
           color: #FFF;
           font-size: 16px; font-weight: 800;
-          padding: 14px; border-radius: 100px;
+          padding: 12px; border-radius: 100px;
           border: none; cursor: pointer;
           display: flex; align-items: center; justify-content: center; gap: 8px;
-          box-shadow: 0 4px 16px var(--glow);
           transition: transform 0.2s, filter 0.2s;
         }
         .pi-add-btn:active { transform: scale(0.96); filter: brightness(0.9); }
@@ -399,8 +398,8 @@ export default function ProductPage() {
           z-index: 100;
           display: flex;
           align-items: center;
-          gap: 16px;
-          box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+          gap: 12px;
+          box-shadow: 0 -2px 10px rgba(0,0,0,0.03);
         }
 
         .msf-price {
@@ -408,7 +407,7 @@ export default function ProductPage() {
           display: flex;
           flex-direction: column;
         }
-        .msf-pr { font-size: 18px; font-weight: 900; color: var(--p1); }
+        .msf-pr { font-size: 16px; font-weight: 900; color: var(--p1); }
         .msf-old { font-size: 12px; color: var(--txt2); text-decoration: line-through; }
 
         /* Related section */
@@ -423,13 +422,13 @@ export default function ProductPage() {
 
         @media (min-width: 768px) {
           .product-page { padding-top: 30px; padding-bottom: 40px; }
-          .product-layout { flex-direction: row; padding: 30px; gap: 40px; }
-          .product-gallery { width: 45%; max-width: 500px; }
-          .pg-main-wrap { border-radius: 20px; }
-          .pi-title { font-size: 28px; }
+          .product-layout { flex-direction: row; padding: 24px; gap: 30px; }
+          .product-gallery { width: 40%; max-width: 450px; }
+          .pg-main-wrap { border-radius: 16px; }
+          .pi-title { font-size: 24px; }
           .desktop-add-btn { display: block; margin-top: auto; }
           .mobile-sticky-footer { display: none; }
-          .pi-desc-box { max-height: 350px; }
+          .pi-desc-box { max-height: 280px; }
         }
       `}</style>
     </div>

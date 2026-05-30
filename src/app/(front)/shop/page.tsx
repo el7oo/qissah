@@ -100,20 +100,25 @@ export default function Shop() {
       .filter(sc => sc.slug !== 'all' && sc.title?.ar !== 'عرض الكل' && sc.title !== 'عرض الكل')
       .map(sc => {
         let scIcon = sc.icon;
-        if (!scIcon || scIcon === '📌') {
+        if (!scIcon || scIcon === '📌' || scIcon === '🏷️') {
           const title = (sc.title?.ar || sc.title?.en || sc.title || sc.slug).toLowerCase();
-          if (title.includes('جمال') || title.includes('beauty')) scIcon = '✨';
-          else if (title.includes('مطبخ') || title.includes('kitchen')) scIcon = '🍳';
-          else if (title.includes('سيار') || title.includes('car')) scIcon = '🚗';
-          else if (title.includes('هاتف') || title.includes('phone')) scIcon = '📱';
-          else if (title.includes('أمن') || title.includes('security')) scIcon = '📹';
-          else if (title.includes('كهربا') || title.includes('electric')) scIcon = '⚡';
-          else if (title.includes('ملابس') || title.includes('clothes')) scIcon = '👕';
-          else if (title.includes('أحذية') || title.includes('shoes')) scIcon = '👟';
-          else if (title.includes('عطور') || title.includes('perfume')) scIcon = '💨';
-          else if (title.includes('صحة') || title.includes('health')) scIcon = '🩺';
-          else if (title.includes('أطفال') || title.includes('baby')) scIcon = '👶';
-          else if (title.includes('تخييم') || title.includes('camping')) scIcon = '🏕️';
+          if (title.match(/جمال|beauty|مكياج|عناية|بشرة|شعر/)) scIcon = '✨';
+          else if (title.match(/مطبخ|kitchen|طبخ|طعام/)) scIcon = '🍳';
+          else if (title.match(/سيار|car|مركب/)) scIcon = '🚗';
+          else if (title.match(/هاتف|phone|جوال|اكسسوارات هواتف/)) scIcon = '📱';
+          else if (title.match(/أمن|security|كامير/)) scIcon = '📹';
+          else if (title.match(/كهربا|electric|الكترونيات/)) scIcon = '⚡';
+          else if (title.match(/ملابس|clothes|أزياء|فستان|قميص/)) scIcon = '👕';
+          else if (title.match(/أحذية|shoes|جزم/)) scIcon = '👟';
+          else if (title.match(/عطور|perfume|رائحة/)) scIcon = '💨';
+          else if (title.match(/صحة|health|طب|لياقة/)) scIcon = '🩺';
+          else if (title.match(/أطفال|baby|رضع|ألعاب/)) scIcon = '👶';
+          else if (title.match(/تخييم|camping|رحل/)) scIcon = '🏕️';
+          else if (title.match(/شتاء|برد|دفا/)) scIcon = '❄️';
+          else if (title.match(/صيف|بحر/)) scIcon = '🏖️';
+          else if (title.match(/أثاث|ديكور|منزل/)) scIcon = '🏠';
+          else if (title.match(/معدات|أدوات|عمل/)) scIcon = '🛠️';
+          else if (title.match(/حقائب|شنط|bags/)) scIcon = '👜';
           else scIcon = '🏷️';
         }
         return {
@@ -192,10 +197,10 @@ export default function Shop() {
 
   return (
     <div ref={rootRef} style={{ paddingTop: '10px', paddingBottom: '120px' }}>
-      <div style={{ padding: '0 13px 10px', display: 'flex', alignItems: 'center', gap: '8px' }} data-shop-reveal>
+      <div style={{ padding: '0 13px 10px', display: 'flex', alignItems: 'center', gap: '8px' }}>
         <div className="ttl" style={{ flex: 1 }}>{t.shop}</div>
       </div>
-      <div className="search-wrap" data-shop-reveal style={{ position: 'relative', zIndex: searchFocused ? 100 : 1 }}>
+      <div className="search-wrap" style={{ position: 'relative', zIndex: searchFocused ? 100 : 1 }}>
         <span style={{ fontSize: '16px', flexShrink: 0 }}><AppleEmoji name="🔍" /></span>
         <input 
           className="search-inp" 
@@ -245,7 +250,7 @@ export default function Shop() {
         )}
       </div>
 
-      <div className="cat-scroll" style={{ marginBottom: '13px' }} data-shop-reveal>
+      <div className="cat-scroll" style={{ marginBottom: '13px' }}>
         {categories.map(c => (
           <div 
             key={c.id} 
@@ -259,7 +264,7 @@ export default function Shop() {
       </div>
 
       {catalogError ? (
-        <div className="empty" data-shop-reveal>
+        <div className="empty">
           <span className="e-ico"><AppleEmoji name="⚠️" /></span>
           <div style={{ fontWeight: 700, fontSize: '15px', marginBottom: '6px' }}>
             {lang === 'ar' ? 'تعذر تحميل الكتالوج' : 'Catalog unavailable'}
@@ -276,13 +281,13 @@ export default function Shop() {
           </button>
         </div>
       ) : loading ? (
-        <div className="pg" data-shop-reveal>
+        <div className="pg">
           {Array.from({ length: 12 }).map((_, i) => (
             <ProductSkeleton key={i} />
           ))}
         </div>
       ) : filteredProducts.length === 0 ? (
-        <div className="empty" data-shop-reveal>
+        <div className="empty">
           <span className="e-ico"><AppleEmoji name="🔍" /></span>
           <div style={{ fontWeight: 700, fontSize: '15px', marginBottom: '6px' }}>لا توجد منتجات</div>
           <button 
@@ -295,7 +300,7 @@ export default function Shop() {
         </div>
       ) : (
         <>
-          <div className="pg" data-shop-reveal>
+          <div className="pg">
             {paginatedProducts.map(product => (
               <ProductCard key={product.id} product={product as any} />
             ))}
