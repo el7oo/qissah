@@ -105,20 +105,22 @@ export default function Shop() {
           if (title.match(/جمال|beauty|مكياج|عناية|بشرة|شعر/)) scIcon = '✨';
           else if (title.match(/مطبخ|kitchen|طبخ|طعام/)) scIcon = '🍳';
           else if (title.match(/سيار|car|مركب/)) scIcon = '🚗';
-          else if (title.match(/هاتف|phone|جوال|اكسسوارات هواتف/)) scIcon = '📱';
-          else if (title.match(/أمن|security|كامير/)) scIcon = '📹';
-          else if (title.match(/كهربا|electric|الكترونيات/)) scIcon = '⚡';
-          else if (title.match(/ملابس|clothes|أزياء|فستان|قميص/)) scIcon = '👕';
+          else if (title.match(/هاتف|هواتف|phone|جوال|اكسسوارات/)) scIcon = '📱';
+          else if (title.match(/أمن|امن|مراقبة|security|كامير/)) scIcon = '📹';
+          else if (title.match(/كهربا|كهرومنزلي|electric|الكترونيات/)) scIcon = '⚡';
+          else if (title.match(/ملابس|البسة|لبس|clothes|أزياء|فستان|قميص/)) scIcon = '👕';
           else if (title.match(/أحذية|shoes|جزم/)) scIcon = '👟';
-          else if (title.match(/عطور|perfume|رائحة/)) scIcon = '💨';
-          else if (title.match(/صحة|health|طب|لياقة/)) scIcon = '🩺';
-          else if (title.match(/أطفال|baby|رضع|ألعاب/)) scIcon = '👶';
+          else if (title.match(/عطور|زيوت|مستخلص|perfume|رائحة/)) scIcon = '💧';
+          else if (title.match(/صحة|لياقة|health|طب/)) scIcon = '🩺';
+          else if (title.match(/أطفال|اطفال|امومة|أمومة|baby|رضع|ألعاب/)) scIcon = '👶';
           else if (title.match(/تخييم|camping|رحل/)) scIcon = '🏕️';
           else if (title.match(/شتاء|برد|دفا/)) scIcon = '❄️';
           else if (title.match(/صيف|بحر/)) scIcon = '🏖️';
-          else if (title.match(/أثاث|ديكور|منزل/)) scIcon = '🏠';
-          else if (title.match(/معدات|أدوات|عمل/)) scIcon = '🛠️';
+          else if (title.match(/أثاث|ديكور|اثاث|منزل/)) scIcon = '🏠';
+          else if (title.match(/معدات|أدوات|عمل|صيانة/)) scIcon = '🛠️';
           else if (title.match(/حقائب|شنط|bags/)) scIcon = '👜';
+          else if (title.match(/ابواب|أبواب|باب|doors|door/)) scIcon = '🚪';
+          else if (title.match(/ترفيه|لعب|تسلية/)) scIcon = '🎮';
           else scIcon = '🏷️';
         }
         return {
