@@ -13,14 +13,11 @@ import { productService, Product } from '@/services/productService';
 import gsap from 'gsap';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-
-const ProductModal = dynamic(() => import('@/components/ui/ProductModal').then(mod => mod.ProductModal), {
-  loading: () => null,
-  ssr: false,
-});
+import { useRouter } from 'next/navigation';
 
 export default function Shop() {
   const { lang } = useLangStore();
+  const router = useRouter();
   const t = useTranslation(lang);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -34,7 +31,6 @@ export default function Shop() {
   const rootRef = useRef<HTMLDivElement | null>(null);
   
   const [searchFocused, setSearchFocused] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   
   useEffect(() => {
     let cancelled = false;
@@ -231,7 +227,7 @@ export default function Shop() {
                 <div 
                   key={p.id} 
                   style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 16px', cursor: 'pointer', borderBottom: '1px solid var(--bdr)', transition: 'background 0.2s' }}
-                  onClick={() => { audio.playTap(); setSelectedProduct(p); setSearchFocused(false); }}
+                  onClick={() => { audio.playTap(); setSearchFocused(false); router.push(`/product/${p.id}`); }}
                 >
                   <Image src={p.image || 'https://placehold.co/40x40/FFE8D6/DC586D?text=🛍️'} alt={p.title} width={40} height={40} style={{ width: '40px', height: '40px', borderRadius: '8px', objectFit: 'cover' }} />
                   <div style={{ flex: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
@@ -248,8 +244,6 @@ export default function Shop() {
           </div>
         )}
       </div>
-
-      {selectedProduct && <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} />}
 
       <div className="cat-scroll" style={{ marginBottom: '13px' }} data-shop-reveal>
         {categories.map(c => (
