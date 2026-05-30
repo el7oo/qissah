@@ -80,11 +80,23 @@ export const useCartStore = create<CartState>()(
       },
 
       totalShipping: () => {
-        return get().items.reduce((total, item) => {
+        const items = get().items;
+        const shippingByCategory = new Map<string, number>();
+        
+        items.forEach(item => {
           const shippingStr = (item as any).shippingPrice || '0';
           const shipping = parseFloat(String(shippingStr).replace(/,/g, '')) || 0;
-          return total + (shipping * item.quantity);
-        }, 0);
+          const catId = item.categoryId || 'default';
+          
+          const currentCatShipping = shippingByCategory.get(catId) || 0;
+          if (shipping > currentCatShipping) {
+            shippingByCategory.set(catId, shipping);
+          }
+        });
+        
+        let total = 0;
+        shippingByCategory.forEach(val => total += val);
+        return total;
       }
     }),
     {

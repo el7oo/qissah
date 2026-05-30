@@ -8,6 +8,7 @@ import { audio } from '@/utils/audioEngine';
 import { triggerRipple, flyToCart } from '@/utils/visualEffects';
 import { useTranslation } from '@/utils/translations';
 import { useLangStore } from '@/store/langStore';
+import { ProductCard } from '@/components/ProductCard';
 
 export default function ProductPage() {
   const params = useParams();
@@ -17,28 +18,39 @@ export default function ProductPage() {
   const t = useTranslation(lang);
   
   const [product, setProduct] = useState<Product | null>(null);
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState('');
   const [notes, setNotes] = useState('');
 
   useEffect(() => {
+    let cancelled = false;
     const fetchProduct = async () => {
       try {
         const id = params.id as string;
         if (!id) return;
         const results = await productService.getProductsByIds([id]);
-        if (results && results.length > 0) {
-          setProduct(results[0]);
-          setActiveImage(results[0].image);
+        if (results && results.length > 0 && !cancelled) {
+          const currentProd = results[0];
+          setProduct(currentProd);
+          setActiveImage(currentProd.image);
+
+          // Fetch related products
+          const allProducts = await productService.getAllProducts(lang);
+          if (!cancelled) {
+            const related = allProducts.filter(p => p.categoryId === currentProd.categoryId && p.id !== currentProd.id).slice(0, 6);
+            setRelatedProducts(related);
+          }
         }
       } catch (err) {
         console.error("Error fetching product", err);
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
     fetchProduct();
-  }, [params.id]);
+    return () => { cancelled = true; };
+  }, [params.id, lang]);
 
   const handleAdd = (e: React.MouseEvent) => {
     if (!product) return;
@@ -51,7 +63,8 @@ export default function ProductPage() {
       title: product.title, 
       price: product.price, 
       image: product.image,
-      shippingPrice: product.shippingPrice
+      shippingPrice: product.shippingPrice,
+      categoryId: product.categoryId
     } as any);
     
     setTimeout(() => {
@@ -71,9 +84,9 @@ export default function ProductPage() {
     return (
       <div style={{ textAlign: 'center', padding: '60px 20px', minHeight: '80vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ fontSize: '64px', marginBottom: '20px' }}>🏷️</div>
-        <h2 style={{ fontFamily: 'var(--font-tajawal)' }}>المنتج غير موجود</h2>
+        <h2 style={{ fontFamily: 'var(--font-tajawal)' }}>{lang === 'ar' ? 'المنتج غير موجود' : 'Product not found'}</h2>
         <button onClick={() => router.push('/')} className="btn btn-p" style={{ marginTop: '20px', width: 'auto' }}>
-          العودة للرئيسية
+          {lang === 'ar' ? 'العودة للرئيسية' : 'Back to Home'}
         </button>
       </div>
     );
@@ -85,79 +98,110 @@ export default function ProductPage() {
 
   return (
     <div className="product-page" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
-      <div className="product-header">
-        <button className="back-btn" onClick={() => router.back()}>
-          {lang === 'ar' ? '➔' : '←'}
-        </button>
-      </div>
-
-      <div className="product-content-wrap">
-        <div className="product-gallery-section">
-          <div className="pg-main-img-wrap">
-            <img 
-              src={optimizedActiveImage || 'https://placehold.co/800x800/222/FFF?text=Image'} 
-              alt={product.title} 
-              className="pg-main-img"
-            />
-            {product.discount && (
-              <div className="pg-badge">SALE {product.discount}</div>
+      <div className="container">
+        <div className="product-layout">
+          {/* Gallery Section */}
+          <div className="product-gallery">
+            <div className="pg-main-wrap">
+              <img 
+                src={optimizedActiveImage || 'https://placehold.co/800x800/222/FFF?text=Image'} 
+                alt={product.title} 
+                className="pg-main-img"
+              />
+              {product.discount && (
+                <div className="pg-badge">SALE {product.discount}</div>
+              )}
+            </div>
+            
+            {product.images && product.images.length > 0 && (
+              <div className="pg-thumbs">
+                <img 
+                  src={product.image || 'https://placehold.co/100x100/222/FFF'} 
+                  onClick={() => setActiveImage(product.image)}
+                  alt={product.title}
+                  className={`pg-thumb ${activeImage === product.image ? 'active' : ''}`}
+                />
+                {product.images.map((img, i) => (
+                  <img 
+                    key={i} 
+                    src={img || 'https://placehold.co/100x100/222/FFF'} 
+                    onClick={() => setActiveImage(img)}
+                    alt={`${product.title} ${i}`}
+                    className={`pg-thumb ${activeImage === img ? 'active' : ''}`}
+                  />
+                ))}
+              </div>
             )}
           </div>
-          
-          {product.images && product.images.length > 0 && (
-            <div className="pg-thumbs-row">
-              <img 
-                src={product.image || 'https://placehold.co/100x100/222/FFF'} 
-                onClick={() => setActiveImage(product.image)}
-                alt={product.title}
-                className={`pg-thumb ${activeImage === product.image ? 'active' : ''}`}
+
+          {/* Info Section */}
+          <div className="product-info">
+            <div className="pi-header">
+              <h1 className="pi-title">{product.title}</h1>
+              <div className="pi-rating">
+                {'★'.repeat(5)} <span style={{ color: 'var(--p1)' }}>{product.rating || '5.0'}</span>
+              </div>
+            </div>
+
+            <div className="pi-price-box">
+              <div className="pi-price-current">{product.price ? Number(product.price).toLocaleString('en-US') : ''} د.ج</div>
+              {product.oldPrice && (
+                <div className="pi-price-old">{Number(product.oldPrice).toLocaleString('en-US')} د.ج</div>
+              )}
+            </div>
+
+            {/* Scrollable Description */}
+            <div className="pi-desc-box">
+              <h3 className="pi-desc-title">{lang === 'ar' ? 'تفاصيل المنتج' : 'Product Details'}</h3>
+              <div className="pi-desc-content">
+                {product.description ? product.description : 'نوعية ممتازة وعالية الجودة. يتميز هذا المنتج بمواصفات مذهلة تمنحك تجربة استخدام فريدة ومريحة. اطلبه الآن قبل نفاذ الكمية!'}
+              </div>
+            </div>
+
+            <div className="pi-notes">
+              <label className="pi-notes-lbl">
+                {lang === 'ar' ? '📝 ملاحظات للطلب (اختياري)' : '📝 Order Notes (Optional)'}
+              </label>
+              <textarea
+                className="pi-notes-input"
+                placeholder={lang === 'ar' ? 'اكتب اللون المطلوب، المقاس، أو أي تفاصيل أخرى...' : 'Color, Size, or any other details...'}
+                dir="auto"
+                rows={2}
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
               />
-              {product.images.map((img, i) => (
-                <img 
-                  key={i} 
-                  src={img || 'https://placehold.co/100x100/222/FFF'} 
-                  onClick={() => setActiveImage(img)}
-                  alt={`${product.title} ${i}`}
-                  className={`pg-thumb ${activeImage === img ? 'active' : ''}`}
-                />
+            </div>
+
+            {/* Desktop Add Button */}
+            <div className="desktop-add-btn">
+              <button className="pi-add-btn" onClick={handleAdd}>
+                <span style={{ fontSize: '20px' }}>🛒</span> {lang === 'ar' ? 'إضافة إلى الطلب' : 'Add to Order'}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Related Products */}
+        {relatedProducts.length > 0 && (
+          <div className="related-section">
+            <h2 className="related-title">{lang === 'ar' ? 'منتجات ذات صلة' : 'Related Products'}</h2>
+            <div className="pg" style={{ padding: '0', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))' }}>
+              {relatedProducts.map(p => (
+                <ProductCard key={p.id} product={p as any} />
               ))}
             </div>
-          )}
-        </div>
-
-        <div className="product-info-section">
-          <h1 className="pi-title">{product.title}</h1>
-          <div className="pi-price-row">
-            <div className="pi-current-price">{product.price ? Number(product.price).toLocaleString('en-US') : ''} د.ج</div>
-            {product.oldPrice && (
-              <div className="pi-old-price">{Number(product.oldPrice).toLocaleString('en-US')} د.ج</div>
-            )}
           </div>
-          <div className="pi-desc">
-            {product.description ? product.description : 'نوعية ممتازة وعالية الجودة. يتميز هذا المنتج بمواصفات مذهلة تمنحك تجربة استخدام فريدة ومريحة. اطلبه الآن قبل نفاذ الكمية!'}
-          </div>
-
-          <div className="pi-notes-section">
-            <label className="pi-notes-label">
-              {lang === 'ar' ? '📝 تفاصيل إضافية (اختياري)' : '📝 Order Details (Optional)'}
-            </label>
-            <textarea
-              className="pi-notes-input"
-              placeholder={lang === 'ar' 
-                ? 'اكتب تفاصيل طلبك هنا (اللون المطلوب، المقاس، الخ...)'
-                : 'Write your order details here (Color, Size, etc...)'}
-              dir="auto"
-              rows={3}
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-            />
-          </div>
-        </div>
+        )}
       </div>
 
-      <div className="product-sticky-footer">
+      {/* Mobile Sticky Footer */}
+      <div className="mobile-sticky-footer">
+        <div className="msf-price">
+           <div className="msf-pr">{product.price ? Number(product.price).toLocaleString('en-US') : ''} د.ج</div>
+           {product.oldPrice && <div className="msf-old">{Number(product.oldPrice).toLocaleString('en-US')} د.ج</div>}
+        </div>
         <button className="pi-add-btn" onClick={handleAdd}>
-          {lang === 'ar' ? 'إضافة إلى الطلب' : 'Add to Order'} — {product.price ? Number(product.price).toLocaleString('en-US') : ''} د.ج
+           {lang === 'ar' ? 'إضافة إلى الطلب' : 'Add to Order'}
         </button>
       </div>
 
@@ -165,177 +209,227 @@ export default function ProductPage() {
         .product-page {
           min-height: 100vh;
           background: var(--bg);
-          display: flex;
-          flex-direction: column;
-          padding-bottom: 80px; /* space for sticky footer */
+          padding-top: 16px;
+          padding-bottom: 90px; /* space for mobile footer */
         }
         
-        .product-header {
-          padding: 16px 20px;
-          position: absolute;
-          top: 0; left: 0; right: 0;
-          z-index: 10;
-          pointer-events: none;
-        }
-        
-        .back-btn {
-          width: 40px; height: 40px;
-          border-radius: 50%;
-          background: rgba(0,0,0,0.5);
-          backdrop-filter: blur(8px);
-          -webkit-backdrop-filter: blur(8px);
-          border: none;
-          color: white;
-          display: flex; align-items: center; justify-content: center;
-          font-size: 18px;
-          pointer-events: auto;
-          cursor: pointer;
-          transition: transform 0.2s, background 0.2s;
-        }
-        
-        .back-btn:active {
-          transform: scale(0.9);
-          background: rgba(0,0,0,0.8);
+        .container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 16px;
         }
 
-        .product-content-wrap {
+        .product-layout {
           display: flex;
           flex-direction: column;
-        }
-
-        .product-gallery-section {
-          width: 100%;
+          gap: 24px;
           background: var(--card);
+          border-radius: 24px;
+          padding: 16px;
+          border: 1px solid var(--bdr);
         }
 
-        .pg-main-img-wrap {
+        /* Gallery */
+        .product-gallery {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        .pg-main-wrap {
           position: relative;
           width: 100%;
           aspect-ratio: 1 / 1;
-          background: var(--bg2);
+          border-radius: 16px;
           overflow: hidden;
+          background: var(--bg2);
         }
 
         .pg-main-img {
           width: 100%;
           height: 100%;
-          object-fit: cover;
+          object-fit: contain; /* Prevent large stretched images */
+          background: #fff;
         }
 
         .pg-badge {
           position: absolute;
-          top: 16px; right: 16px;
-          background: var(--p1);
-          color: #FFF;
+          top: 12px; right: 12px;
+          background: var(--p1); color: #FFF;
           font-size: 11px; font-weight: 800;
-          padding: 6px 12px;
-          border-radius: 20px;
+          padding: 4px 10px; border-radius: 20px;
           box-shadow: 0 4px 12px var(--glow);
         }
 
-        .pg-thumbs-row {
+        .pg-thumbs {
           display: flex; gap: 8px;
-          padding: 12px 16px;
-          overflow-x: auto;
-          scrollbar-width: none;
+          overflow-x: auto; scrollbar-width: none;
         }
-        .pg-thumbs-row::-webkit-scrollbar { display: none; }
+        .pg-thumbs::-webkit-scrollbar { display: none; }
 
         .pg-thumb {
           width: 60px; height: 60px; min-width: 60px;
-          border-radius: 12px;
-          object-fit: cover;
-          border: 2px solid transparent;
-          cursor: pointer;
-          transition: all 0.2s;
+          border-radius: 10px; object-fit: cover;
+          border: 2px solid transparent; cursor: pointer;
+          transition: all 0.2s; background: #fff;
         }
         .pg-thumb.active {
           border-color: var(--p1);
-          transform: scale(1.05);
         }
 
-        .product-info-section {
-          padding: 24px 20px;
+        /* Info Section */
+        .product-info {
+          display: flex;
+          flex-direction: column;
           flex: 1;
         }
 
+        .pi-header {
+          margin-bottom: 16px;
+        }
+
         .pi-title {
-          font-size: 24px;
+          font-size: 22px;
           font-weight: 800;
           color: var(--txt);
-          line-height: 1.3;
-          margin-bottom: 12px;
+          line-height: 1.4;
+          margin-bottom: 8px;
           font-family: var(--font-tajawal);
         }
 
-        .pi-price-row {
-          display: flex; align-items: baseline; gap: 12px;
-          margin-bottom: 20px;
-        }
-        .pi-current-price {
-          font-size: 28px; font-weight: 900; color: var(--p1);
-        }
-        .pi-old-price {
-          font-size: 16px; color: var(--txt2); text-decoration: line-through; opacity: 0.8;
+        .pi-rating {
+          font-size: 14px;
+          color: #FFC107;
+          display: flex; align-items: center; gap: 6px;
         }
 
-        .pi-desc {
+        .pi-price-box {
+          display: inline-flex;
+          align-items: baseline;
+          gap: 12px;
+          padding: 12px 16px;
+          background: var(--bg2);
+          border-radius: 12px;
+          margin-bottom: 20px;
+          border: 1px solid var(--bdr);
+        }
+        .pi-price-current {
+          font-size: 26px; font-weight: 900; color: var(--p1);
+        }
+        .pi-price-old {
+          font-size: 15px; color: var(--txt2); text-decoration: line-through;
+        }
+
+        /* Scrollable Description Box */
+        .pi-desc-box {
+          background: var(--bg2);
+          border: 1px solid var(--bdr);
+          border-radius: 16px;
+          padding: 16px;
+          margin-bottom: 20px;
+          max-height: 250px;
+          display: flex;
+          flex-direction: column;
+        }
+        
+        .pi-desc-title {
           font-size: 15px;
-          line-height: 1.7;
-          color: var(--txt2);
-          margin-bottom: 24px;
-          white-space: pre-wrap;
+          font-weight: 700;
+          margin-bottom: 8px;
+          color: var(--txt);
+          border-bottom: 1px solid var(--bdr);
+          padding-bottom: 8px;
         }
 
-        .pi-notes-section {
+        .pi-desc-content {
+          font-size: 14px;
+          line-height: 1.8;
+          color: var(--txt2);
+          white-space: pre-wrap;
+          overflow-y: auto;
+          flex: 1;
+          padding-right: 8px; /* space for scrollbar */
+        }
+        
+        .pi-desc-content::-webkit-scrollbar {
+          width: 4px;
+        }
+        .pi-desc-content::-webkit-scrollbar-thumb {
+          background: var(--bdr);
+          border-radius: 4px;
+        }
+
+        .pi-notes {
           margin-bottom: 20px;
         }
-        .pi-notes-label {
-          display: block; font-size: 14px; font-weight: 700; color: var(--txt); margin-bottom: 8px;
+        .pi-notes-lbl {
+          display: block; font-size: 13px; font-weight: 700; color: var(--txt); margin-bottom: 8px;
         }
         .pi-notes-input {
-          width: 100%; padding: 14px; border-radius: 16px;
-          border: 1.5px solid var(--bdr); background: var(--bg2); color: var(--txt);
+          width: 100%; padding: 12px; border-radius: 12px;
+          border: 1px solid var(--bdr); background: var(--bg); color: var(--txt);
           font-size: 13px; font-family: inherit; resize: none; outline: none;
-          transition: all 0.2s;
+          transition: border-color 0.2s;
         }
-        .pi-notes-input:focus {
-          border-color: var(--p1); box-shadow: 0 0 0 3px var(--glow); background: var(--card);
-        }
+        .pi-notes-input:focus { border-color: var(--p1); }
 
-        .product-sticky-footer {
-          position: fixed;
-          bottom: 0; left: 0; right: 0;
-          max-width: 480px; /* match container max-width */
-          margin: 0 auto;
-          background: var(--card);
-          backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-          padding: 16px 20px calc(16px + env(safe-area-inset-bottom, 0px));
-          border-top: 1px solid var(--bdr);
-          z-index: 100;
-        }
-
+        /* Buttons */
+        .desktop-add-btn { display: none; }
+        
         .pi-add-btn {
           width: 100%;
-          background: linear-gradient(135deg, var(--p1), var(--p2));
+          background: var(--p1);
           color: #FFF;
-          font-size: 18px; font-weight: 800;
-          padding: 18px; border-radius: 100px;
+          font-size: 16px; font-weight: 800;
+          padding: 14px; border-radius: 100px;
           border: none; cursor: pointer;
-          box-shadow: 0 8px 24px rgba(220,88,109,0.25);
-          transition: transform 0.2s, box-shadow 0.2s;
+          display: flex; align-items: center; justify-content: center; gap: 8px;
+          box-shadow: 0 4px 16px var(--glow);
+          transition: transform 0.2s, filter 0.2s;
         }
-        .pi-add-btn:active {
-          transform: scale(0.96); box-shadow: 0 4px 12px rgba(220,88,109,0.15);
+        .pi-add-btn:active { transform: scale(0.96); filter: brightness(0.9); }
+
+        .mobile-sticky-footer {
+          position: fixed;
+          bottom: 0; left: 0; right: 0;
+          background: var(--card);
+          padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+          border-top: 1px solid var(--bdr);
+          z-index: 100;
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+        }
+
+        .msf-price {
+          flex-shrink: 0;
+          display: flex;
+          flex-direction: column;
+        }
+        .msf-pr { font-size: 18px; font-weight: 900; color: var(--p1); }
+        .msf-old { font-size: 12px; color: var(--txt2); text-decoration: line-through; }
+
+        /* Related section */
+        .related-section {
+          margin-top: 40px;
+          padding-top: 24px;
+          border-top: 1px solid var(--bdr);
+        }
+        .related-title {
+          font-size: 20px; font-weight: 800; margin-bottom: 20px; color: var(--txt);
         }
 
         @media (min-width: 768px) {
-          .product-page { padding-bottom: 0; }
-          .product-content-wrap { flex-direction: row; gap: 30px; padding: 40px; }
-          .product-gallery-section { flex: 1; max-width: 50%; border-radius: 24px; overflow: hidden; }
-          .product-info-section { flex: 1; padding: 0; }
-          .product-sticky-footer { position: static; background: transparent; border: none; padding: 0; box-shadow: none; margin-top: 30px; max-width: none; }
-          .product-header { display: none; }
+          .product-page { padding-top: 30px; padding-bottom: 40px; }
+          .product-layout { flex-direction: row; padding: 30px; gap: 40px; }
+          .product-gallery { width: 45%; max-width: 500px; }
+          .pg-main-wrap { border-radius: 20px; }
+          .pi-title { font-size: 28px; }
+          .desktop-add-btn { display: block; margin-top: auto; }
+          .mobile-sticky-footer { display: none; }
+          .pi-desc-box { max-height: 350px; }
         }
       `}</style>
     </div>
